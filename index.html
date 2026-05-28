@@ -1,830 +1,1112 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>People Analytics Tools · Fernando L. Paoli</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>People Analytics Dashboard · Innova Pessoas S.A.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Geist:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
-  :root {
-    --ink: #111110;
-    --ink2: #5a5a57;
-    --ink3: #9a9a96;
-    --border: #e8e8e4;
-    --bg: #fafaf8;
-    --bg2: #f2f2ee;
-    --white: #ffffff;
-    --purple: #6366f1;
-    --cyan: #06b6d4;
-    --amber: #f59e0b;
-    --rose: #f43f5e;
-    --green: #10b981;
-    --radius: 12px;
-    --radius-sm: 7px;
-  }
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: 'Geist', sans-serif;
-    font-size: 15px;
-    line-height: 1.6;
-    min-height: 100vh;
-  }
+:root{
+  --sb:#0f172a;--sb-w:240px;--acc:#6366f1;--acc2:#818cf8;
+  --ok:#16a34a;--warn:#d97706;--crit:#dc2626;
+  --bg:#f1f5f9;--surf:#fff;--bdr:#e2e8f0;
+  --tx:#1e293b;--tx2:#64748b;--tx3:#94a3b8;
+  --r:12px;--sh:0 1px 3px rgba(0,0,0,.08);--sh2:0 4px 16px rgba(0,0,0,.1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Geist',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;min-height:100vh}
 
-  /* NAV */
-  nav {
-    position: sticky; top: 0; z-index: 100;
-    background: rgba(250,250,248,.92);
-    backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    padding: 0 2rem;
-    display: flex; align-items: center; justify-content: space-between;
-    height: 56px;
-  }
-  .nav-brand {
-    font-family: 'DM Serif Display', serif;
-    font-size: 1rem; color: var(--ink); text-decoration: none;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .nav-brand span { font-size: .65rem; font-family: 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); }
-  .nav-links { display: flex; gap: 2rem; list-style: none; }
-  .nav-links a { font-size: .72rem; font-family: 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); text-decoration: none; transition: color .15s; }
-  .nav-links a:hover { color: var(--ink); }
-  .nav-cta {
-    font-size: .7rem; font-family: 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase;
-    background: var(--ink); color: #fff; padding: 7px 16px; border-radius: 6px; text-decoration: none;
-    transition: opacity .15s;
-  }
-  .nav-cta:hover { opacity: .8; }
+/* ── APP LAYOUT ─────────────────────────────── */
+.app{display:flex;min-height:100vh}
 
-  /* HERO */
-  .hero {
-    max-width: 900px; margin: 0 auto;
-    padding: 5rem 2rem 4rem;
-    display: grid; grid-template-columns: 1fr auto; gap: 3rem; align-items: center;
-  }
-  .hero-eyebrow {
-    font-family: 'DM Mono', monospace; font-size: .65rem; letter-spacing: .2em;
-    text-transform: uppercase; color: var(--purple); margin-bottom: .75rem;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .hero-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--purple); }
-  .hero-title {
-    font-family: 'DM Serif Display', serif; font-size: clamp(2.2rem, 5vw, 3.2rem);
-    font-weight: 400; line-height: 1.15; color: var(--ink); margin-bottom: 1rem;
-  }
-  .hero-title em { font-style: italic; color: var(--purple); }
-  .hero-sub { font-size: .95rem; color: var(--ink2); line-height: 1.7; max-width: 480px; margin-bottom: 1.75rem; }
-  .hero-btns { display: flex; gap: 10px; flex-wrap: wrap; }
-  .btn-primary {
-    font-size: .72rem; font-family: 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase;
-    background: var(--ink); color: #fff; padding: 10px 20px; border-radius: var(--radius-sm);
-    text-decoration: none; transition: opacity .15s; border: none; cursor: pointer;
-  }
-  .btn-primary:hover { opacity: .8; }
-  .btn-secondary {
-    font-size: .72rem; font-family: 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase;
-    background: transparent; color: var(--ink); padding: 10px 20px; border-radius: var(--radius-sm);
-    text-decoration: none; transition: border-color .15s, color .15s; border: 1px solid var(--border);
-  }
-  .btn-secondary:hover { border-color: var(--ink); }
-  .hero-badge {
-    background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 1.5rem; text-align: center; min-width: 160px;
-  }
-  .hero-badge-num { font-family: 'DM Serif Display', serif; font-size: 3rem; line-height: 1; color: var(--ink); }
-  .hero-badge-label { font-size: .62rem; font-family: 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-top: 6px; }
-  .hero-badge-sub { font-size: .68rem; color: var(--ink2); margin-top: 8px; line-height: 1.5; }
+/* ── SIDEBAR ─────────────────────────────────── */
+.sidebar{
+  width:var(--sb-w);min-width:var(--sb-w);background:var(--sb);
+  color:#94a3b8;position:sticky;top:0;height:100vh;
+  overflow-y:auto;display:flex;flex-direction:column;padding:20px 0;z-index:10;
+}
+.sb-logo{padding:0 18px 18px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:6px}
+.sb-co{font-size:.82rem;font-weight:600;color:#fff;line-height:1.3}
+.sb-tag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#334155;margin-top:3px}
+.sb-sect{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#334155;padding:14px 18px 5px}
+.sb-nav{list-style:none;padding:0 10px}
+.sb-nav li{margin-bottom:2px}
+.sb-nav a{
+  display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;
+  color:#94a3b8;text-decoration:none;font-size:.8rem;cursor:pointer;
+  transition:background .15s,color .15s;
+}
+.sb-nav a:hover{background:rgba(255,255,255,.05);color:#e2e8f0}
+.sb-nav a.active{background:rgba(99,102,241,.18);color:#818cf8}
+.sb-nav a .ic{font-size:1rem;width:18px;text-align:center}
+.sb-nav a .bdg{
+  margin-left:auto;background:rgba(99,102,241,.22);color:#818cf8;
+  font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 6px;border-radius:8px;
+}
+.sb-bottom{
+  margin-top:auto;padding:14px 18px;
+  border-top:1px solid rgba(255,255,255,.06);
+  font-size:.66rem;color:#334155;line-height:1.9;
+}
+.sb-bottom a{color:#475569;text-decoration:none;transition:color .15s}
+.sb-bottom a:hover{color:#818cf8}
 
-  /* SECTION WRAPPER */
-  .section { max-width: 900px; margin: 0 auto; padding: 3.5rem 2rem; }
-  .section + .section { border-top: 1px solid var(--border); }
-  .sec-eyebrow {
-    font-family: 'DM Mono', monospace; font-size: .62rem; letter-spacing: .2em;
-    text-transform: uppercase; color: var(--ink3); margin-bottom: .5rem;
-    display: flex; align-items: center; gap: 8px;
-  }
-  .sec-eyebrow::before { content: ''; width: 16px; height: 1px; background: var(--ink3); }
-  .sec-title { font-family: 'DM Serif Display', serif; font-size: 1.75rem; font-weight: 400; color: var(--ink); margin-bottom: .3rem; }
-  .sec-sub { font-size: .88rem; color: var(--ink2); margin-bottom: 2rem; }
+/* ── MAIN ────────────────────────────────────── */
+.main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
 
-  /* STAT CARDS */
-  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 2rem; }
-  .stat-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem 1rem; }
-  .stat-card-num { font-family: 'DM Serif Display', serif; font-size: 1.8rem; line-height: 1; }
-  .stat-card-label { font-size: .6rem; font-family: 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-top: 5px; }
+/* ── TOP BAR ─────────────────────────────────── */
+.topbar{
+  background:var(--surf);border-bottom:1px solid var(--bdr);
+  padding:0 26px;height:52px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:5;flex-shrink:0;
+}
+.tb-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--tx)}
+.tb-right{display:flex;align-items:center;gap:14px}
+.tb-date{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--tx3)}
+.lang-bar{display:flex;background:var(--bg);border:1px solid var(--bdr);border-radius:20px;overflow:hidden}
+.lb{
+  padding:4px 13px;font-family:'DM Mono',monospace;font-size:.62rem;
+  letter-spacing:.06em;text-transform:uppercase;border:none;
+  background:transparent;color:var(--tx2);cursor:pointer;transition:background .15s,color .15s;
+}
+.lb.active{background:var(--acc);color:#fff;border-radius:20px}
 
-  /* CHART GRID */
-  .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
-  .chart-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.25rem; }
-  .chart-card-label { font-size: .62rem; font-family: 'DM Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: 1rem; }
-  .chart-canvas-wrap { position: relative; height: 180px; }
-  .custom-legend { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-  .leg-item { display: flex; align-items: center; gap: 5px; font-size: .7rem; color: var(--ink2); }
-  .leg-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+/* ── CONTENT / PAGES ─────────────────────────── */
+.content{flex:1;overflow-y:auto}
+.page{display:none;padding:26px}
+.page.active{display:block;animation:fadeUp .22s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
 
-  /* BAR CHART CUSTOM */
-  .bar-rows { margin-top: 4px; }
-  .bar-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .bar-lbl { font-size: .7rem; font-family: 'DM Mono', monospace; color: var(--ink2); width: 130px; flex-shrink: 0; text-align: right; }
-  .bar-track { flex: 1; height: 8px; background: var(--bg2); border-radius: 3px; overflow: hidden; }
-  .bar-fill { height: 100%; border-radius: 3px; width: 0; transition: width 1.2s cubic-bezier(.4,0,.2,1); }
-  .bar-val { font-family: 'DM Mono', monospace; font-size: .68rem; color: var(--ink3); width: 40px; }
+/* ── PAGE HEADER ─────────────────────────────── */
+.ph{margin-bottom:22px}
+.ph-eye{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--acc);margin-bottom:3px}
+.ph-title{font-family:'DM Serif Display',serif;font-size:1.55rem;font-weight:400;color:var(--tx)}
+.ph-sub{font-size:.82rem;color:var(--tx2);margin-top:3px}
 
-  /* ── SELECTION FUNNEL SECTION ── */
-  .funnel-header {
-    display: flex; align-items: center; justify-content: space-between;
-    flex-wrap: wrap; gap: 12px; margin-bottom: 1.5rem;
-  }
+/* ── GENERIC CARD ────────────────────────────── */
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);padding:18px}
+.card-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:10px}
 
-  /* Date filter toggle */
-  .date-filter {
-    display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
-  }
-  .date-filter-label {
-    font-size: .6rem; font-family: 'DM Mono', monospace; letter-spacing: .1em;
-    text-transform: uppercase; color: var(--ink3);
-  }
-  .filter-btns { display: flex; background: var(--bg2); border-radius: var(--radius-sm); padding: 3px; gap: 2px; }
-  .filter-btn {
-    font-size: .65rem; font-family: 'DM Mono', monospace; letter-spacing: .07em; text-transform: uppercase;
-    padding: 5px 12px; border-radius: 5px; border: none; background: transparent;
-    color: var(--ink3); cursor: pointer; transition: background .15s, color .15s;
-    white-space: nowrap;
-  }
-  .filter-btn.active { background: var(--white); color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+/* ── KPI TILES (HOME) ──────────────────────────── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.kti{
+  background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);
+  padding:16px;box-shadow:var(--sh);border-left:3px solid transparent;
+}
+.kti.ok  {border-left-color:var(--ok)}
+.kti.warn{border-left-color:var(--warn)}
+.kti.crit{border-left-color:var(--crit)}
+.kti-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3)}
+.kti-val{font-family:'DM Serif Display',serif;font-size:1.9rem;line-height:1.1;margin:5px 0 3px;color:var(--tx)}
+.kti-meta{font-size:.7rem;color:var(--tx2);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.chip{font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 7px;border-radius:9px}
+.chip-ok  {background:#f0fdf4;color:var(--ok)}
+.chip-warn{background:#fffbeb;color:var(--warn)}
+.chip-crit{background:#fef2f2;color:var(--crit)}
 
-  /* Period picker (hidden by default) */
-  .period-picker {
-    display: none; align-items: center; gap: 8px; flex-wrap: wrap;
-    background: var(--white); border: 1px solid var(--border);
-    border-radius: var(--radius-sm); padding: 8px 12px;
-    margin-top: 10px;
-  }
-  .period-picker.show { display: flex; }
-  .period-picker label { font-size: .6rem; font-family: 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); }
-  .period-picker input[type="month"] {
-    padding: 5px 10px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-    font-size: .8rem; font-family: 'DM Mono', monospace; color: var(--ink);
-    background: var(--bg); outline: none; transition: border-color .15s; cursor: pointer;
-  }
-  .period-picker input[type="month"]:focus { border-color: var(--ink); }
-  .period-sep { font-size: .7rem; color: var(--ink3); }
+/* ── ALERT PANEL ─────────────────────────────── */
+.alert-panel{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:18px}
+.alert-hdr{
+  padding:13px 18px;border-bottom:1px solid var(--bdr);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.alert-hdr-title{font-family:'DM Serif Display',serif;font-size:.95rem;font-weight:400}
+.alert-hdr-sub{font-size:.72rem;color:var(--tx2)}
+.alert-row{
+  display:grid;grid-template-columns:10px 1fr 90px 90px 100px 120px;
+  align-items:center;padding:10px 18px;border-bottom:1px solid var(--bdr);gap:12px;
+  transition:background .13s;
+}
+.alert-row:last-child{border-bottom:none}
+.alert-row:hover{background:#fafafa}
+.adot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.adot.ok  {background:var(--ok);  box-shadow:0 0 0 3px #bbf7d0}
+.adot.warn{background:var(--warn);box-shadow:0 0 0 3px #fde68a}
+.adot.crit{background:var(--crit);box-shadow:0 0 0 3px #fecaca}
+.a-kpi{font-weight:500;font-size:.8rem}
+.a-val,.a-bench{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--tx2)}
+.a-bar-wrap .a-bar{height:5px;background:var(--bg);border-radius:2px;overflow:hidden}
+.a-bar-fill{height:100%;border-radius:2px;transition:width 1s}
+.fill-ok  {background:var(--ok)}
+.fill-warn{background:var(--warn)}
+.fill-crit{background:var(--crit)}
+.a-action{font-size:.72rem;font-weight:500}
+.a-action.ok  {color:var(--ok)}
+.a-action.warn{color:var(--warn)}
+.a-action.crit{color:var(--crit)}
 
-  /* Average banner */
-  .avg-banner {
-    background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 1rem 1.25rem; margin-bottom: 1.5rem;
-    display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
-  }
-  .avg-tag {
-    font-size: .58rem; font-family: 'DM Mono', monospace; letter-spacing: .12em;
-    text-transform: uppercase; background: var(--ink); color: #fff;
-    padding: 3px 8px; border-radius: 4px;
-  }
-  .avg-stats { display: flex; gap: 20px; flex-wrap: wrap; }
-  .avg-item { display: flex; flex-direction: column; }
-  .avg-item-val { font-family: 'DM Serif Display', serif; font-size: 1.2rem; line-height: 1; color: var(--ink); }
-  .avg-item-lbl { font-size: .58rem; font-family: 'DM Mono', monospace; letter-spacing: .08em; text-transform: uppercase; color: var(--ink3); margin-top: 3px; }
-  .avg-divider { width: 1px; height: 36px; background: var(--border); }
+/* ── CHARTS ──────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px}
+.cw{position:relative;height:210px}
+.cw-sm{position:relative;height:150px}
 
-  /* Input grid */
-  .calc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-  .field { margin-bottom: .85rem; }
-  .field label { display: block; font-size: .62rem; font-family: 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--ink3); margin-bottom: 5px; }
-  .field input {
-    width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: var(--radius-sm);
-    font-size: .88rem; font-family: 'Geist', sans-serif; color: var(--ink); background: var(--bg);
-    outline: none; transition: border-color .15s;
-  }
-  .field input:focus { border-color: var(--ink); background: var(--white); }
+/* ── DATA TABLE ──────────────────────────────── */
+.dt{width:100%;border-collapse:collapse}
+.dt th{
+  font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--tx3);padding:8px 12px;text-align:left;
+  border-bottom:1px solid var(--bdr);background:#fafafa;
+}
+.dt td{padding:10px 12px;border-bottom:1px solid var(--bdr);font-size:.8rem;color:var(--tx)}
+.dt tr:last-child td{border-bottom:none}
+.dt tr:hover td{background:#f8fafc}
+.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-family:'DM Mono',monospace;font-size:.62rem;font-weight:500;gap:4px}
+.pill.ok  {background:#f0fdf4;color:var(--ok)}
+.pill.warn{background:#fffbeb;color:var(--warn)}
+.pill.crit{background:#fef2f2;color:var(--crit)}
 
-  /* Funnel result cards */
-  .funnel-out { display: none; grid-template-columns: repeat(4,1fr); gap: 8px; margin-top: 1rem; }
-  .funnel-out.show { display: grid; }
-  .fc { background: var(--ink); color: #fff; border-radius: var(--radius-sm); padding: 12px 8px; text-align: center; }
-  .fc-n { font-family: 'DM Serif Display', serif; font-size: 1.4rem; line-height: 1; }
-  .fc-l { font-size: .58rem; font-family: 'DM Mono', monospace; letter-spacing: .07em; opacity: .5; text-transform: uppercase; margin-top: 4px; }
+/* ── PROG BAR ────────────────────────────────── */
+.pb-wrap{display:flex;align-items:center;gap:8px}
+.pb-track{flex:1;height:5px;background:var(--bg);border-radius:2px;overflow:hidden}
+.pb-fill{height:100%;border-radius:2px;transition:width 1s}
+.pb-fill.ok  {background:var(--ok)}
+.pb-fill.warn{background:var(--warn)}
+.pb-fill.crit{background:var(--crit)}
+.pb-fill.acc {background:var(--acc)}
 
-  /* Avg comparison line */
-  .fc-avg { font-size: .6rem; font-family: 'DM Mono', monospace; margin-top: 6px; opacity: .5; }
-  .fc-avg.better { color: #6ee7b7; opacity: .85; }
-  .fc-avg.worse  { color: #fca5a5; opacity: .85; }
+/* ── KPI FULL CARDS (KPIs page) ──────────────── */
+.kf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
+.kf{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
+.kf-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
+.kf-name{font-weight:600;font-size:.85rem}
+.kf-val{font-family:'DM Serif Display',serif;font-size:1.75rem;line-height:1;margin:3px 0}
+.kf-bench{font-size:.72rem;color:var(--tx2)}
+.kf-spark{height:44px;margin-top:8px}
 
-  /* ORG CHART */
-  .org-hint { font-size: .72rem; font-family: 'DM Mono', monospace; color: var(--ink3); margin-bottom: 2rem; letter-spacing: .04em; }
-  .org-wrap { display: flex; flex-direction: column; align-items: center; }
-  .org-boss {
-    background: var(--ink); border-radius: var(--radius); padding: 14px 24px;
-    text-align: center; min-width: 200px; cursor: default;
-    position: relative;
-  }
-  .org-boss-emo { font-size: 28px; line-height: 1; margin-bottom: 6px; }
-  .org-boss-name { font-size: .9rem; font-weight: 500; color: #fff; }
-  .org-boss-role { font-size: .6rem; font-family: 'DM Mono', monospace; color: rgba(255,255,255,.45); letter-spacing: .06em; margin-top: 3px; }
-  .org-vline { width: 1.5px; height: 28px; background: var(--border); margin: 0 auto; }
-  .org-hline { height: 1.5px; background: var(--border); }
-  .org-teams { display: flex; gap: 48px; justify-content: center; flex-wrap: wrap; width: 100%; }
-  .org-team { display: flex; flex-direction: column; align-items: center; }
-  .org-team-label {
-    font-size: .6rem; font-family: 'DM Mono', monospace; letter-spacing: .12em; text-transform: uppercase;
-    color: var(--ink2); background: var(--white); border: 1px solid var(--border);
-    border-radius: 20px; padding: 4px 14px; white-space: nowrap;
-  }
-  .org-members { display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
-  .org-branch { display: flex; flex-direction: column; align-items: center; }
-  .org-member-wrap { position: relative; }
-  .org-card {
-    background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
-    padding: 12px 14px; text-align: center; min-width: 92px; max-width: 108px;
-    cursor: pointer; transition: border-color .18s, transform .18s;
-    perspective: 600px;
-  }
-  .org-card:hover { border-color: var(--ink); transform: translateY(-3px); }
-  .org-card.flipped { background: var(--ink); border-color: var(--ink); }
-  .org-card-emo { font-size: 24px; line-height: 1; margin-bottom: 5px; transition: opacity .15s; }
-  .org-card.flipped .org-card-emo { opacity: .35; }
-  .org-card-name { font-size: .72rem; font-weight: 500; color: var(--ink); line-height: 1.2; }
-  .org-card.flipped .org-card-name { color: #fff; }
-  .org-card-role { font-size: .58rem; font-family: 'DM Mono', monospace; color: var(--ink3); letter-spacing: .04em; margin-top: 3px; line-height: 1.3; }
-  .org-card.flipped .org-card-role { color: rgba(255,255,255,.4); }
-  .org-card-secret { display: none; font-size: .6rem; color: rgba(255,255,255,.55); font-family: 'DM Mono', monospace; margin-top: 6px; line-height: 1.4; font-style: italic; }
-  .org-card.flipped .org-card-secret { display: block; }
-  .org-tip {
-    position: absolute; bottom: calc(100% + 8px); left: 50%; transform: translateX(-50%);
-    background: var(--ink); color: #fff; border-radius: var(--radius-sm);
-    padding: 8px 12px; font-size: .64rem; font-family: 'DM Mono', monospace;
-    white-space: nowrap; max-width: 210px; white-space: normal; text-align: center;
-    line-height: 1.4; pointer-events: none; opacity: 0; transition: opacity .18s; z-index: 20;
-  }
-  .org-tip::after { content: ''; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); border: 5px solid transparent; border-top-color: var(--ink); }
-  .org-member-wrap:hover .org-tip { opacity: 1; }
+/* ── TRAINING BARS ───────────────────────────── */
+.tb-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
+.tb-dept{font-size:.78rem;width:100px;flex-shrink:0}
+.tb-pct{font-family:'DM Mono',monospace;font-size:.7rem;width:36px;text-align:right;flex-shrink:0}
 
-  /* PROFILE */
-  .profile-grid { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: start; }
-  .profile-avatar {
-    width: 80px; height: 80px; border-radius: 50%; background: var(--bg2);
-    border: 2px solid var(--border); display: flex; align-items: center; justify-content: center;
-    font-size: 2.2rem; flex-shrink: 0;
-  }
-  .profile-name { font-family: 'DM Serif Display', serif; font-size: 1.4rem; margin-bottom: .2rem; }
-  .profile-role { font-size: .68rem; font-family: 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--purple); margin-bottom: .75rem; }
-  .profile-bio { font-size: .88rem; color: var(--ink2); line-height: 1.75; margin-bottom: 1rem; }
-  .profile-tags { display: flex; flex-wrap: wrap; gap: 6px; }
-  .tag {
-    font-size: .62rem; font-family: 'DM Mono', monospace; letter-spacing: .07em;
-    text-transform: uppercase; padding: 4px 10px; border: 1px solid var(--border);
-    border-radius: 20px; color: var(--ink2);
-  }
+/* ── VAGAS FUNNEL ────────────────────────────── */
+.funnel{display:flex;align-items:flex-end;gap:6px;height:110px;margin:14px 0}
+.fs{display:flex;flex-direction:column;align-items:center;flex:1}
+.fb{width:100%;border-radius:4px 4px 0 0;background:var(--acc);opacity:.75;min-height:6px;transition:opacity .15s}
+.fb:hover{opacity:1}
+.fv{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:600;margin-bottom:4px;color:var(--tx)}
+.fl{font-size:.6rem;color:var(--tx3);text-align:center;margin-top:5px;line-height:1.3}
 
-  /* STACK */
-  .stack-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; }
-  .stack-group { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
-  .stack-group-title { font-size: .6rem; font-family: 'DM Mono', monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--ink3); margin-bottom: .85rem; }
-  .stack-items { display: flex; flex-wrap: wrap; gap: 6px; }
-  .stack-item {
-    font-size: .68rem; font-family: 'DM Mono', monospace; padding: 4px 10px;
-    background: var(--bg2); border-radius: 4px; color: var(--ink2);
-    border: 1px solid transparent; transition: border-color .15s, color .15s;
-  }
-  .stack-item:hover { border-color: var(--ink); color: var(--ink); }
+/* ── ORG CHART ───────────────────────────────── */
+.org-wrap{overflow-x:auto;padding:16px 0}
+.org-tree{display:flex;flex-direction:column;align-items:center;gap:0;min-width:800px}
+.org-level{display:flex;gap:0;align-items:flex-start;position:relative;padding-top:22px}
+.org-level::before{
+  content:'';position:absolute;top:0;left:50%;
+  width:1.5px;height:22px;background:var(--bdr);transform:translateX(-50%);
+}
+.org-hline{
+  position:absolute;top:0;background:var(--bdr);height:1.5px;
+}
+.org-branch{display:flex;flex-direction:column;align-items:center;gap:0;padding:0 18px;position:relative}
+.org-branch::before{
+  content:'';position:absolute;top:0;left:50%;
+  width:1.5px;height:22px;background:var(--bdr);transform:translateX(-50%);
+}
+.oc{
+  background:var(--surf);border:1.5px solid var(--bdr);border-radius:10px;
+  padding:11px 14px;text-align:center;min-width:128px;max-width:155px;
+  position:relative;box-shadow:var(--sh);transition:border-color .15s,transform .15s,box-shadow .15s;
+  cursor:pointer;
+}
+.oc:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:var(--sh2)}
+.oc.ceo{background:var(--acc);border-color:var(--acc);color:#fff;min-width:150px}
+.oc.vp{border-color:#c7d2fe;background:#eef2ff}
+.oc .on{font-weight:600;font-size:.75rem;display:block;line-height:1.3}
+.oc.ceo .on{color:#fff}
+.oc .or{font-size:.62rem;color:var(--tx3);margin-top:2px;display:block}
+.oc.ceo .or{color:rgba(255,255,255,.6)}
+.oc .oh{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--acc);margin-top:4px;display:block}
+.oc.ceo .oh{color:rgba(255,255,255,.7)}
+.risk{
+  position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;
+}
+.r-ok  {background:var(--ok)}
+.r-warn{background:var(--warn)}
+.r-crit{background:var(--crit)}
+.org-children{overflow:hidden;transition:max-height .35s ease,opacity .28s}
+.org-children.collapsed{max-height:0!important;opacity:0}
+.collapse-btn{
+  background:none;border:1px solid var(--bdr);border-radius:10px;
+  font-size:.6rem;font-family:'DM Mono',monospace;color:var(--tx3);
+  padding:2px 7px;cursor:pointer;margin-top:4px;transition:background .13s;
+}
+.collapse-btn:hover{background:var(--bg);color:var(--tx)}
+.org-vline{width:1.5px;height:18px;background:var(--bdr);margin:0 auto}
 
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border); padding: 2rem;
-    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
-    max-width: 900px; margin: 0 auto;
-  }
-  footer span { font-size: .65rem; font-family: 'DM Mono', monospace; color: var(--ink3); letter-spacing: .07em; }
-  footer a { font-size: .65rem; font-family: 'DM Mono', monospace; color: var(--purple); text-decoration: none; letter-spacing: .07em; }
-  footer a:hover { text-decoration: underline; }
-
-  /* ANIMATIONS */
-  @keyframes fadeUp { from { opacity:0; transform: translateY(16px); } to { opacity:1; transform: none; } }
-  .fade-up { opacity: 0; animation: fadeUp .5s ease forwards; }
-  .fade-up:nth-child(1) { animation-delay: .05s; }
-  .fade-up:nth-child(2) { animation-delay: .12s; }
-  .fade-up:nth-child(3) { animation-delay: .19s; }
-  .fade-up:nth-child(4) { animation-delay: .26s; }
-
-  /* RESPONSIVE */
-  @media (max-width: 640px) {
-    .hero { grid-template-columns: 1fr; }
-    .hero-badge { display: none; }
-    .stats-grid { grid-template-columns: repeat(2,1fr); }
-    .charts-grid { grid-template-columns: 1fr; }
-    .calc-grid { grid-template-columns: 1fr; }
-    .profile-grid { grid-template-columns: 1fr; }
-    .stack-grid { grid-template-columns: 1fr; }
-    .funnel-out { grid-template-columns: repeat(2,1fr); }
-    .org-teams { gap: 24px; }
-    nav .nav-links { display: none; }
-    .avg-stats { gap: 12px; }
-    .avg-divider { display: none; }
-    .funnel-header { flex-direction: column; align-items: flex-start; }
-  }
+/* ── ORG TOOLTIP ─────────────────────────────── */
+.org-tt{
+  position:fixed;background:#1e293b;color:#e2e8f0;padding:10px 13px;
+  border-radius:8px;font-size:.73rem;line-height:1.65;pointer-events:none;
+  z-index:9999;min-width:175px;box-shadow:var(--sh2);
+  opacity:0;transition:opacity .15s;
+}
+.org-tt.vis{opacity:1}
+.org-tt .ttname{font-weight:600;color:#fff;margin-bottom:5px;display:block}
+.org-tt .ttrow{display:flex;justify-content:space-between;gap:14px}
+.org-tt .ttk{color:#64748b;font-size:.7rem}
+.org-tt .ttv{font-family:'DM Mono',monospace;font-size:.72rem}
+.ttv.ok  {color:#4ade80}
+.ttv.warn{color:#fbbf24}
+.ttv.crit{color:#f87171}
 </style>
 </head>
 <body>
+<div class="app">
 
-<!-- NAV -->
-<nav>
-  <a class="nav-brand" href="#">
-    🦇 <span>Fernando L. Paoli</span>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#dashboard">Dashboard</a></li>
-    <li><a href="#calculator">Calculator</a></li>
-    <li><a href="#team">The Team</a></li>
-    <li><a href="#about">About</a></li>
+<!-- ═══ SIDEBAR ════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sb-logo">
+    <div class="sb-co">Innova Pessoas S.A.</div>
+    <div class="sb-tag">People Analytics · Q2 2026</div>
+  </div>
+
+  <div class="sb-sect" data-pt="Páginas" data-en="Pages">Páginas</div>
+  <ul class="sb-nav">
+    <li><a class="active" data-page="home" onclick="nav('home')">
+      <span class="ic">🏠</span><span data-pt="Início" data-en="Home">Início</span>
+    </a></li>
+    <li><a data-page="kpis" onclick="nav('kpis')">
+      <span class="ic">📊</span><span data-pt="KPIs" data-en="KPIs">KPIs</span>
+      <span class="bdg">10</span>
+    </a></li>
+    <li><a data-page="td" onclick="nav('td')">
+      <span class="ic">🎓</span><span data-pt="T&amp;D" data-en="L&amp;D">T&amp;D</span>
+    </a></li>
+    <li><a data-page="vagas" onclick="nav('vagas')">
+      <span class="ic">🔍</span><span data-pt="Vagas" data-en="Vacancies">Vagas</span>
+      <span class="bdg" id="sb-vagas-count">8</span>
+    </a></li>
+    <li><a data-page="org" onclick="nav('org')">
+      <span class="ic">🏢</span><span data-pt="Organograma" data-en="Org Chart">Organograma</span>
+    </a></li>
   </ul>
-  <a class="nav-cta" href="https://www.linkedin.com/in/fernandopaoli" target="_blank">Connect →</a>
-</nav>
 
-<!-- HERO -->
-<div class="hero">
-  <div>
-    <div class="hero-eyebrow fade-up">People Analytics Tools</div>
-    <h1 class="hero-title fade-up">Recruiting data,<br><em>made visible.</em></h1>
-    <p class="hero-sub fade-up">Interactive dashboards, recruiting calculators and a very unconventional org chart — built by a Tech Recruiter who takes People Analytics seriously. And caffeine.</p>
-    <div class="hero-btns fade-up">
-      <a class="btn-primary" href="#dashboard">View dashboard</a>
-      <a class="btn-secondary" href="#calculator">Open calculator</a>
+  <div class="sb-sect" data-pt="Referências" data-en="References">Referências</div>
+  <div class="sb-bottom">
+    <a href="https://www.shrm.org" target="_blank">SHRM</a> ·
+    <a href="https://www.aihr.com" target="_blank">AIHR</a> ·
+    <a href="https://business.linkedin.com/talent-solutions" target="_blank">LinkedIn</a><br>
+    <a href="https://www.michaelpage.com.br" target="_blank">Michael Page</a> ·
+    <a href="https://www.abrhf.org.br" target="_blank">ABRHF</a>
+  </div>
+</aside>
+
+<!-- ═══ MAIN ════════════════════════════════════ -->
+<div class="main">
+  <header class="topbar">
+    <div class="tb-title" id="tb-title">Briefing Executivo</div>
+    <div class="tb-right">
+      <div class="tb-date" data-pt="Atualizado: Jun 2026" data-en="Updated: Jun 2026">Atualizado: Jun 2026</div>
+      <div class="lang-bar">
+        <button class="lb active" data-lang="pt" onclick="setLang('pt')">PT</button>
+        <button class="lb" data-lang="en" onclick="setLang('en')">EN</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="content">
+
+  <!-- ════ PAGE: HOME ════════════════════════════ -->
+  <div id="page-home" class="page active">
+    <div class="ph">
+      <div class="ph-eye" data-pt="01 · BRIEFING EXECUTIVO" data-en="01 · EXECUTIVE BRIEFING">01 · BRIEFING EXECUTIVO</div>
+      <div class="ph-title" data-pt="Visão Geral de People Analytics" data-en="People Analytics Overview">Visão Geral de People Analytics</div>
+      <div class="ph-sub" data-pt="Innova Pessoas S.A. · 312 colaboradores · 6 departamentos · São Paulo, BR"
+           data-en="Innova Pessoas S.A. · 312 employees · 6 departments · São Paulo, BR">Innova Pessoas S.A. · 312 colaboradores · 6 departamentos · São Paulo, BR</div>
+    </div>
+
+    <!-- KPI TILES -->
+    <div class="kpi-grid" id="home-tiles"></div>
+
+    <!-- ALERT PANEL -->
+    <div class="alert-panel">
+      <div class="alert-hdr">
+        <div>
+          <div class="alert-hdr-title" data-pt="🎯 O que precisa de mais atenção?" data-en="🎯 What needs the most attention?">🎯 O que precisa de mais atenção?</div>
+          <div class="alert-hdr-sub" data-pt="Score automático: desvio × peso do KPI · ordenado por prioridade"
+               data-en="Auto-score: deviation × KPI weight · sorted by priority">Score automático: desvio × peso do KPI · ordenado por prioridade</div>
+        </div>
+      </div>
+      <div class="alert-row" style="background:#fafafa;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">
+        <div></div>
+        <div data-pt="KPI" data-en="KPI">KPI</div>
+        <div data-pt="Valor atual" data-en="Current">Valor atual</div>
+        <div data-pt="Benchmark" data-en="Benchmark">Benchmark</div>
+        <div data-pt="Desvio" data-en="Deviation">Desvio</div>
+        <div data-pt="Ação" data-en="Action">Ação</div>
+      </div>
+      <div id="alert-list"></div>
+    </div>
+
+    <!-- CHARTS ROW -->
+    <div class="g2">
+      <div class="card">
+        <div class="card-lbl" data-pt="Turnover por departamento" data-en="Turnover by department">Turnover por departamento</div>
+        <div class="cw"><canvas id="c-home-turnover"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-lbl" data-pt="Tendência eNPS — últimos 6 trimestres" data-en="eNPS Trend — last 6 quarters">Tendência eNPS — últimos 6 trimestres</div>
+        <div class="cw"><canvas id="c-home-enps"></canvas></div>
+      </div>
+    </div>
+
+    <!-- DEPT SCORECARD -->
+    <div class="card">
+      <div class="card-lbl" data-pt="Saúde organizacional por departamento" data-en="Organizational health by department">Saúde organizacional por departamento</div>
+      <table class="dt" id="dept-table"></table>
+    </div>
+  </div><!-- /home -->
+
+  <!-- ════ PAGE: KPIs ═════════════════════════════ -->
+  <div id="page-kpis" class="page">
+    <div class="ph">
+      <div class="ph-eye" data-pt="02 · INDICADORES" data-en="02 · INDICATORS">02 · INDICADORES</div>
+      <div class="ph-title" data-pt="10 KPIs Estratégicos" data-en="10 Strategic KPIs">10 KPIs Estratégicos</div>
+      <div class="ph-sub" data-pt="Comparativo com benchmarks SHRM · AIHR · LinkedIn Talent Trends"
+           data-en="Compared against SHRM · AIHR · LinkedIn Talent Trends benchmarks">Comparativo com benchmarks SHRM · AIHR · LinkedIn Talent Trends</div>
+    </div>
+    <div class="kf-grid" id="kpi-cards"></div>
+  </div>
+
+  <!-- ════ PAGE: T&D ══════════════════════════════ -->
+  <div id="page-td" class="page">
+    <div class="ph">
+      <div class="ph-eye" data-pt="03 · TREINAMENTO &amp; DESENVOLVIMENTO" data-en="03 · LEARNING &amp; DEVELOPMENT">03 · TREINAMENTO &amp; DESENVOLVIMENTO</div>
+      <div class="ph-title" data-pt="Capacitação e Crescimento" data-en="Training &amp; Growth">Capacitação e Crescimento</div>
+      <div class="ph-sub" data-pt="Taxa de conclusão, top cursos e investimento por colaborador"
+           data-en="Completion rate, top courses and investment per employee">Taxa de conclusão, top cursos e investimento por colaborador</div>
+    </div>
+
+    <!-- KPI tiles T&D -->
+    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)" id="td-tiles"></div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="card-lbl" data-pt="Conclusão de treinamento por departamento (%)" data-en="Training completion by department (%)">Conclusão de treinamento por departamento (%)</div>
+        <div id="td-bars"></div>
+      </div>
+      <div class="card">
+        <div class="card-lbl" data-pt="Distribuição do orçamento de T&amp;D" data-en="L&amp;D budget distribution">Distribuição do orçamento de T&amp;D</div>
+        <div class="cw"><canvas id="c-td-budget"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-lbl" data-pt="Top cursos — conclusão e avaliação" data-en="Top courses — completion and rating">Top cursos — conclusão e avaliação</div>
+      <table class="dt" id="courses-table"></table>
     </div>
   </div>
-  <div class="hero-badge fade-up">
-    <div class="hero-badge-num">200+</div>
-    <div class="hero-badge-label">Total Hires</div>
-    <div class="hero-badge-sub">Tech &amp; Civil Engineering<br>2018 → present</div>
-  </div>
-</div>
 
-<!-- DASHBOARD -->
-<div class="section" id="dashboard">
-  <div class="sec-eyebrow">01 · Dashboard</div>
-  <h2 class="sec-title">By the numbers</h2>
-  <p class="sec-sub">Real data from 200+ placements across technology services, startups and civil engineering.</p>
+  <!-- ════ PAGE: VAGAS ════════════════════════════ -->
+  <div id="page-vagas" class="page">
+    <div class="ph">
+      <div class="ph-eye" data-pt="04 · VAGAS &amp; RECRUTAMENTO" data-en="04 · VACANCIES &amp; RECRUITING">04 · VAGAS &amp; RECRUTAMENTO</div>
+      <div class="ph-title" data-pt="Pipeline de Contratação" data-en="Hiring Pipeline">Pipeline de Contratação</div>
+      <div class="ph-sub" data-pt="Funil, vagas abertas e métricas de TA"
+           data-en="Funnel, open positions and TA metrics">Funil, vagas abertas e métricas de TA</div>
+    </div>
 
-  <div class="stats-grid">
-    <div class="stat-card fade-up">
-      <div class="stat-card-num" style="color:var(--purple)">200+</div>
-      <div class="stat-card-label">Total hires</div>
+    <div class="kpi-grid" id="vagas-tiles"></div>
+
+    <div class="g2">
+      <div class="card">
+        <div class="card-lbl" data-pt="Funil de recrutamento — candidatos ativos" data-en="Recruiting funnel — active candidates">Funil de recrutamento — candidatos ativos</div>
+        <div class="funnel" id="vagas-funnel"></div>
+      </div>
+      <div class="card">
+        <div class="card-lbl" data-pt="Time to Fill por vaga (dias)" data-en="Time to Fill by vacancy (days)">Time to Fill por vaga (dias)</div>
+        <div class="cw"><canvas id="c-vagas-ttf"></canvas></div>
+      </div>
     </div>
-    <div class="stat-card fade-up">
-      <div class="stat-card-num" style="color:var(--cyan)">100</div>
-      <div class="stat-card-label">Tech placements</div>
-    </div>
-    <div class="stat-card fade-up">
-      <div class="stat-card-num" style="color:var(--amber)">100</div>
-      <div class="stat-card-label">Civil eng. placements</div>
-    </div>
-    <div class="stat-card fade-up">
-      <div class="stat-card-num" style="color:var(--rose)">1</div>
-      <div class="stat-card-label">Director hired (tech)</div>
+
+    <div class="card">
+      <div class="card-lbl" data-pt="Vagas abertas" data-en="Open positions">Vagas abertas</div>
+      <table class="dt" id="vagas-table"></table>
     </div>
   </div>
 
-  <div class="charts-grid">
-    <div class="chart-card">
-      <div class="chart-card-label">Hires by level</div>
-      <div class="chart-canvas-wrap"><canvas id="c-level"></canvas></div>
-      <div class="custom-legend" id="leg-level"></div>
+  <!-- ════ PAGE: ORG ══════════════════════════════ -->
+  <div id="page-org" class="page">
+    <div class="ph">
+      <div class="ph-eye" data-pt="05 · ORGANOGRAMA" data-en="05 · ORG CHART">05 · ORGANOGRAMA</div>
+      <div class="ph-title" data-pt="Estrutura Organizacional" data-en="Organizational Structure">Estrutura Organizacional</div>
+      <div class="ph-sub" data-pt="Clique nos times para expandir/recolher · Passe o mouse para métricas individuais"
+           data-en="Click teams to expand/collapse · Hover for individual metrics">Clique nos times para expandir/recolher · Passe o mouse para métricas individuais</div>
     </div>
-    <div class="chart-card">
-      <div class="chart-card-label">Sector breakdown</div>
-      <div class="chart-canvas-wrap"><canvas id="c-sector"></canvas></div>
-      <div class="custom-legend" id="leg-sector"></div>
-    </div>
-  </div>
-
-  <div class="chart-card" style="margin-bottom:14px">
-    <div class="chart-card-label">Hires by level — detail view</div>
-    <div class="bar-rows" id="bar-detail"></div>
-  </div>
-
-  <div class="charts-grid">
-    <div class="chart-card">
-      <div class="chart-card-label">Technology sub-sector</div>
-      <div class="chart-canvas-wrap"><canvas id="c-tech"></canvas></div>
-      <div class="custom-legend" id="leg-tech"></div>
-    </div>
-    <div class="chart-card">
-      <div class="chart-card-label">Caffeine consumed — daily survival kit</div>
-      <div class="chart-canvas-wrap"><canvas id="c-caf"></canvas></div>
-      <div class="custom-legend" id="leg-caf"></div>
-    </div>
-  </div>
-</div>
-
-<!-- CALCULATOR — Selection Funnel only -->
-<div class="section" id="calculator">
-  <div class="sec-eyebrow">02 · Calculator</div>
-  <h2 class="sec-title">Selection Funnel</h2>
-  <p class="sec-sub">Track conversion rates across every stage of your hiring pipeline.</p>
-
-  <!-- Header: title + date filter -->
-  <div class="funnel-header">
-    <div class="date-filter">
-      <span class="date-filter-label">Period:</span>
-      <div class="filter-btns">
-        <button class="filter-btn active" onclick="setFilter('alltime', this)">All time</button>
-        <button class="filter-btn" onclick="setFilter('period', this)">By period</button>
+    <div class="card">
+      <div class="org-wrap">
+        <div class="org-tree" id="org-tree"></div>
       </div>
     </div>
   </div>
 
-  <!-- Period picker (shown only when "By period" is active) -->
-  <div class="period-picker" id="period-picker">
-    <label>From</label>
-    <input type="month" id="period-from" value="2024-01" onchange="onPeriodChange()">
-    <span class="period-sep">→</span>
-    <label>To</label>
-    <input type="month" id="period-to" value="2024-12" onchange="onPeriodChange()">
-  </div>
+  </div><!-- /content -->
+</div><!-- /main -->
+</div><!-- /app -->
 
-  <!-- Average banner -->
-  <div class="avg-banner" id="avg-banner">
-    <span class="avg-tag">Avg</span>
-    <div class="avg-stats" id="avg-stats"><!-- filled by JS --></div>
-  </div>
+<!-- ── ORG TOOLTIP ────────────────────────────── -->
+<div class="org-tt" id="org-tt"></div>
 
-  <!-- Manual input form -->
-  <div class="calc-grid">
-    <div class="field"><label>Applications received</label><input type="number" id="fn-a" placeholder="e.g. 200" min="1"></div>
-    <div class="field"><label>Screened (phone / CV)</label><input type="number" id="fn-s" placeholder="e.g. 40" min="0"></div>
-  </div>
-  <div class="calc-grid">
-    <div class="field"><label>Interviewed</label><input type="number" id="fn-i" placeholder="e.g. 12" min="0"></div>
-    <div class="field"><label>Offers made</label><input type="number" id="fn-o" placeholder="e.g. 3" min="0"></div>
-  </div>
-  <div class="field"><label>Hires</label><input type="number" id="fn-h" placeholder="e.g. 1" min="0"></div>
-  <button class="btn-primary" onclick="cFnl()">Calculate →</button>
-  <div class="funnel-out" id="fnl-out"></div>
-</div>
-
-<!-- ORG CHART -->
-<div class="section" id="team">
-  <div class="sec-eyebrow">03 · The Team</div>
-  <h2 class="sec-title">Org chart</h2>
-  <p class="sec-sub">My dream team. Do not ask questions.</p>
-  <p class="org-hint">Click a card to flip and reveal the secret performance review · Hover for the official title rating</p>
-
-  <div class="org-wrap">
-    <div class="org-member-wrap">
-      <div class="org-tip">Self-evaluated as "exceeds expectations." No one disagreed.</div>
-      <div class="org-boss">
-        <div class="org-boss-emo">🦇</div>
-        <div class="org-boss-name">Fernando Paoli</div>
-        <div class="org-boss-role">Tech Recruiter · People Analytics</div>
-      </div>
-    </div>
-    <div class="org-vline"></div>
-    <div class="org-hline" style="width:min(520px,88%)"></div>
-    <div class="org-teams" id="org-teams"></div>
-  </div>
-</div>
-
-<!-- ABOUT -->
-<div class="section" id="about">
-  <div class="sec-eyebrow">04 · About</div>
-  <h2 class="sec-title">Fernando L. Paoli</h2>
-  <p class="sec-sub" style="margin-bottom:2rem">The human behind the data.</p>
-
-  <div class="profile-grid" style="margin-bottom:2.5rem">
-    <div class="profile-avatar">🦇</div>
-    <div>
-      <div class="profile-name">Fernando L. Paoli</div>
-      <div class="profile-role">Tech Recruiter · People Analytics · São Paulo, BR</div>
-      <p class="profile-bio">
-        I'm a very curious person who loves learning about technology and people. I hold a specialization in Human Resources Management and currently work as a Tech Recruiter with a strong interest in People Analytics. I also help people transition into new careers and improve their resumes — connecting the right people to the right opportunities.
-      </p>
-      <div class="profile-tags">
-        <span class="tag">Tech Recruiting</span>
-        <span class="tag">People Analytics</span>
-        <span class="tag">Career Coaching</span>
-        <span class="tag">Resume Review</span>
-        <span class="tag">10k+ LinkedIn followers</span>
-        <span class="tag">200+ hires</span>
-      </div>
-    </div>
-  </div>
-
-  <div class="stack-grid">
-    <div class="stack-group">
-      <div class="stack-group-title">💻 Tech</div>
-      <div class="stack-items">
-        <span class="stack-item">Python</span>
-        <span class="stack-item">HTML</span>
-        <span class="stack-item">CSS</span>
-        <span class="stack-item">JavaScript</span>
-        <span class="stack-item">Git</span>
-      </div>
-    </div>
-    <div class="stack-group">
-      <div class="stack-group-title">📊 Data & Analytics</div>
-      <div class="stack-items">
-        <span class="stack-item">Power BI</span>
-        <span class="stack-item">Excel</span>
-        <span class="stack-item">SQL</span>
-      </div>
-    </div>
-    <div class="stack-group">
-      <div class="stack-group-title">🧠 Recruiting Tools</div>
-      <div class="stack-items">
-        <span class="stack-item">LI Recruiter</span>
-        <span class="stack-item">Slack</span>
-        <span class="stack-item">Trello</span>
-        <span class="stack-item">Miro</span>
-      </div>
-    </div>
-  </div>
-</div>
-
-<footer>
-  <span>Fernando L. Paoli · People Analytics Tools · São Paulo, BR</span>
-  <a href="https://www.linkedin.com/in/fernandopaoli" target="_blank">linkedin/fernandopaoli →</a>
-</footer>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script>
-// ── CHARTS ──────────────────────────────────────────────────────────────────
-const COLORS = { purple:'#6366f1', cyan:'#06b6d4', amber:'#f59e0b', rose:'#f43f5e', green:'#10b981', gray:'#94a3b8' };
+/* ══════════════════════════════════════════════
+   DATA
+══════════════════════════════════════════════ */
+const DATA = {
+  company: { name_pt:'Innova Pessoas S.A.', name_en:'Innova Pessoas S.A.', hc:312 },
 
-function buildDonut(id, legId, labels, data, colors) {
-  new Chart(document.getElementById(id), {
-    type: 'doughnut',
-    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0, hoverOffset: 6 }] },
-    options: {
-      responsive: true, maintainAspectRatio: false, cutout: '62%',
-      plugins: {
-        legend: { display: false },
-        tooltip: { callbacks: { label: c => ' ' + c.label + ': ' + c.parsed + (c.parsed <= 100 ? '%' : ' hires') } }
+  depts:[
+    {id:'eng',  pt:'Engenharia',  en:'Engineering',    hc:87,  turnover:9.1,  eNPS:38, absent:2.1, manager:'Carlos Santos'},
+    {id:'prod', pt:'Produto',     en:'Product',        hc:41,  turnover:11.2, eNPS:32, absent:1.8, manager:'Ana Lima'},
+    {id:'sales',pt:'Vendas',      en:'Sales',          hc:63,  turnover:28.3, eNPS:14, absent:6.2, manager:'Pedro Gomes'},
+    {id:'hr',   pt:'RH',          en:'HR',             hc:22,  turnover:8.0,  eNPS:41, absent:1.5, manager:'Mariana Costa'},
+    {id:'fin',  pt:'Financeiro',  en:'Finance',        hc:35,  turnover:13.5, eNPS:24, absent:3.1, manager:'Roberto Dias'},
+    {id:'mkt',  pt:'Marketing',   en:'Marketing',      hc:64,  turnover:17.2, eNPS:19, absent:4.3, manager:'Juliana Ferreira'},
+  ],
+
+  kpis:[
+    {key:'turnover',    pt:'Turnover Rate',        en:'Turnover Rate',        v:14.8, bench:12,   dir:'lower', unit:'%', w:10, src:'SHRM',   trend:[12.1,13.4,14.2,14.8,15.2,14.8]},
+    {key:'retention',   pt:'Retention Rate',       en:'Retention Rate',       v:85.2, bench:88,   dir:'higher',unit:'%', w:7,  src:'SHRM',   trend:[90,89,88,87,86,85.2]},
+    {key:'eNPS',        pt:'eNPS',                 en:'eNPS',                 v:22,   bench:30,   dir:'higher',unit:'',  w:9,  src:'AIHR',   trend:[34,31,28,25,22,22]},
+    {key:'absent',      pt:'Absenteísmo',          en:'Absenteeism',          v:3.8,  bench:3.5,  dir:'lower', unit:'%', w:8,  src:'AIHR',   trend:[2.8,3.1,3.4,3.6,3.9,3.8]},
+    {key:'ttf',         pt:'Time to Fill',         en:'Time to Fill',         v:34,   bench:35,   dir:'lower', unit:'d', w:7,  src:'SHRM',   trend:[42,38,36,34,32,34]},
+    {key:'oar',         pt:'Offer Acceptance Rate',en:'Offer Acceptance Rate',v:82,   bench:85,   dir:'higher',unit:'%', w:8,  src:'LinkedIn',trend:[88,86,85,83,82,82]},
+    {key:'cph',         pt:'Cost per Hire',        en:'Cost per Hire',        v:4200, bench:4700, dir:'lower', unit:'R$',w:6,  src:'SHRM',   trend:[5100,4800,4600,4400,4200,4200]},
+    {key:'qoh',         pt:'Quality of Hire',      en:'Quality of Hire',      v:78,   bench:70,   dir:'higher',unit:'',  w:8,  src:'AIHR',   trend:[62,65,68,72,76,78]},
+    {key:'volturn',     pt:'Voluntary Turnover',   en:'Voluntary Turnover',   v:11.2, bench:10,   dir:'lower', unit:'%', w:9,  src:'SHRM',   trend:[8.5,9.1,9.8,10.4,11.0,11.2]},
+    {key:'tth',         pt:'Time to Hire',         en:'Time to Hire',         v:22,   bench:25,   dir:'lower', unit:'d', w:6,  src:'LinkedIn',trend:[30,27,25,23,21,22]},
+  ],
+
+  training:{
+    depts:[
+      {pt:'RH',          en:'HR',          pct:94},
+      {pt:'Produto',     en:'Product',     pct:82},
+      {pt:'Engenharia',  en:'Engineering', pct:78},
+      {pt:'Marketing',   en:'Marketing',   pct:71},
+      {pt:'Financeiro',  en:'Finance',     pct:68},
+      {pt:'Vendas',      en:'Sales',       pct:45},
+    ],
+    budget:[
+      {pt:'Power BI & Analytics',     en:'Power BI & Analytics',     val:35},
+      {pt:'Liderança & Gestão',       en:'Leadership & Management',  val:25},
+      {pt:'Soft Skills',              en:'Soft Skills',              val:20},
+      {pt:'Idiomas',                  en:'Languages',                val:12},
+      {pt:'Outros',                   en:'Other',                    val:8},
+    ],
+    courses:[
+      {pt:'Power BI Essentials',   en:'Power BI Essentials',   enr:87, done:74, rating:4.8},
+      {pt:'Data Storytelling',     en:'Data Storytelling',     enr:63, done:51, rating:4.6},
+      {pt:'Excel Avançado',        en:'Advanced Excel',        enr:112,done:89, rating:4.4},
+      {pt:'SQL para RH',           en:'SQL for HR',            enr:34, done:28, rating:4.7},
+      {pt:'Python Básico',         en:'Python Basics',         enr:41, done:22, rating:4.2},
+    ],
+    investPerHead:1840, roi:312, hrsAvg:28,
+  },
+
+  vagas:[
+    {id:1,pt:'Senior Full Stack Dev',      en:'Senior Full Stack Dev',      dept_pt:'Engenharia', dept_en:'Engineering',days:28,target:35,apps:47,stage:'Interview',   recruiter:'Beatriz A.'},
+    {id:2,pt:'Product Manager',            en:'Product Manager',            dept_pt:'Produto',    dept_en:'Product',   days:19,target:35,apps:31,stage:'Phone Screen',  recruiter:'Beatriz A.'},
+    {id:3,pt:'Executivo de Vendas',        en:'Sales Executive',            dept_pt:'Vendas',     dept_en:'Sales',     days:51,target:30,apps:83,stage:'Offer',         recruiter:'Lucas M.'},
+    {id:4,pt:'Executivo de Vendas',        en:'Sales Executive',            dept_pt:'Vendas',     dept_en:'Sales',     days:47,target:30,apps:61,stage:'Interview',     recruiter:'Lucas M.'},
+    {id:5,pt:'Analista de Dados',          en:'Data Analyst',               dept_pt:'Engenharia', dept_en:'Engineering',days:12,target:35,apps:28,stage:'Sourcing',      recruiter:'Beatriz A.'},
+    {id:6,pt:'Analista de Marketing',      en:'Marketing Analyst',          dept_pt:'Marketing',  dept_en:'Marketing', days:33,target:35,apps:55,stage:'Interview',     recruiter:'Lucas M.'},
+    {id:7,pt:'Analista Financeiro',        en:'Financial Analyst',          dept_pt:'Financeiro', dept_en:'Finance',   days:22,target:35,apps:34,stage:'Phone Screen',  recruiter:'Beatriz A.'},
+    {id:8,pt:'HR Business Partner',        en:'HR Business Partner',        dept_pt:'RH',         dept_en:'HR',        days:8, target:35,apps:19,stage:'Sourcing',      recruiter:'Lucas M.'},
+  ],
+
+  funnel:[
+    {pt:'Candidatos',   en:'Applicants',    v:358},
+    {pt:'Triagem',      en:'Screen',        v:127},
+    {pt:'Entrevistas',  en:'Interviews',    v:68},
+    {pt:'Propostas',    en:'Offers',        v:14},
+    {pt:'Contratados',  en:'Hired',         v:9},
+  ],
+
+  org:{
+    name:'Fernanda Ortiz', role_pt:'CEO', role_en:'CEO',
+    hc:312, risk:'ok', dept_pt:'Diretoria', dept_en:'Board',
+    tenure:7, enps:41, perf:95,
+    children:[
+      {name:'Carlos Santos', role_pt:'VP Engenharia', role_en:'VP Engineering',
+       hc:87, risk:'ok', tenure:4, enps:38, perf:88,
+       children:[
+         {name:'Lucas Silva',  role_pt:'Gerente Backend',  role_en:'Backend Manager',  hc:44, risk:'ok', tenure:3, enps:40, perf:86},
+         {name:'Marina Torres',role_pt:'Gerente Frontend', role_en:'Frontend Manager', hc:43, risk:'warn',tenure:2, enps:35, perf:82},
+       ]},
+      {name:'Ana Lima', role_pt:'VP Produto', role_en:'VP Product',
+       hc:41, risk:'ok', tenure:3, enps:32, perf:90,
+       children:[
+         {name:'Rafael Souza',role_pt:'PM Lead',role_en:'PM Lead',hc:41,risk:'ok',tenure:2,enps:33,perf:87},
+       ]},
+      {name:'Pedro Gomes', role_pt:'VP Vendas', role_en:'VP Sales',
+       hc:63, risk:'crit', tenure:1, enps:14, perf:68,
+       children:[
+         {name:'Camila Nunes', role_pt:'Gerente Regional SP', role_en:'Regional Mgr SP', hc:32, risk:'crit', tenure:1, enps:12, perf:65},
+         {name:'Bruno Lopes',  role_pt:'Gerente Regional RJ', role_en:'Regional Mgr RJ', hc:31, risk:'warn', tenure:2, enps:18, perf:71},
+       ]},
+      {name:'Mariana Costa', role_pt:'VP RH', role_en:'VP HR',
+       hc:22, risk:'ok', tenure:5, enps:41, perf:92,
+       children:[
+         {name:'Daniela Mendes',role_pt:'HRBP Lead',role_en:'HRBP Lead',hc:22,risk:'ok',tenure:3,enps:42,perf:90},
+       ]},
+      {name:'Roberto Dias', role_pt:'VP Financeiro', role_en:'VP Finance',
+       hc:35, risk:'warn', tenure:2, enps:24, perf:79,
+       children:[
+         {name:'André Figueiredo',role_pt:'Controller',role_en:'Controller',hc:35,risk:'warn',tenure:2,enps:25,perf:78},
+       ]},
+      {name:'Juliana Ferreira', role_pt:'VP Marketing', role_en:'VP Marketing',
+       hc:64, risk:'warn', tenure:2, enps:19, perf:75,
+       children:[
+         {name:'Thiago Carvalho',role_pt:'Growth Lead',    role_en:'Growth Lead',     hc:32,risk:'warn',tenure:2,enps:20,perf:76},
+         {name:'Isabela Moura',  role_pt:'Brand Manager',  role_en:'Brand Manager',   hc:32,risk:'ok',  tenure:3,enps:22,perf:80},
+       ]},
+    ]
+  }
+};
+
+/* ══════════════════════════════════════════════
+   I18N
+══════════════════════════════════════════════ */
+const I18N = {
+  pt:{
+    pageTitles:{home:'Briefing Executivo',kpis:'KPIs Estratégicos',td:'Treinamento & Desenvolvimento',vagas:'Pipeline de Vagas',org:'Organograma'},
+    action_crit:'Ação imediata', action_warn:'Monitorar', action_ok:'Dentro do esperado',
+    bench:'bench', curr:'Atual',
+    deptHdr:['Departamento','HC','Turnover','eNPS','Absentee','Gestor','Saúde'],
+    vagasHdr:['Cargo','Dpto','Dias aberto','Meta TTF','Apps','Fase','Recruiter','Progresso'],
+    courseHdr:['Curso','Inscritos','Concluídos','Taxa','Avaliação'],
+    stageMap:{Sourcing:'Mapeamento','Phone Screen':'Triagem',Interview:'Entrevistas',Offer:'Proposta'},
+  },
+  en:{
+    pageTitles:{home:'Executive Briefing',kpis:'Strategic KPIs',td:'Learning & Development',vagas:'Hiring Pipeline',org:'Org Chart'},
+    action_crit:'Immediate action', action_warn:'Monitor', action_ok:'Within expected range',
+    bench:'bench', curr:'Current',
+    deptHdr:['Department','HC','Turnover','eNPS','Absenteeism','Manager','Health'],
+    vagasHdr:['Role','Dept','Days open','TTF Target','Apps','Stage','Recruiter','Progress'],
+    courseHdr:['Course','Enrolled','Completed','Rate','Rating'],
+    stageMap:{Sourcing:'Sourcing','Phone Screen':'Screening',Interview:'Interviews',Offer:'Offer'},
+  }
+};
+
+/* ══════════════════════════════════════════════
+   STATE
+══════════════════════════════════════════════ */
+let lang = 'pt';
+const charts = {};
+
+/* ══════════════════════════════════════════════
+   UTILS
+══════════════════════════════════════════════ */
+function t(key){ return I18N[lang][key]; }
+function L(obj){ return obj[lang] || obj.pt; }
+function severity(k){ const d=dev(k); return k.dir==='lower'?k.v>k.bench*(1+.2)?'crit':k.v>k.bench?'warn':'ok':k.v<k.bench*(1-.2)?'crit':k.v<k.bench?'warn':'ok'; }
+function dev(k){ return k.dir==='lower'?Math.max(0,(k.v-k.bench)/k.bench):Math.max(0,(k.bench-k.v)/k.bench); }
+function fmtKPI(k){ return k.unit==='R$'?`R$${k.v.toLocaleString('pt-BR')}`:k.v+k.unit; }
+function statusPill(s){ return `<span class="pill ${s}">● ${s==='ok'?'OK':s==='warn'?'Atenção':'Crítico'}</span>`; }
+function riskLabel(r){ return {ok:'🟢',warn:'🟡',crit:'🔴'}[r]; }
+
+/* ══════════════════════════════════════════════
+   NAVIGATION
+══════════════════════════════════════════════ */
+function nav(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.querySelectorAll('.sb-nav a').forEach(a=>a.classList.toggle('active',a.dataset.page===id));
+  document.getElementById('tb-title').textContent = t('pageTitles')[id];
+  if(id==='kpis'   && !charts.kpiBar)  initKPICharts();
+  if(id==='td'     && !charts.tdDough) initTDCharts();
+  if(id==='vagas'  && !charts.vagaTTF) initVagasCharts();
+  if(id==='org')   buildOrgChart();
+}
+
+/* ══════════════════════════════════════════════
+   LANGUAGE
+══════════════════════════════════════════════ */
+function setLang(l){
+  lang = l;
+  document.documentElement.lang = l;
+  document.querySelectorAll('[data-pt]').forEach(el=>{ el.textContent = l==='pt'?el.dataset.pt:el.dataset.en; });
+  document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
+  // Re-render dynamic content
+  renderAlerts();
+  renderDeptTable();
+  renderHomeTiles();
+  renderTDTiles(); renderTDBars(); renderCoursesTable();
+  renderVagasTiles(); renderFunnel(); renderVagasTable();
+  const cur = document.querySelector('.page.active');
+  if(cur) document.getElementById('tb-title').textContent = t('pageTitles')[cur.id.replace('page-','')];
+  updateCharts();
+}
+
+/* ══════════════════════════════════════════════
+   ALERTS ENGINE
+══════════════════════════════════════════════ */
+function getAlerts(){
+  return DATA.kpis.map(k=>{
+    const sev = severity(k);
+    const d   = dev(k);
+    return {...k, sev, d};
+  }).sort((a,b)=>b.d-a.d||b.w-a.w);
+}
+function renderAlerts(){
+  const alerts = getAlerts();
+  document.getElementById('alert-list').innerHTML = alerts.map(a=>{
+    const name = lang==='pt'?a.pt:a.en;
+    const bench_s = a.unit==='R$'?`R$${a.bench.toLocaleString('pt-BR')}`:a.bench+a.unit;
+    const pct = Math.min(a.d*200, 100);
+    const action = t(`action_${a.sev}`);
+    return `<div class="alert-row">
+      <div class="adot ${a.sev}"></div>
+      <div class="a-kpi">${name}</div>
+      <div class="a-val">${fmtKPI(a)}</div>
+      <div class="a-bench">${t('bench')}: ${bench_s}</div>
+      <div class="a-bar-wrap"><div class="a-bar"><div class="a-bar-fill fill-${a.sev}" style="width:${pct}%"></div></div></div>
+      <div class="a-action ${a.sev}">${action}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   HOME TILES
+══════════════════════════════════════════════ */
+function renderHomeTiles(){
+  const show = ['turnover','eNPS','absent','ttf'];
+  document.getElementById('home-tiles').innerHTML = show.map(key=>{
+    const k = DATA.kpis.find(x=>x.key===key);
+    const sev = severity(k);
+    const bench_s = k.unit==='R$'?`R$${k.bench.toLocaleString('pt-BR')}`:k.bench+k.unit;
+    const d = dev(k); const pct = (d*100).toFixed(0);
+    const chip = d>0?`<span class="chip chip-${sev}">${sev==='crit'?'▲ ':''}${pct}% desvio</span>`:'';
+    return `<div class="kti ${sev}">
+      <div class="kti-lbl">${lang==='pt'?k.pt:k.en}</div>
+      <div class="kti-val">${fmtKPI(k)}</div>
+      <div class="kti-meta"><span>bench: ${bench_s}</span>${chip}</div>
+    </div>`;
+  }).join('');
+}
+
+/* ══════════════════════════════════════════════
+   DEPT TABLE
+══════════════════════════════════════════════ */
+function renderDeptTable(){
+  const hdr = t('deptHdr');
+  let html = `<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  DATA.depts.forEach(d=>{
+    const ts = d.turnover>20?'crit':d.turnover>15?'warn':'ok';
+    const es = d.eNPS<20?'crit':d.eNPS<30?'warn':'ok';
+    const as_ = d.absent>6?'crit':d.absent>3.5?'warn':'ok';
+    const health = ts==='crit'||es==='crit'||as_==='crit'?'crit':ts==='warn'||es==='warn'||as_==='warn'?'warn':'ok';
+    html += `<tr>
+      <td><strong>${lang==='pt'?d.pt:d.en}</strong></td>
+      <td>${d.hc}</td>
+      <td><span class="pill ${ts}">${d.turnover}%</span></td>
+      <td><span class="pill ${es}">${d.eNPS}</span></td>
+      <td><span class="pill ${as_}">${d.absent}%</span></td>
+      <td>${d.manager}</td>
+      <td>${statusPill(health)}</td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  document.getElementById('dept-table').innerHTML = html;
+}
+
+/* ══════════════════════════════════════════════
+   KPI FULL CARDS
+══════════════════════════════════════════════ */
+function renderKPICards(){
+  const qtrs = ['Q1','Q2','Q3','Q4','Q5','Q6'];
+  document.getElementById('kpi-cards').innerHTML = DATA.kpis.map((k,i)=>{
+    const sev = severity(k);
+    const bench_s = k.unit==='R$'?`R$${k.bench.toLocaleString('pt-BR')}`:k.bench+k.unit;
+    return `<div class="kf">
+      <div class="kf-top">
+        <div>
+          <div class="kf-name">${lang==='pt'?k.pt:k.en}</div>
+          <div style="font-size:.65rem;color:var(--tx3);margin-top:2px">Benchmark: ${bench_s} · ${k.src}</div>
+        </div>
+        <span class="chip chip-${sev}">${sev==='ok'?'✓ OK':sev==='warn'?'▲ Watch':'● Critical'}</span>
+      </div>
+      <div class="kf-val" style="color:var(--${sev==='ok'?'ok':sev==='warn'?'warn':'crit'})">${fmtKPI(k)}</div>
+      <div class="kf-bench" style="margin-bottom:6px">${lang==='pt'?'Benchmark':'Benchmark'}: ${bench_s}</div>
+      <canvas id="spark-${i}" class="kf-spark"></canvas>
+    </div>`;
+  }).join('');
+  // Init sparklines
+  DATA.kpis.forEach((k,i)=>{
+    const sev = severity(k);
+    const colors = {ok:'#16a34a',warn:'#d97706',crit:'#dc2626'};
+    new Chart(document.getElementById('spark-'+i),{
+      type:'line',
+      data:{
+        labels:['Q1','Q2','Q3','Q4','Q5','Q6'],
+        datasets:[{
+          data:k.trend,borderColor:colors[sev],backgroundColor:colors[sev]+'22',
+          borderWidth:2,pointRadius:2,fill:true,tension:.3
+        }]
+      },
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{legend:{display:false},tooltip:{enabled:true}},
+        scales:{x:{display:false},y:{display:false}}
       }
+    });
+  });
+}
+
+/* ══════════════════════════════════════════════
+   T&D TILES
+══════════════════════════════════════════════ */
+function renderTDTiles(){
+  const tiles = [
+    {lpt:'Investimento/colaborador',len:'Investment/employee',v:`R$ ${DATA.training.investPerHead.toLocaleString('pt-BR')}`,s:'ok'},
+    {lpt:'ROI do treinamento',      len:'Training ROI',       v:`${DATA.training.roi}%`,s:'ok'},
+    {lpt:'Horas médias/colaborador',len:'Avg hrs/employee',   v:`${DATA.training.hrsAvg}h`,s:'warn'},
+  ];
+  document.getElementById('td-tiles').innerHTML = tiles.map(t=>`
+    <div class="kti ${t.s}">
+      <div class="kti-lbl">${lang==='pt'?t.lpt:t.len}</div>
+      <div class="kti-val">${t.v}</div>
+    </div>`).join('');
+}
+function renderTDBars(){
+  const sorted = [...DATA.training.depts].sort((a,b)=>b.pct-a.pct);
+  document.getElementById('td-bars').innerHTML = sorted.map(d=>{
+    const s = d.pct>=80?'ok':d.pct>=60?'warn':'crit';
+    return `<div class="tb-row">
+      <div class="tb-dept">${lang==='pt'?d.pt:d.en}</div>
+      <div class="pb-wrap" style="flex:1">
+        <div class="pb-track"><div class="pb-fill ${s}" style="width:${d.pct}%"></div></div>
+      </div>
+      <div class="tb-pct">${d.pct}%</div>
+    </div>`;
+  }).join('');
+}
+function renderCoursesTable(){
+  const hdr = t('courseHdr');
+  let html = `<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  DATA.training.courses.forEach(c=>{
+    const rate = Math.round(c.done/c.enr*100);
+    const s = rate>=80?'ok':rate>=65?'warn':'crit';
+    const stars = '★'.repeat(Math.round(c.rating))+'☆'.repeat(5-Math.round(c.rating));
+    html += `<tr>
+      <td><strong>${lang==='pt'?c.pt:c.en}</strong></td>
+      <td>${c.enr}</td><td>${c.done}</td>
+      <td><span class="pill ${s}">${rate}%</span></td>
+      <td style="color:#f59e0b;letter-spacing:1px">${stars} <span style="color:var(--tx2);font-size:.72rem">${c.rating}</span></td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  document.getElementById('courses-table').innerHTML = html;
+}
+
+/* ══════════════════════════════════════════════
+   VAGAS
+══════════════════════════════════════════════ */
+function renderVagasTiles(){
+  const overdue = DATA.vagas.filter(v=>v.days>v.target).length;
+  const avgTTF  = Math.round(DATA.vagas.reduce((s,v)=>s+v.days,0)/DATA.vagas.length);
+  const tiles = [
+    {lpt:'Vagas abertas',     len:'Open positions', v:DATA.vagas.length,s:'warn'},
+    {lpt:'Avg Time to Fill',  len:'Avg Time to Fill',v:`${avgTTF}d`,s:avgTTF<=35?'ok':'warn'},
+    {lpt:'Vagas atrasadas',   len:'Overdue vacancies',v:overdue,s:overdue>2?'crit':'warn'},
+    {lpt:'Total aplicações',  len:'Total applications',v:DATA.vagas.reduce((s,v)=>s+v.apps,0),s:'ok'},
+  ];
+  document.getElementById('vagas-tiles').innerHTML = tiles.map(t=>`
+    <div class="kti ${t.s}">
+      <div class="kti-lbl">${lang==='pt'?t.lpt:t.len}</div>
+      <div class="kti-val">${t.v}</div>
+    </div>`).join('');
+}
+function renderFunnel(){
+  const max = DATA.funnel[0].v;
+  document.getElementById('vagas-funnel').innerHTML = DATA.funnel.map(f=>{
+    const h = Math.max(8, Math.round(f.v/max*100));
+    return `<div class="fs">
+      <div class="fv">${f.v}</div>
+      <div class="fb" style="height:${h}px"></div>
+      <div class="fl">${lang==='pt'?f.pt:f.en}</div>
+    </div>`;
+  }).join('');
+}
+function renderVagasTable(){
+  const hdr = t('vagasHdr');
+  const sm = t('stageMap');
+  let html = `<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  DATA.vagas.forEach(v=>{
+    const over = v.days>v.target;
+    const s = over?'crit':v.days>v.target*.8?'warn':'ok';
+    const pct = Math.min(Math.round(v.days/v.target*100),100);
+    html += `<tr>
+      <td><strong>${lang==='pt'?v.pt:v.en}</strong></td>
+      <td>${lang==='pt'?v.dept_pt:v.dept_en}</td>
+      <td><span class="pill ${s}">${v.days}d</span></td>
+      <td>${v.target}d</td><td>${v.apps}</td>
+      <td><span style="font-size:.72rem;color:var(--tx2)">${sm[v.stage]||v.stage}</span></td>
+      <td>${v.recruiter}</td>
+      <td style="min-width:110px">
+        <div class="pb-wrap">
+          <div class="pb-track"><div class="pb-fill ${s}" style="width:${pct}%"></div></div>
+          <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--tx3);width:32px;text-align:right">${pct}%</span>
+        </div>
+      </td>
+    </tr>`;
+  });
+  html += '</tbody>';
+  document.getElementById('vagas-table').innerHTML = html;
+}
+
+/* ══════════════════════════════════════════════
+   CHARTS — HOME
+══════════════════════════════════════════════ */
+function initHomeCharts(){
+  const depts   = DATA.depts.map(d=>lang==='pt'?d.pt:d.en);
+  const colors  = DATA.depts.map(d=>d.turnover>20?'#dc2626':d.turnover>15?'#d97706':'#6366f1');
+
+  charts.homeTurn = new Chart(document.getElementById('c-home-turnover'),{
+    type:'bar',
+    data:{
+      labels:DATA.depts.map(d=>lang==='pt'?d.pt:d.en),
+      datasets:[{
+        label:'Turnover %',data:DATA.depts.map(d=>d.turnover),
+        backgroundColor:colors,borderRadius:5
+      },{
+        label:'Benchmark',data:DATA.depts.map(()=>12),
+        type:'line',borderColor:'#94a3b8',borderDash:[4,4],
+        borderWidth:1.5,pointRadius:0,fill:false
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{y:{beginAtZero:true,grid:{color:'#f1f5f9'}}}}
+  });
+
+  const eNPSquarters=['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25'];
+  const eNPS_trend = DATA.kpis.find(k=>k.key==='eNPS').trend;
+  charts.homeEnps = new Chart(document.getElementById('c-home-enps'),{
+    type:'line',
+    data:{
+      labels:eNPSquarters,
+      datasets:[
+        {label:'eNPS',data:eNPS_trend,borderColor:'#6366f1',backgroundColor:'#6366f133',borderWidth:2,fill:true,tension:.35,pointRadius:3},
+        {label:lang==='pt'?'Benchmark':'Benchmark',data:eNPS_trend.map(()=>30),borderColor:'#16a34a',borderDash:[5,5],borderWidth:1.5,pointRadius:0,fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},
+      scales:{y:{grid:{color:'#f1f5f9'}}}}
+  });
+}
+
+/* ══════════════════════════════════════════════
+   CHARTS — KPIs page (sparklines built inline)
+══════════════════════════════════════════════ */
+function initKPICharts(){
+  renderKPICards();
+}
+
+/* ══════════════════════════════════════════════
+   CHARTS — T&D
+══════════════════════════════════════════════ */
+function initTDCharts(){
+  renderTDTiles(); renderTDBars(); renderCoursesTable();
+  const budget = DATA.training.budget;
+  charts.tdDough = new Chart(document.getElementById('c-td-budget'),{
+    type:'doughnut',
+    data:{
+      labels:budget.map(b=>lang==='pt'?b.pt:b.en),
+      datasets:[{
+        data:budget.map(b=>b.val),
+        backgroundColor:['#6366f1','#22d3ee','#f59e0b','#f43f5e','#94a3b8'],
+        borderWidth:0
+      }]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}
+  });
+}
+
+/* ══════════════════════════════════════════════
+   CHARTS — VAGAS
+══════════════════════════════════════════════ */
+function initVagasCharts(){
+  renderVagasTiles(); renderFunnel(); renderVagasTable();
+  charts.vagaTTF = new Chart(document.getElementById('c-vagas-ttf'),{
+    type:'bar',
+    data:{
+      labels:DATA.vagas.map(v=>lang==='pt'?v.pt:v.en),
+      datasets:[{
+        label:'Days open',
+        data:DATA.vagas.map(v=>v.days),
+        backgroundColor:DATA.vagas.map(v=>v.days>v.target?'#dc2626':v.days>v.target*.8?'#d97706':'#6366f1'),
+        borderRadius:4
+      },{
+        label:'Target',data:DATA.vagas.map(v=>v.target),
+        type:'line',borderColor:'#94a3b8',borderDash:[4,4],
+        borderWidth:1.5,pointRadius:0,fill:false
+      }]
+    },
+    options:{
+      indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{display:false}},
+      scales:{x:{beginAtZero:true,grid:{color:'#f1f5f9'}},y:{ticks:{font:{size:10}}}}
     }
   });
-  const leg = document.getElementById(legId);
-  labels.forEach((l, i) => {
-    const s = document.createElement('span'); s.className = 'leg-item';
-    s.innerHTML = `<span class="leg-dot" style="background:${colors[i]}"></span>${l} — ${data[i]}${data[i] <= 100 ? '%' : ' hires'}`;
-    leg.appendChild(s);
-  });
 }
 
-buildDonut('c-level', 'leg-level',
-  ['Basic (Assistants/Juniors)', 'Intermediate (Pleno/Sênior)', 'Advanced (Specialists/Managers)', 'Director'],
-  [100, 74, 25, 1],
-  [COLORS.purple, COLORS.cyan, COLORS.amber, COLORS.rose]
-);
-buildDonut('c-sector', 'leg-sector',
-  ['Technology (Services & Startups)', 'Civil Engineering (Supply Chain & Construction)'],
-  [100, 100],
-  [COLORS.purple, COLORS.cyan]
-);
-buildDonut('c-tech', 'leg-tech',
-  ['Tech Services', 'Startups'],
-  [65, 35],
-  [COLORS.purple, COLORS.amber]
-);
-buildDonut('c-caf', 'leg-caf',
-  ['Monster Energy', 'Coffee', 'Thermogenics'],
-  [80, 15, 5],
-  [COLORS.rose, COLORS.purple, COLORS.amber]
-);
-
-// Bar chart
-const barData = [
-  { label: 'Basic (100)', pct: 50, color: COLORS.purple },
-  { label: 'Intermediate (74)', pct: 37, color: COLORS.cyan },
-  { label: 'Advanced (25)', pct: 12.5, color: COLORS.amber },
-  { label: 'Director (1)', pct: 0.5, color: COLORS.rose },
-];
-const barWrap = document.getElementById('bar-detail');
-barData.forEach(b => {
-  barWrap.innerHTML += `<div class="bar-row">
-    <span class="bar-lbl">${b.label}</span>
-    <div class="bar-track"><div class="bar-fill" data-pct="${b.pct}" style="background:${b.color}"></div></div>
-    <span class="bar-val">${b.pct}%</span>
-  </div>`;
-});
-setTimeout(() => document.querySelectorAll('.bar-fill').forEach(el => el.style.width = el.dataset.pct + '%'), 300);
-
-
-// ── MOCK DATA ────────────────────────────────────────────────────────────────
-// Monthly funnel data: Jan 2023 → Dec 2024 (24 months)
-const MOCK_MONTHS = (() => {
-  const months = [];
-  const start = new Date(2023, 0, 1);
-  for (let i = 0; i < 24; i++) {
-    const d = new Date(start.getFullYear(), start.getMonth() + i, 1);
-    const key = d.toISOString().slice(0, 7); // "YYYY-MM"
-    const apps  = Math.round(120 + Math.random() * 180);   // 120–300
-    const scrn  = Math.round(apps  * (0.18 + Math.random() * 0.12));
-    const intv  = Math.round(scrn  * (0.35 + Math.random() * 0.20));
-    const offr  = Math.round(intv  * (0.25 + Math.random() * 0.20));
-    const hire  = Math.round(offr  * (0.55 + Math.random() * 0.30));
-    months.push({ key, apps, scrn, intv, offr, hire });
+/* ══════════════════════════════════════════════
+   UPDATE CHARTS LABELS ON LANG CHANGE
+══════════════════════════════════════════════ */
+function updateCharts(){
+  if(charts.homeTurn){
+    charts.homeTurn.data.labels = DATA.depts.map(d=>lang==='pt'?d.pt:d.en);
+    charts.homeTurn.update();
   }
-  return months;
-})();
-
-// Compute averages for a subset of months
-function computeAvg(months) {
-  if (!months.length) return null;
-  const sum = months.reduce((acc, m) => ({
-    apps: acc.apps + m.apps,
-    scrn: acc.scrn + m.scrn,
-    intv: acc.intv + m.intv,
-    offr: acc.offr + m.offr,
-    hire: acc.hire + m.hire,
-  }), { apps:0, scrn:0, intv:0, offr:0, hire:0 });
-  const n = months.length;
-  const avg = { apps: sum.apps/n, scrn: sum.scrn/n, intv: sum.intv/n, offr: sum.offr/n, hire: sum.hire/n };
-  return {
-    screenRate : (avg.scrn / avg.apps * 100).toFixed(1),
-    interviewRate: (avg.intv / avg.apps * 100).toFixed(1),
-    offerRate  : (avg.offr / avg.apps * 100).toFixed(1),
-    cvsPerHire : avg.hire > 0 ? Math.round(avg.apps / avg.hire) : '—',
-    months     : n,
-  };
-}
-
-// ── DATE FILTER ──────────────────────────────────────────────────────────────
-let currentFilter = 'alltime';
-
-function getFilteredMonths() {
-  if (currentFilter === 'alltime') return MOCK_MONTHS;
-  const from = document.getElementById('period-from').value; // "YYYY-MM"
-  const to   = document.getElementById('period-to').value;
-  return MOCK_MONTHS.filter(m => m.key >= from && m.key <= to);
-}
-
-function renderAvgBanner() {
-  const months = getFilteredMonths();
-  const avg = computeAvg(months);
-  const el = document.getElementById('avg-stats');
-  if (!avg || !months.length) {
-    el.innerHTML = '<span style="font-size:.75rem;color:var(--ink3);font-family:\'DM Mono\',monospace">No data for selected period.</span>';
-    return;
+  if(charts.vagaTTF){
+    charts.vagaTTF.data.labels = DATA.vagas.map(v=>lang==='pt'?v.pt:v.en);
+    charts.vagaTTF.update();
   }
-  const items = [
-    { val: avg.screenRate + '%',    lbl: 'Avg screen rate'    },
-    { val: avg.interviewRate + '%', lbl: 'Avg interview rate' },
-    { val: avg.offerRate + '%',     lbl: 'Avg offer rate'     },
-    { val: avg.cvsPerHire + ' : 1', lbl: 'Avg CVs/hire'       },
-    { val: avg.months,              lbl: 'Months in range'    },
-  ];
-  el.innerHTML = items.map((it, i) =>
-    (i > 0 ? '<div class="avg-divider"></div>' : '') +
-    `<div class="avg-item">
-      <span class="avg-item-val">${it.val}</span>
-      <span class="avg-item-lbl">${it.lbl}</span>
-    </div>`
-  ).join('');
 }
 
-function setFilter(type, btn) {
-  currentFilter = type;
-  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const picker = document.getElementById('period-picker');
-  type === 'period' ? picker.classList.add('show') : picker.classList.remove('show');
-  renderAvgBanner();
-  // Clear any previous calculation result
-  const out = document.getElementById('fnl-out');
-  out.classList.remove('show');
-  out.innerHTML = '';
-}
+/* ══════════════════════════════════════════════
+   ORG CHART
+══════════════════════════════════════════════ */
+let orgBuilt = false;
+function buildOrgChart(){
+  if(orgBuilt) return;
+  orgBuilt = true;
+  const tree = document.getElementById('org-tree');
+  tree.innerHTML = '';
 
-function onPeriodChange() {
-  renderAvgBanner();
-}
+  // CEO
+  const ceoWrap = document.createElement('div');
+  ceoWrap.style.display='flex';ceoWrap.style.flexDirection='column';ceoWrap.style.alignItems='center';
+  ceoWrap.innerHTML = makeOrgCard(DATA.org, true);
+  tree.appendChild(ceoWrap);
 
-// ── FUNNEL CALCULATOR ────────────────────────────────────────────────────────
-function cFnl() {
-  const a = parseFloat(document.getElementById('fn-a').value) || 1;
-  const s = parseFloat(document.getElementById('fn-s').value) || 0;
-  const i = parseFloat(document.getElementById('fn-i').value) || 0;
-  const o = parseFloat(document.getElementById('fn-o').value) || 0;
-  const h = parseFloat(document.getElementById('fn-h').value) || 0;
+  // Vertical line from CEO
+  const vl = document.createElement('div');
+  vl.className='org-vline';
+  ceoWrap.appendChild(vl);
 
-  // Get avg for comparison
-  const months = getFilteredMonths();
-  const avg = computeAvg(months);
+  // VPs row
+  const vpRow = document.createElement('div');
+  vpRow.style.cssText='display:flex;align-items:flex-start;position:relative;';
+  ceoWrap.appendChild(vpRow);
 
-  const userMetrics = {
-    screenRate   : s / a * 100,
-    interviewRate: i / a * 100,
-    offerRate    : o / a * 100,
-    cvsPerHire   : h > 0 ? a / h : null,
-  };
+  // Horizontal line connecting VPs
+  // We'll use a CSS trick via a container
+  const vpContainer = document.createElement('div');
+  vpContainer.style.cssText='display:flex;gap:0;position:relative;';
+  vpRow.appendChild(vpContainer);
 
-  function cmpLabel(userVal, avgVal, inverse) {
-    if (!avg || userVal === null) return '';
-    const better = inverse ? userVal < avgVal : userVal > avgVal;
-    const diff = Math.abs(userVal - avgVal).toFixed(1);
-    const cls = better ? 'better' : 'worse';
-    const arrow = better ? '▲' : '▼';
-    const sign = better ? '+' : '-';
-    return `<div class="fc-avg ${cls}">${arrow} ${sign}${diff}${inverse ? '' : '%'} vs avg</div>`;
-  }
-
-  const avgVals = avg ? {
-    screenRate   : parseFloat(avg.screenRate),
-    interviewRate: parseFloat(avg.interviewRate),
-    offerRate    : parseFloat(avg.offerRate),
-    cvsPerHire   : parseFloat(avg.cvsPerHire),
-  } : null;
-
-  const cards = [
-    {
-      l: 'Screen rate',
-      v: (userMetrics.screenRate).toFixed(1) + '%',
-      cmp: avgVals ? cmpLabel(userMetrics.screenRate, avgVals.screenRate, false) : ''
-    },
-    {
-      l: 'Interview rate',
-      v: (userMetrics.interviewRate).toFixed(1) + '%',
-      cmp: avgVals ? cmpLabel(userMetrics.interviewRate, avgVals.interviewRate, false) : ''
-    },
-    {
-      l: 'Offer rate',
-      v: (userMetrics.offerRate).toFixed(1) + '%',
-      cmp: avgVals ? cmpLabel(userMetrics.offerRate, avgVals.offerRate, false) : ''
-    },
-    {
-      l: 'CVs per hire',
-      v: h > 0 ? Math.round(a / h) + ' : 1' : '—',
-      cmp: avgVals && h > 0 ? cmpLabel(a/h, avgVals.cvsPerHire, true) : ''
-    },
-  ];
-
-  const el = document.getElementById('fnl-out');
-  el.innerHTML = cards.map(c =>
-    `<div class="fc">
-      <div class="fc-n">${c.v}</div>
-      <div class="fc-l">${c.l}</div>
-      ${c.cmp}
-    </div>`
-  ).join('');
-  el.classList.add('show');
-}
-
-// Init banner on load
-renderAvgBanner();
-
-
-// ── ORG CHART ────────────────────────────────────────────────────────────────
-const TEAMS = [
-  {
-    label: '🐾 Animal Resources',
-    members: [
-      { e: '🐱', n: 'Woody', r: 'Senior Nap Analyst', tip: 'Attends meetings only if treats are involved.', secret: 'Expertise: horizontal surfaces & strategic ignoring.' },
-      { e: '🐱', n: 'Lazuli', r: 'Head of Chaos Mgmt', tip: 'Knocked 3 laptops off the desk. Claims it was market research.', secret: 'Speciality: desk demolition. OKRs: unclear.' },
-      { e: '🐱', n: 'Petra', r: 'Director of Vibes', tip: 'Most photogenic employee 3 years running. Zero deliverables.', secret: 'KPI: ambient mood score. Always green.' },
-    ]
-  },
-  {
-    label: '🛟 Emotional Support',
-    members: [
-      { e: '🍸', n: 'Absolut Vodka', r: 'VP After-Hours Support', tip: 'Available 24/7. Especially at 2am on a Friday.', secret: 'SLA: immediately. No tickets required.' },
-      { e: '🧊', n: 'Black Ice', r: 'Chief Cooling Officer', tip: 'Cool under pressure. Literally. Never overheats.', secret: 'Threat level: slippery. Handle with care.' },
-    ]
-  }
-];
-
-const teamsEl = document.getElementById('org-teams');
-TEAMS.forEach(team => {
-  const col = document.createElement('div');
-  col.className = 'org-team';
-  col.innerHTML = `
-    <div class="org-vline"></div>
-    <div class="org-team-label">${team.label}</div>
-    <div class="org-vline"></div>
-    <div class="org-hline" style="width:${team.members.length > 2 ? '280px' : '160px'}"></div>
-    <div class="org-members" id="members-${team.label.replace(/\s/g,'')}"></div>
-  `;
-  teamsEl.appendChild(col);
-  const membersEl = col.querySelector('.org-members');
-  team.members.forEach(m => {
+  DATA.org.children.forEach((vp, idx)=>{
     const branch = document.createElement('div');
-    branch.className = 'org-branch';
-    branch.innerHTML = `
-      <div class="org-vline"></div>
-      <div class="org-member-wrap">
-        <div class="org-tip">${m.tip}</div>
-        <div class="org-card" onclick="this.classList.toggle('flipped')">
-          <div class="org-card-emo">${m.e}</div>
-          <div class="org-card-name">${m.n}</div>
-          <div class="org-card-role">${m.r}</div>
-          <div class="org-card-secret">${m.secret}</div>
-        </div>
-      </div>`;
-    membersEl.appendChild(branch);
+    branch.style.cssText='display:flex;flex-direction:column;align-items:center;padding:0 14px;';
+
+    // Top connector line for each VP
+    const tl = document.createElement('div');
+    tl.className='org-vline';
+    branch.appendChild(tl);
+
+    // VP card
+    const vpCardEl = document.createElement('div');
+    vpCardEl.innerHTML = makeOrgCard(vp, false, true);
+    branch.appendChild(vpCardEl);
+
+    // Children (managers)
+    if(vp.children && vp.children.length>0){
+      const collapsed = document.createElement('div');
+      collapsed.className='org-children';
+      collapsed.style.maxHeight='500px';
+
+      const innerVl = document.createElement('div');
+      innerVl.className='org-vline';
+      collapsed.appendChild(innerVl);
+
+      const mgrsRow = document.createElement('div');
+      mgrsRow.style.cssText='display:flex;gap:0;';
+      vp.children.forEach(mgr=>{
+        const mb = document.createElement('div');
+        mb.style.cssText='display:flex;flex-direction:column;align-items:center;padding:0 8px;';
+        const mvl = document.createElement('div');
+        mvl.className='org-vline';
+        mb.appendChild(mvl);
+        const mc = document.createElement('div');
+        mc.innerHTML = makeOrgCard(mgr, false, false);
+        mb.appendChild(mc);
+        mgrsRow.appendChild(mb);
+      });
+      collapsed.appendChild(mgrsRow);
+      branch.appendChild(collapsed);
+
+      // Toggle button on VP card
+      const btn = document.createElement('button');
+      btn.className='collapse-btn';
+      btn.textContent=lang==='pt'?'▼ Recolher':'▼ Collapse';
+      btn.onclick=function(e){
+        e.stopPropagation();
+        const isCollapsed = collapsed.classList.toggle('collapsed');
+        btn.textContent = isCollapsed?(lang==='pt'?'▶ Expandir':'▶ Expand'):(lang==='pt'?'▼ Recolher':'▼ Collapse');
+      };
+      branch.appendChild(btn);
+    }
+
+    vpContainer.appendChild(branch);
   });
+
+  // Attach tooltip hover logic
+  attachOrgHover();
+}
+
+function makeOrgCard(p, isCEO=false, isVP=false){
+  const riskClass = {ok:'r-ok',warn:'r-warn',crit:'r-crit'}[p.risk];
+  const cls = isCEO?'oc ceo':isVP?'oc vp':'oc';
+  const role = lang==='pt'?p.role_pt:p.role_en;
+  return `<div class="${cls}"
+    data-name="${p.name}" data-role="${role}" data-hc="${p.hc}"
+    data-tenure="${p.tenure}" data-enps="${p.enps}" data-perf="${p.perf}" data-risk="${p.risk}">
+    <span class="risk ${riskClass}"></span>
+    <span class="on">${p.name}</span>
+    <span class="or">${role}</span>
+    <span class="oh">${p.hc} ${lang==='pt'?'colab.':'people'}</span>
+  </div>`;
+}
+
+function attachOrgHover(){
+  const tt = document.getElementById('org-tt');
+  document.querySelectorAll('.oc').forEach(card=>{
+    card.addEventListener('mouseenter', e=>{
+      const d = card.dataset;
+      const riskLabel = {ok:lang==='pt'?'Baixo':'Low', warn:lang==='pt'?'Médio':'Medium', crit:lang==='pt'?'Alto':'High'}[d.risk];
+      const riskCls = d.risk;
+      tt.innerHTML = `<span class="ttname">${d.name}</span>
+        <div class="ttrow"><span class="ttk">${lang==='pt'?'Cargo':'Role'}</span><span class="ttv">${d.role}</span></div>
+        <div class="ttrow"><span class="ttk">HC</span><span class="ttv">${d.hc}</span></div>
+        <div class="ttrow"><span class="ttk">${lang==='pt'?'Tempo na empresa':'Tenure'}</span><span class="ttv">${d.tenure} ${lang==='pt'?'anos':'yrs'}</span></div>
+        <div class="ttrow"><span class="ttk">eNPS</span><span class="ttv ${d.enps>=30?'ok':d.enps>=20?'warn':'crit'}">${d.enps}</span></div>
+        <div class="ttrow"><span class="ttk">${lang==='pt'?'Performance':'Performance'}</span><span class="ttv ${d.perf>=80?'ok':d.perf>=70?'warn':'crit'}">${d.perf}</span></div>
+        <div class="ttrow"><span class="ttk">Flight Risk</span><span class="ttv ${riskCls}">${riskLabel}</span></div>`;
+      tt.classList.add('vis');
+    });
+    card.addEventListener('mousemove', e=>{
+      tt.style.left = (e.clientX+14)+'px';
+      tt.style.top  = (e.clientY-10)+'px';
+    });
+    card.addEventListener('mouseleave', ()=> tt.classList.remove('vis'));
+  });
+}
+
+/* ══════════════════════════════════════════════
+   INIT
+══════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded',()=>{
+  renderAlerts();
+  renderDeptTable();
+  renderHomeTiles();
+  initHomeCharts();
 });
 </script>
 </body>
