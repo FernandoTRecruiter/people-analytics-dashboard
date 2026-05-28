@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>People Analytics Dashboard · Innova Pessoas S.A.</title>
+<title>People Analytics Dashboard · C. &amp; Paoli corp.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -389,7 +389,7 @@ button{font-family:inherit;cursor:pointer}
 <!-- ══════════ SIDEBAR ════════════════════════ -->
 <aside class="sidebar">
   <div class="sb-logo">
-    <div class="sb-company">Innova Pessoas S.A.</div>
+    <div class="sb-company">C. &amp; Paoli corp.</div>
     <div class="sb-tag">People Analytics · Q2 2026</div>
   </div>
 
@@ -520,7 +520,7 @@ button{font-family:inherit;cursor:pointer}
   <div id="page-home" class="page">
     <div class="ph">
       <div class="ph-eye" data-pt="01 · BRIEFING EXECUTIVO" data-en="01 · EXECUTIVE BRIEFING">01 · BRIEFING EXECUTIVO</div>
-      <div class="ph-title" data-pt="Visão Geral · Innova Pessoas S.A." data-en="Overview · Innova Pessoas S.A.">Visão Geral · Innova Pessoas S.A.</div>
+      <div class="ph-title" data-pt="Visão Geral · C. &amp; Paoli corp." data-en="Overview · C. &amp; Paoli corp.">Visão Geral · C. &amp; Paoli corp.</div>
       <div class="ph-sub" data-pt="312 colaboradores · 6 departamentos · São Paulo, BR · Q2 2026"
            data-en="312 employees · 6 departments · São Paulo, BR · Q2 2026">312 colaboradores · 6 departamentos · São Paulo, BR · Q2 2026</div>
     </div>
@@ -606,11 +606,8 @@ button{font-family:inherit;cursor:pointer}
     <div class="kpi-row" id="vagas-tiles"></div>
     <div class="g2">
       <div class="card">
-        <div class="card-label" data-pt="Funil de recrutamento — candidatos por etapa" data-en="Recruiting funnel — candidates by stage">Funil de recrutamento — candidatos por etapa</div>
-        <div class="funnel-wrap">
-          <div class="funnel" id="vagas-funnel"></div>
-          <div class="funnel-arrow" data-pt="Conversão total: 358 → 9 contratados (2.5%)" data-en="Total conversion: 358 → 9 hired (2.5%)">Conversão total: 358 → 9 contratados (2.5%)</div>
-        </div>
+        <div class="card-label" data-pt="Funil de recrutamento — conversão por etapa" data-en="Recruiting funnel — conversion by stage">Funil de recrutamento — conversão por etapa</div>
+        <div id="vagas-funnel" style="padding:4px 0"></div>
       </div>
       <div class="card">
         <div class="card-label" data-pt="Time to Fill por vaga (dias abertos vs. meta)" data-en="Time to Fill by vacancy (days open vs. target)">Time to Fill por vaga (dias abertos vs. meta)</div>
@@ -627,14 +624,19 @@ button{font-family:inherit;cursor:pointer}
   <div id="page-org" class="page">
     <div class="ph">
       <div class="ph-eye" data-pt="05 · ORGANOGRAMA" data-en="05 · ORG CHART">05 · ORGANOGRAMA</div>
-      <div class="ph-title" data-pt="Estrutura Organizacional" data-en="Organizational Structure">Estrutura Organizacional</div>
-      <div class="ph-sub" data-pt="Clique nos cards de VP para expandir/recolher a equipe · Passe o mouse para ver métricas individuais"
-           data-en="Click VP cards to expand/collapse the team · Hover to see individual metrics">Clique nos cards de VP para expandir/recolher a equipe · Passe o mouse para ver métricas individuais</div>
+      <div class="ph-title" data-pt="Estrutura Organizacional — Vista Circular" data-en="Organizational Structure — Radial View">Estrutura Organizacional — Vista Circular</div>
+      <div class="ph-sub" data-pt="Passe o mouse sobre qualquer nó para ver métricas individuais · cores indicam Flight Risk"
+           data-en="Hover any node to see individual metrics · colors indicate Flight Risk">Passe o mouse sobre qualquer nó para ver métricas individuais · cores indicam Flight Risk</div>
     </div>
-    <div class="card">
-      <div class="org-scroll">
-        <div class="org-tree" id="org-tree"></div>
-      </div>
+    <!-- Legend -->
+    <div style="display:flex;gap:20px;margin-bottom:14px;flex-wrap:wrap;font-size:.75rem;color:var(--tx2)">
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#6366f1;margin-right:5px"></span><span data-pt="CEO / Empresa" data-en="CEO / Company">CEO / Empresa</span></span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#22c55e;margin-right:5px"></span><span data-pt="Flight Risk Baixo" data-en="Low Flight Risk">Flight Risk Baixo</span></span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#d97706;margin-right:5px"></span><span data-pt="Flight Risk Médio" data-en="Medium Flight Risk">Flight Risk Médio</span></span>
+      <span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc2626;margin-right:5px"></span><span data-pt="Flight Risk Alto — Atenção" data-en="High Flight Risk — Alert">Flight Risk Alto — Atenção</span></span>
+    </div>
+    <div class="card" style="padding:8px;overflow:hidden">
+      <svg id="org-svg" width="100%" style="display:block;min-height:620px"></svg>
     </div>
   </div>
 
@@ -838,11 +840,14 @@ function nav(id){
   document.getElementById('page-'+id).classList.add('active');
   document.querySelectorAll('.sb-link').forEach(a=>a.classList.toggle('active',a.dataset.page===id));
   document.getElementById('tb-title').textContent = T().pages[id]||id;
-  if(id==='home'  && !CC.homeTurn) initHomeCharts();
+  if(id==='home'){
+    renderHomeTiles(); renderAlerts(); renderDeptTable();
+    if(!CC.homeTurn) initHomeCharts();
+  }
   if(id==='kpis'  && !CC.kpiDone)  { renderKPICards(); CC.kpiDone=true; }
   if(id==='td'    && !CC.tdBudget) initTDCharts();
   if(id==='vagas' && !CC.vagaTTF)  initVagasCharts();
-  if(id==='org')                   buildOrgChart();
+  if(id==='org')                   buildCircularOrg();
 }
 
 /* ═══════════════════════════════════════════════
@@ -1113,14 +1118,25 @@ function renderVagasTiles(){
 }
 function renderFunnel(){
   const max=D.funnel[0].v;
-  document.getElementById('vagas-funnel').innerHTML=D.funnel.map(f=>{
-    const h=Math.max(8,Math.round(f.v/max*110));
-    return `<div class="fstep">
-      <div class="fval">${f.v}</div>
-      <div class="fbar" style="height:${h}px;background:${f.color}"></div>
-      <div class="flbl">${L(f)}</div>
+  const rows=D.funnel.map((f,i)=>{
+    const prev=i>0?D.funnel[i-1].v:null;
+    const conv=prev?Math.round(f.v/prev*100):100;
+    const pct=Math.round(f.v/max*100);
+    const colors=['#6366f1','#7c3aed','#9333ea','#a855f7','#22c55e'];
+    const bg=colors[i]||'#94a3b8';
+    const convLabel=prev?`<span style="font-size:.62rem;color:var(--tx3);font-family:'DM Mono',monospace">→ ${conv}% ${lang==='pt'?'conv.':'conv.'}</span>`:'';
+    return `<div style="margin-bottom:8px">
+      ${i>0?`<div style="font-size:.6rem;color:var(--tx3);font-family:'DM Mono',monospace;text-align:center;margin-bottom:3px;letter-spacing:.04em">▼ ${conv}% ${lang==='pt'?'conversão':'conversion'}</div>`:''}
+      <div style="display:flex;align-items:center;gap:10px">
+        <div style="font-family:'DM Mono',monospace;font-size:.75rem;font-weight:600;width:36px;text-align:right;color:var(--tx)">${f.v}</div>
+        <div style="flex:1;height:36px;border-radius:5px;background:${bg};width:${pct}%;min-width:8px;display:flex;align-items:center;padding:0 10px;transition:width 1s">
+          <span style="font-size:.72rem;color:rgba(255,255,255,.9);font-weight:500;white-space:nowrap">${L(f)}</span>
+        </div>
+        <div style="font-size:.65rem;color:var(--tx3);font-family:'DM Mono',monospace;width:34px">${pct}%</div>
+      </div>
     </div>`;
   }).join('');
+  document.getElementById('vagas-funnel').innerHTML=rows;
 }
 function renderVagasTable(){
   const hdr=T().vagas_hdr, stages=T().stages;
@@ -1170,137 +1186,165 @@ function initVagasCharts(){
 }
 
 /* ═══════════════════════════════════════════════
-   ORG CHART — CSS tree via JS
+   ORG CHART — Circular/Radial SVG
 ═══════════════════════════════════════════════ */
 let orgReady=false;
-function buildOrgChart(){
+function buildCircularOrg(){
   if(orgReady) return;
   orgReady=true;
-  const root=document.getElementById('org-tree');
-  root.innerHTML='';
+  // ── layout constants ──────────────────────────
+  const svg  = document.getElementById('org-svg');
+  const W    = svg.clientWidth || 900;
+  const H    = 620;
+  const cx   = W/2, cy = H/2;
+  const R1   = 135;   // VP ring radius
+  const R2   = 290;   // Manager ring radius
+  const vpN  = D.org.children.length;
 
-  // CEO node
-  const ceoWrap=document.createElement('div');
-  ceoWrap.style.cssText='display:flex;flex-direction:column;align-items:center;';
-  ceoWrap.appendChild(makeOcEl(D.org,true,false));
-  const vDown=document.createElement('div');
-  vDown.className='tree-vline';
-  ceoWrap.appendChild(vDown);
-  root.appendChild(ceoWrap);
+  svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  svg.style.height = H+'px';
 
-  // VPs as <ul class="tree-ul">
-  const vpUl=document.createElement('ul');
-  vpUl.className='tree-ul';
-  vpUl.style.cssText='margin:0;padding:0;';
+  // ── colour helpers ─────────────────────────────
+  const riskFill  = {ok:'#dcfce7',warn:'#fef3c7',crit:'#fee2e2'};
+  const riskStroke= {ok:'#16a34a',warn:'#d97706',crit:'#dc2626'};
 
-  D.org.children.forEach(vp=>{
-    const li=document.createElement('li');
-    li.className='tree-li';
+  // ── build node list ────────────────────────────
+  const nodes=[], links=[];
+  // CEO
+  nodes.push({...D.org, x:cx, y:cy, r:50, level:'ceo', id:'ceo'});
 
-    const nodeWrap=document.createElement('div');
-    nodeWrap.className='tree-node-wrap';
+  D.org.children.forEach((vp,vi)=>{
+    const ang = -Math.PI/2 + (2*Math.PI/vpN)*vi;
+    const vx  = cx + R1*Math.cos(ang);
+    const vy  = cy + R1*Math.sin(ang);
+    const vid = `vp-${vi}`;
+    nodes.push({...vp, x:vx, y:vy, r:38, level:'vp', id:vid, parentId:'ceo'});
+    links.push({x1:cx,y1:cy,x2:vx,y2:vy,w:2,color:'#c7d2fe'});
 
-    // VP card
-    const vpCard=makeOcEl(vp,false,true);
-    nodeWrap.appendChild(vpCard);
-
-    // Toggle btn
-    const btn=document.createElement('button');
-    btn.className='tree-toggle';
-    btn.textContent=T().expand;
-    nodeWrap.appendChild(btn);
-
-    // Children ul (collapsed initially for cleaner look)
-    const childrenDiv=document.createElement('div');
-    childrenDiv.className='tree-children';
-    const childH=estimateChildrenH(vp.children);
-    childrenDiv.style.maxHeight=childH+'px';
-
-    const childUl=document.createElement('ul');
-    childUl.className='tree-ul';
-    childUl.style.cssText='margin:0;padding:0;';
-
-    (vp.children||[]).forEach(mgr=>{
-      const mgrLi=document.createElement('li');
-      mgrLi.className='tree-li';
-      const mWrap=document.createElement('div');
-      mWrap.className='tree-node-wrap';
-      mWrap.appendChild(makeOcEl(mgr,false,false));
-      mgrLi.appendChild(mWrap);
-      childUl.appendChild(mgrLi);
+    const mgrs = vp.children||[];
+    const mN   = mgrs.length;
+    mgrs.forEach((mgr,mi)=>{
+      const spread = mN>1 ? 0.38 : 0;
+      const mang   = ang + (mi-(mN-1)/2)*spread;
+      const mx     = cx + R2*Math.cos(mang);
+      const my     = cy + R2*Math.sin(mang);
+      const mid    = `mgr-${vi}-${mi}`;
+      nodes.push({...mgr, x:mx, y:my, r:28, level:'mgr', id:mid, parentId:vid});
+      links.push({x1:vx,y1:vy,x2:mx,y2:my,w:1.5,color:'#e2e8f0'});
     });
-
-    childrenDiv.appendChild(childUl);
-    nodeWrap.appendChild(childrenDiv);
-
-    // Toggle logic
-    let expanded=true;
-    btn.onclick=()=>{
-      expanded=!expanded;
-      if(expanded){
-        childrenDiv.classList.remove('collapsed');
-        childrenDiv.style.maxHeight=childH+'px';
-        btn.textContent=T().expand;
-      } else {
-        childrenDiv.classList.add('collapsed');
-        btn.textContent=T().collapse;
-      }
-    };
-
-    li.appendChild(nodeWrap);
-    vpUl.appendChild(li);
   });
 
-  root.appendChild(vpUl);
-  attachOrgHover();
-}
+  // ── draw department arcs (background sectors) ──
+  let arcs='';
+  D.org.children.forEach((vp,vi)=>{
+    const ang = -Math.PI/2 + (2*Math.PI/vpN)*vi;
+    const half = Math.PI/vpN;
+    const a1   = ang-half, a2=ang+half;
+    const rOuter=R2+70, rInner=R1-52;
+    const x1o=cx+rOuter*Math.cos(a1), y1o=cy+rOuter*Math.sin(a1);
+    const x2o=cx+rOuter*Math.cos(a2), y2o=cy+rOuter*Math.sin(a2);
+    const x1i=cx+rInner*Math.cos(a2), y1i=cy+rInner*Math.sin(a2);
+    const x2i=cx+rInner*Math.cos(a1), y2i=cy+rInner*Math.sin(a1);
+    const fColors=['#f0f4ff','#f5f3ff','#fff0f0','#f0fdf4','#fffbeb','#fdf4ff'];
+    arcs+=`<path d="M${x1o},${y1o} A${rOuter},${rOuter} 0 0,1 ${x2o},${y2o} L${x1i},${y1i} A${rInner},${rInner} 0 0,0 ${x2i},${y2i} Z"
+      fill="${fColors[vi%fColors.length]}" opacity="0.55"/>`;
+  });
 
-function estimateChildrenH(ch){ return ch&&ch.length>0?160:0; }
+  // ── draw concentric guide circles ──────────────
+  const guides=`
+    <circle cx="${cx}" cy="${cy}" r="${R1}" fill="none" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>
+    <circle cx="${cx}" cy="${cy}" r="${R2}" fill="none" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4 4" opacity=".5"/>`;
 
-function makeOcEl(p,isCeo,isVp){
-  const el=document.createElement('div');
-  const riskCls={ok:'r-ok',warn:'r-warn',crit:'r-crit'}[p.risk];
-  el.className=`oc${isCeo?' ceo':isVp?' vp':p.risk==='crit'?' crit-card':''}`;
-  el.dataset.name=p.name;
-  el.dataset.role=lang==='pt'?p.role_pt:p.role_en;
-  el.dataset.hc=p.hc;
-  el.dataset.tenure=p.tenure;
-  el.dataset.enps=p.enps;
-  el.dataset.perf=p.perf;
-  el.dataset.risk=p.risk;
-  el.innerHTML=`
-    <div class="oc-risk ${riskCls}"></div>
-    <span class="oc-emoji">${p.emoji}</span>
-    <span class="oc-name">${p.name}</span>
-    <span class="oc-role">${lang==='pt'?p.role_pt:p.role_en}</span>
-    <span class="oc-hc">${p.hc} ${T().people}</span>`;
-  return el;
-}
+  // ── draw bezier links ──────────────────────────
+  let paths='';
+  links.forEach(l=>{
+    const mx=(l.x1+l.x2)/2, my=(l.y1+l.y2)/2;
+    const bend=0;
+    paths+=`<line x1="${l.x1}" y1="${l.y1}" x2="${l.x2}" y2="${l.y2}" stroke="${l.color}" stroke-width="${l.w}" opacity=".8"/>`;
+  });
 
-function attachOrgHover(){
+  // ── draw nodes ────────────────────────────────
+  let nhtml='';
+  nodes.forEach(n=>{
+    if(n.level==='ceo'){
+      // Large CEO circle
+      nhtml+=`
+        <circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="#6366f1" stroke="#4f46e5" stroke-width="2.5"
+          class="org-node" data-id="${n.id}" data-name="${n.name}" data-role="${lang==='pt'?n.role_pt:n.role_en}"
+          data-hc="${n.hc}" data-tenure="${n.tenure}" data-enps="${n.enps}" data-perf="${n.perf}" data-risk="${n.risk}"/>
+        <text x="${n.x}" y="${n.y-14}" text-anchor="middle" dominant-baseline="middle" font-size="22" style="pointer-events:none">${n.emoji}</text>
+        <text x="${n.x}" y="${n.y+5}"  text-anchor="middle" dominant-baseline="middle" font-size="9.5" font-weight="700" fill="white" style="pointer-events:none">${n.name.split(' ').slice(0,2).join(' ')}</text>
+        <text x="${n.x}" y="${n.y+18}" text-anchor="middle" dominant-baseline="middle" font-size="8" fill="rgba(255,255,255,.7)" style="pointer-events:none">${lang==='pt'?n.role_pt:n.role_en}</text>
+        <text x="${n.x}" y="${n.y+29}" text-anchor="middle" dominant-baseline="middle" font-size="7.5" fill="rgba(255,255,255,.55)" style="pointer-events:none">${n.hc} ${T().people}</text>`;
+    } else if(n.level==='vp'){
+      const fs=riskFill[n.risk]||'#f0f4ff', ss=riskStroke[n.risk]||'#6366f1';
+      const sw=n.risk==='crit'?3:2;
+      nhtml+=`
+        <circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${fs}" stroke="${ss}" stroke-width="${sw}"
+          class="org-node" style="cursor:pointer" filter="url(#shadow)"
+          data-id="${n.id}" data-name="${n.name}" data-role="${lang==='pt'?n.role_pt:n.role_en}"
+          data-hc="${n.hc}" data-tenure="${n.tenure}" data-enps="${n.enps}" data-perf="${n.perf}" data-risk="${n.risk}"/>
+        <text x="${n.x}" y="${n.y-11}" text-anchor="middle" dominant-baseline="middle" font-size="17" style="pointer-events:none">${n.emoji}</text>
+        <text x="${n.x}" y="${n.y+4}"  text-anchor="middle" dominant-baseline="middle" font-size="8.5" font-weight="700" fill="#1e293b" style="pointer-events:none">${n.name.split(' ')[0]}</text>
+        <text x="${n.x}" y="${n.y+15}" text-anchor="middle" dominant-baseline="middle" font-size="7" fill="#64748b" style="pointer-events:none">${lang==='pt'?n.role_pt:n.role_en}</text>
+        <text x="${n.x}" y="${n.y+25}" text-anchor="middle" dominant-baseline="middle" font-size="7" fill="${ss}" font-weight="600" style="pointer-events:none">${n.hc} ${T().people}</text>`;
+    } else {
+      const fs=riskFill[n.risk]||'#f8fafc', ss=riskStroke[n.risk]||'#94a3b8';
+      const sw=n.risk==='crit'?2.5:1.5;
+      nhtml+=`
+        <circle cx="${n.x}" cy="${n.y}" r="${n.r}" fill="${fs}" stroke="${ss}" stroke-width="${sw}"
+          class="org-node" style="cursor:pointer"
+          data-id="${n.id}" data-name="${n.name}" data-role="${lang==='pt'?n.role_pt:n.role_en}"
+          data-hc="${n.hc}" data-tenure="${n.tenure}" data-enps="${n.enps}" data-perf="${n.perf}" data-risk="${n.risk}"/>
+        <text x="${n.x}" y="${n.y-8}" text-anchor="middle" dominant-baseline="middle" font-size="12" style="pointer-events:none">${n.emoji}</text>
+        <text x="${n.x}" y="${n.y+5}" text-anchor="middle" dominant-baseline="middle" font-size="7.5" font-weight="600" fill="#1e293b" style="pointer-events:none">${n.name.split(' ')[0]}</text>
+        <text x="${n.x}" y="${n.y+15}" text-anchor="middle" dominant-baseline="middle" font-size="6.5" fill="#94a3b8" style="pointer-events:none">${n.hc} ${T().people}</text>`;
+    }
+  });
+
+  // ── department labels ─────────────────────────
+  let labels='';
+  D.org.children.forEach((vp,vi)=>{
+    const ang=(-Math.PI/2+(2*Math.PI/vpN)*vi);
+    const labelR=R2+55;
+    const lx=cx+labelR*Math.cos(ang), ly=cy+labelR*Math.sin(ang);
+    const deptName=lang==='pt'?vp.role_pt:vp.role_en;
+    labels+=`<text x="${lx}" y="${ly}" text-anchor="middle" dominant-baseline="middle"
+      font-size="9" font-weight="600" fill="#94a3b8" letter-spacing="0.08em"
+      style="text-transform:uppercase;pointer-events:none">${deptName.replace('VP ','').replace('VP','').toUpperCase()}</text>`;
+  });
+
+  svg.innerHTML=`
+    <defs>
+      <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-color="rgba(0,0,0,.12)"/>
+      </filter>
+    </defs>
+    ${arcs}${guides}${paths}${nhtml}${labels}`;
+
+  // ── tooltip ────────────────────────────────────
   const tt=document.getElementById('org-tt');
-  document.querySelectorAll('.oc').forEach(card=>{
-    card.addEventListener('mouseenter',()=>{
-      const d=card.dataset;
-      const rLabel={ok:lang==='pt'?'Baixo':'Low',warn:lang==='pt'?'Médio':'Medium',crit:lang==='pt'?'Alto':'High'}[d.risk];
-      const eClass=d.enps>=30?'ok':d.enps>=20?'warn':'crit';
-      const pClass=d.perf>=80?'ok':d.perf>=70?'warn':'crit';
-      const rClass=d.risk;
+  svg.querySelectorAll('.org-node').forEach(node=>{
+    node.addEventListener('mouseenter',()=>{
+      const d=node.dataset;
+      if(!d.name) return;
+      const rLabel={ok:lang==='pt'?'Baixo':'Low',warn:lang==='pt'?'Médio':'Medium',crit:lang==='pt'?'Alto':'High'}[d.risk]||'—';
+      const eC=d.enps>=30?'ok':d.enps>=20?'warn':'crit';
+      const pC=d.perf>=80?'ok':d.perf>=70?'warn':'crit';
+      const rC=d.risk;
       tt.innerHTML=`
         <span class="tn">${d.name}</span>
         <div class="tr"><span class="tk">${lang==='pt'?'Cargo':'Role'}</span><span class="tv">${d.role}</span></div>
         <div class="tr"><span class="tk">HC</span><span class="tv">${d.hc} ${T().people}</span></div>
-        <div class="tr"><span class="tk">${lang==='pt'?'Tempo de empresa':'Tenure'}</span><span class="tv">${d.tenure} ${T().years}</span></div>
-        <div class="tr"><span class="tk">eNPS</span><span class="tv ${eClass}">${d.enps}</span></div>
-        <div class="tr"><span class="tk">Performance</span><span class="tv ${pClass}">${d.perf}/100</span></div>
-        <div class="tr"><span class="tk">Flight Risk</span><span class="tv ${rClass}">${rLabel}</span></div>`;
+        <div class="tr"><span class="tk">${lang==='pt'?'Tempo na empresa':'Tenure'}</span><span class="tv">${d.tenure} ${T().years}</span></div>
+        <div class="tr"><span class="tk">eNPS</span><span class="tv ${eC}">${d.enps}</span></div>
+        <div class="tr"><span class="tk">Performance</span><span class="tv ${pC}">${d.perf}/100</span></div>
+        <div class="tr"><span class="tk">Flight Risk</span><span class="tv ${rC}">${rLabel}</span></div>`;
       tt.classList.add('vis');
+      node.setAttribute('opacity','0.88');
     });
-    card.addEventListener('mousemove',e=>{
-      tt.style.left=(e.clientX+16)+'px';
-      tt.style.top=(e.clientY-10)+'px';
-    });
-    card.addEventListener('mouseleave',()=>tt.classList.remove('vis'));
+    node.addEventListener('mousemove',e=>{ tt.style.left=(e.clientX+16)+'px'; tt.style.top=(e.clientY-10)+'px'; });
+    node.addEventListener('mouseleave',()=>{ tt.classList.remove('vis'); node.setAttribute('opacity','1'); });
   });
 }
 
