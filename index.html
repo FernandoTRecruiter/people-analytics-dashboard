@@ -5,131 +5,163 @@
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title>People Analytics Dashboard · Innova Pessoas S.A.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
+/* ──────────────────────────────────────────────
+   TOKENS
+────────────────────────────────────────────── */
 :root{
-  --sb:#0f172a;--sb-w:240px;--acc:#6366f1;--acc2:#818cf8;
-  --ok:#16a34a;--warn:#d97706;--crit:#dc2626;
-  --bg:#f1f5f9;--surf:#fff;--bdr:#e2e8f0;
-  --tx:#1e293b;--tx2:#64748b;--tx3:#94a3b8;
-  --r:12px;--sh:0 1px 3px rgba(0,0,0,.08);--sh2:0 4px 16px rgba(0,0,0,.1);
+  --sb:#0f172a; --sb2:#1e2d45; --sb-w:230px;
+  --acc:#6366f1; --acc-h:#4f46e5; --acc-l:#e0e7ff;
+  --ok:#16a34a; --ok-l:#dcfce7;
+  --warn:#d97706; --warn-l:#fef3c7;
+  --crit:#dc2626; --crit-l:#fee2e2;
+  --bg:#f0f4f8; --surf:#ffffff; --surf2:#f8fafc;
+  --bdr:#e2e8f0; --bdr2:#cbd5e1;
+  --tx:#0f172a; --tx2:#475569; --tx3:#94a3b8;
+  --r:10px; --r2:16px;
+  --sh:0 1px 3px rgba(0,0,0,.06),0 1px 2px rgba(0,0,0,.04);
+  --sh2:0 4px 20px rgba(0,0,0,.09);
+  --sh3:0 8px 32px rgba(0,0,0,.14);
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:'Geist',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;min-height:100vh}
-
-/* ── APP LAYOUT ─────────────────────────────── */
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--tx);font-size:14px;line-height:1.6;min-height:100vh}
+button{font-family:inherit;cursor:pointer}
+/* ──────────────────────────────────────────────
+   LAYOUT
+────────────────────────────────────────────── */
 .app{display:flex;min-height:100vh}
-
-/* ── SIDEBAR ─────────────────────────────────── */
+/* ──────────────────────────────────────────────
+   SIDEBAR
+────────────────────────────────────────────── */
 .sidebar{
   width:var(--sb-w);min-width:var(--sb-w);background:var(--sb);
-  color:#94a3b8;position:sticky;top:0;height:100vh;
-  overflow-y:auto;display:flex;flex-direction:column;padding:20px 0;z-index:10;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+  display:flex;flex-direction:column;padding:18px 0;z-index:20;
+  box-shadow:2px 0 12px rgba(0,0,0,.15);
 }
-.sb-logo{padding:0 18px 18px;border-bottom:1px solid rgba(255,255,255,.06);margin-bottom:6px}
-.sb-co{font-size:.82rem;font-weight:600;color:#fff;line-height:1.3}
-.sb-tag{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:#334155;margin-top:3px}
-.sb-sect{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.14em;text-transform:uppercase;color:#334155;padding:14px 18px 5px}
-.sb-nav{list-style:none;padding:0 10px}
-.sb-nav li{margin-bottom:2px}
-.sb-nav a{
-  display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:8px;
-  color:#94a3b8;text-decoration:none;font-size:.8rem;cursor:pointer;
-  transition:background .15s,color .15s;
+.sb-logo{padding:0 16px 16px;border-bottom:1px solid rgba(255,255,255,.07);margin-bottom:4px}
+.sb-company{font-size:.82rem;font-weight:700;color:#f1f5f9;letter-spacing:-.01em}
+.sb-tag{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:#475569;margin-top:2px}
+.sb-section{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.14em;text-transform:uppercase;color:#334155;padding:14px 16px 4px}
+.sb-nav{list-style:none;padding:0 8px}
+.sb-nav li{margin-bottom:1px}
+.sb-link{
+  display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;
+  color:#94a3b8;text-decoration:none;font-size:.78rem;font-weight:400;
+  transition:background .14s,color .14s;cursor:pointer;
 }
-.sb-nav a:hover{background:rgba(255,255,255,.05);color:#e2e8f0}
-.sb-nav a.active{background:rgba(99,102,241,.18);color:#818cf8}
-.sb-nav a .ic{font-size:1rem;width:18px;text-align:center}
-.sb-nav a .bdg{
-  margin-left:auto;background:rgba(99,102,241,.22);color:#818cf8;
-  font-family:'DM Mono',monospace;font-size:.58rem;padding:2px 6px;border-radius:8px;
+.sb-link:hover{background:rgba(255,255,255,.06);color:#cbd5e1}
+.sb-link.active{background:rgba(99,102,241,.2);color:#a5b4fc;font-weight:500}
+.sb-link .ic{font-size:.95rem;width:18px;text-align:center;flex-shrink:0}
+.sb-link .sb-badge{
+  margin-left:auto;background:rgba(99,102,241,.25);color:#a5b4fc;
+  font-family:'DM Mono',monospace;font-size:.56rem;padding:2px 6px;border-radius:8px;
 }
-.sb-bottom{
-  margin-top:auto;padding:14px 18px;
-  border-top:1px solid rgba(255,255,255,.06);
-  font-size:.66rem;color:#334155;line-height:1.9;
-}
-.sb-bottom a{color:#475569;text-decoration:none;transition:color .15s}
-.sb-bottom a:hover{color:#818cf8}
-
-/* ── MAIN ────────────────────────────────────── */
+.sb-divider{height:1px;background:rgba(255,255,255,.06);margin:10px 0}
+.sb-refs{padding:10px 16px;font-size:.65rem;color:#334155;line-height:2}
+.sb-refs a{color:#475569;text-decoration:none;transition:color .14s}
+.sb-refs a:hover{color:#a5b4fc}
+/* ──────────────────────────────────────────────
+   MAIN
+────────────────────────────────────────────── */
 .main{flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden}
-
-/* ── TOP BAR ─────────────────────────────────── */
+/* ──────────────────────────────────────────────
+   TOPBAR
+────────────────────────────────────────────── */
 .topbar{
   background:var(--surf);border-bottom:1px solid var(--bdr);
-  padding:0 26px;height:52px;display:flex;align-items:center;
-  justify-content:space-between;position:sticky;top:0;z-index:5;flex-shrink:0;
+  padding:0 24px;height:52px;display:flex;align-items:center;
+  justify-content:space-between;position:sticky;top:0;z-index:10;flex-shrink:0;
+  box-shadow:var(--sh);
 }
-.tb-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--tx)}
-.tb-right{display:flex;align-items:center;gap:14px}
-.tb-date{font-family:'DM Mono',monospace;font-size:.62rem;letter-spacing:.05em;text-transform:uppercase;color:var(--tx3)}
+.tb-title{font-size:.88rem;font-weight:600;color:var(--tx);letter-spacing:-.01em}
+.tb-right{display:flex;align-items:center;gap:12px}
+.tb-date{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.04em;color:var(--tx3);display:flex;align-items:center;gap:5px}
+.tb-dot{width:6px;height:6px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 2px #dcfce7;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
 .lang-bar{display:flex;background:var(--bg);border:1px solid var(--bdr);border-radius:20px;overflow:hidden}
 .lb{
-  padding:4px 13px;font-family:'DM Mono',monospace;font-size:.62rem;
+  padding:4px 12px;font-family:'DM Mono',monospace;font-size:.6rem;
   letter-spacing:.06em;text-transform:uppercase;border:none;
-  background:transparent;color:var(--tx2);cursor:pointer;transition:background .15s,color .15s;
+  background:transparent;color:var(--tx2);transition:background .14s,color .14s;
 }
 .lb.active{background:var(--acc);color:#fff;border-radius:20px}
-
-/* ── CONTENT / PAGES ─────────────────────────── */
+/* ──────────────────────────────────────────────
+   CONTENT / PAGES
+────────────────────────────────────────────── */
 .content{flex:1;overflow-y:auto}
-.page{display:none;padding:26px}
-.page.active{display:block;animation:fadeUp .22s ease}
-@keyframes fadeUp{from{opacity:0;transform:translateY(7px)}to{opacity:1;transform:none}}
-
-/* ── PAGE HEADER ─────────────────────────────── */
-.ph{margin-bottom:22px}
-.ph-eye{font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.15em;text-transform:uppercase;color:var(--acc);margin-bottom:3px}
-.ph-title{font-family:'DM Serif Display',serif;font-size:1.55rem;font-weight:400;color:var(--tx)}
-.ph-sub{font-size:.82rem;color:var(--tx2);margin-top:3px}
-
-/* ── GENERIC CARD ────────────────────────────── */
-.card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);box-shadow:var(--sh);padding:18px}
-.card-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:10px}
-
-/* ── KPI TILES (HOME) ──────────────────────────── */
-.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.page{display:none;padding:24px 28px 40px}
+.page.active{display:block;animation:fadeUp .2s ease}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+/* ──────────────────────────────────────────────
+   PAGE HEADER
+────────────────────────────────────────────── */
+.ph{margin-bottom:20px}
+.ph-eye{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.16em;text-transform:uppercase;color:var(--acc);margin-bottom:3px;display:flex;align-items:center;gap:6px}
+.ph-eye::before{content:'';width:16px;height:1.5px;background:var(--acc);display:block}
+.ph-title{font-family:'DM Serif Display',serif;font-size:1.6rem;font-weight:400;color:var(--tx);line-height:1.2}
+.ph-sub{font-size:.8rem;color:var(--tx2);margin-top:4px}
+/* ──────────────────────────────────────────────
+   CARDS
+────────────────────────────────────────────── */
+.card{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);box-shadow:var(--sh);padding:20px}
+.card-label{font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.12em;text-transform:uppercase;color:var(--tx3);margin-bottom:12px}
+/* ──────────────────────────────────────────────
+   KPI TILES
+────────────────────────────────────────────── */
+.kpi-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.kpi-row.cols-3{grid-template-columns:repeat(3,1fr)}
+.kpi-row.cols-5{grid-template-columns:repeat(5,1fr)}
 .kti{
-  background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);
-  padding:16px;box-shadow:var(--sh);border-left:3px solid transparent;
+  background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);
+  padding:16px 18px;box-shadow:var(--sh);position:relative;overflow:hidden;
+  border-top:3px solid transparent;transition:box-shadow .15s;
 }
-.kti.ok  {border-left-color:var(--ok)}
-.kti.warn{border-left-color:var(--warn)}
-.kti.crit{border-left-color:var(--crit)}
-.kti-lbl{font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3)}
-.kti-val{font-family:'DM Serif Display',serif;font-size:1.9rem;line-height:1.1;margin:5px 0 3px;color:var(--tx)}
-.kti-meta{font-size:.7rem;color:var(--tx2);display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.chip{font-family:'DM Mono',monospace;font-size:.62rem;padding:2px 7px;border-radius:9px}
-.chip-ok  {background:#f0fdf4;color:var(--ok)}
-.chip-warn{background:#fffbeb;color:var(--warn)}
-.chip-crit{background:#fef2f2;color:var(--crit)}
-
-/* ── ALERT PANEL ─────────────────────────────── */
-.alert-panel{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);overflow:hidden;box-shadow:var(--sh);margin-bottom:18px}
-.alert-hdr{
-  padding:13px 18px;border-bottom:1px solid var(--bdr);
-  display:flex;align-items:center;justify-content:space-between;
+.kti:hover{box-shadow:var(--sh2)}
+.kti.ok  {border-top-color:var(--ok)}
+.kti.warn{border-top-color:var(--warn)}
+.kti.crit{border-top-color:var(--crit)}
+.kti-label{font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-bottom:6px}
+.kti-val{font-family:'DM Serif Display',serif;font-size:1.85rem;line-height:1;color:var(--tx);margin-bottom:5px}
+.kti-meta{display:flex;align-items:center;gap:6px;flex-wrap:wrap;font-size:.7rem;color:var(--tx2)}
+.kti-chip{font-family:'DM Mono',monospace;font-size:.6rem;padding:2px 7px;border-radius:8px;font-weight:500;display:inline-flex;align-items:center;gap:3px}
+.kti-proj{font-size:.68rem;color:var(--tx3);margin-top:4px}
+.chip-ok  {background:var(--ok-l);color:var(--ok)}
+.chip-warn{background:var(--warn-l);color:var(--warn)}
+.chip-crit{background:var(--crit-l);color:var(--crit)}
+/* ──────────────────────────────────────────────
+   ALERT PANEL
+────────────────────────────────────────────── */
+.alert-box{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);box-shadow:var(--sh);overflow:hidden;margin-bottom:16px}
+.alert-head{padding:14px 20px;border-bottom:1px solid var(--bdr);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.alert-head-title{font-family:'DM Serif Display',serif;font-size:.95rem;font-weight:400}
+.alert-head-sub{font-size:.7rem;color:var(--tx2);margin-top:2px}
+.alert-cols{
+  display:grid;grid-template-columns:12px 1.8fr 80px 80px 90px 1fr;
+  align-items:center;gap:12px;padding:8px 20px;
+  font-family:'DM Mono',monospace;font-size:.57rem;letter-spacing:.08em;
+  text-transform:uppercase;color:var(--tx3);background:var(--surf2);
+  border-bottom:1px solid var(--bdr);
 }
-.alert-hdr-title{font-family:'DM Serif Display',serif;font-size:.95rem;font-weight:400}
-.alert-hdr-sub{font-size:.72rem;color:var(--tx2)}
 .alert-row{
-  display:grid;grid-template-columns:10px 1fr 90px 90px 100px 120px;
-  align-items:center;padding:10px 18px;border-bottom:1px solid var(--bdr);gap:12px;
-  transition:background .13s;
+  display:grid;grid-template-columns:12px 1.8fr 80px 80px 90px 1fr;
+  align-items:center;gap:12px;padding:10px 20px;
+  border-bottom:1px solid var(--bdr);transition:background .12s;
 }
 .alert-row:last-child{border-bottom:none}
-.alert-row:hover{background:#fafafa}
+.alert-row:hover{background:var(--surf2)}
 .adot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
-.adot.ok  {background:var(--ok);  box-shadow:0 0 0 3px #bbf7d0}
-.adot.warn{background:var(--warn);box-shadow:0 0 0 3px #fde68a}
-.adot.crit{background:var(--crit);box-shadow:0 0 0 3px #fecaca}
-.a-kpi{font-weight:500;font-size:.8rem}
-.a-val,.a-bench{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--tx2)}
-.a-bar-wrap .a-bar{height:5px;background:var(--bg);border-radius:2px;overflow:hidden}
-.a-bar-fill{height:100%;border-radius:2px;transition:width 1s}
+.adot.ok  {background:var(--ok);  box-shadow:0 0 0 3px var(--ok-l)}
+.adot.warn{background:var(--warn);box-shadow:0 0 0 3px var(--warn-l)}
+.adot.crit{background:var(--crit);box-shadow:0 0 0 3px var(--crit-l);animation:blink 1.5s infinite}
+@keyframes blink{0%,100%{box-shadow:0 0 0 3px var(--crit-l)}50%{box-shadow:0 0 0 5px #fca5a5}}
+.a-name{font-size:.8rem;font-weight:500;color:var(--tx)}
+.a-mono{font-family:'DM Mono',monospace;font-size:.72rem;color:var(--tx2)}
+.a-bar-wrap .a-bar{height:5px;background:var(--bg);border-radius:3px;overflow:hidden;margin-top:2px}
+.a-bar-fill{height:100%;border-radius:3px;transition:width 1.2s cubic-bezier(.4,0,.2,1)}
 .fill-ok  {background:var(--ok)}
 .fill-warn{background:var(--warn)}
 .fill-crit{background:var(--crit)}
@@ -137,170 +169,282 @@ body{font-family:'Geist',system-ui,sans-serif;background:var(--bg);color:var(--t
 .a-action.ok  {color:var(--ok)}
 .a-action.warn{color:var(--warn)}
 .a-action.crit{color:var(--crit)}
-
-/* ── CHARTS ──────────────────────────────────── */
-.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
-.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:18px}
-.cw{position:relative;height:210px}
-.cw-sm{position:relative;height:150px}
-
-/* ── DATA TABLE ──────────────────────────────── */
+/* ──────────────────────────────────────────────
+   GRID LAYOUTS
+────────────────────────────────────────────── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:16px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin-bottom:16px}
+.g-5-3{display:grid;grid-template-columns:5fr 3fr;gap:14px;margin-bottom:16px}
+/* fixed-height chart containers */
+.ch200{position:relative;height:200px;width:100%}
+.ch160{position:relative;height:160px;width:100%}
+.ch130{position:relative;height:130px;width:100%}
+/* ──────────────────────────────────────────────
+   DATA TABLE
+────────────────────────────────────────────── */
 .dt{width:100%;border-collapse:collapse}
 .dt th{
-  font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--tx3);padding:8px 12px;text-align:left;
-  border-bottom:1px solid var(--bdr);background:#fafafa;
+  font-family:'DM Mono',monospace;font-size:.58rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--tx3);padding:9px 14px;text-align:left;border-bottom:2px solid var(--bdr);background:var(--surf2);
 }
-.dt td{padding:10px 12px;border-bottom:1px solid var(--bdr);font-size:.8rem;color:var(--tx)}
-.dt tr:last-child td{border-bottom:none}
-.dt tr:hover td{background:#f8fafc}
-.pill{display:inline-flex;align-items:center;padding:2px 8px;border-radius:10px;font-family:'DM Mono',monospace;font-size:.62rem;font-weight:500;gap:4px}
-.pill.ok  {background:#f0fdf4;color:var(--ok)}
-.pill.warn{background:#fffbeb;color:var(--warn)}
-.pill.crit{background:#fef2f2;color:var(--crit)}
-
-/* ── PROG BAR ────────────────────────────────── */
-.pb-wrap{display:flex;align-items:center;gap:8px}
-.pb-track{flex:1;height:5px;background:var(--bg);border-radius:2px;overflow:hidden}
-.pb-fill{height:100%;border-radius:2px;transition:width 1s}
+.dt td{padding:11px 14px;border-bottom:1px solid var(--bdr);font-size:.8rem;color:var(--tx);vertical-align:middle}
+.dt tbody tr:last-child td{border-bottom:none}
+.dt tbody tr{transition:background .12s}
+.dt tbody tr:hover td{background:var(--surf2)}
+.pill{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-family:'DM Mono',monospace;font-size:.62rem;font-weight:500;gap:4px;white-space:nowrap}
+.pill.ok  {background:var(--ok-l);  color:var(--ok)}
+.pill.warn{background:var(--warn-l);color:var(--warn)}
+.pill.crit{background:var(--crit-l);color:var(--crit)}
+.pill.acc {background:var(--acc-l); color:var(--acc)}
+/* ──────────────────────────────────────────────
+   PROGRESS BAR
+────────────────────────────────────────────── */
+.pb{display:flex;align-items:center;gap:8px}
+.pb-track{flex:1;height:5px;background:var(--bg);border-radius:3px;overflow:hidden}
+.pb-fill{height:100%;border-radius:3px;transition:width 1.2s}
 .pb-fill.ok  {background:var(--ok)}
 .pb-fill.warn{background:var(--warn)}
 .pb-fill.crit{background:var(--crit)}
 .pb-fill.acc {background:var(--acc)}
-
-/* ── KPI FULL CARDS (KPIs page) ──────────────── */
+.pb-val{font-family:'DM Mono',monospace;font-size:.65rem;color:var(--tx3);min-width:32px;text-align:right}
+/* ──────────────────────────────────────────────
+   KPI FULL CARDS (KPIs page)
+────────────────────────────────────────────── */
 .kf-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:13px}
-.kf{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r);padding:18px;box-shadow:var(--sh)}
-.kf-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
-.kf-name{font-weight:600;font-size:.85rem}
-.kf-val{font-family:'DM Serif Display',serif;font-size:1.75rem;line-height:1;margin:3px 0}
+.kf{background:var(--surf);border:1px solid var(--bdr);border-radius:var(--r2);padding:20px;box-shadow:var(--sh);transition:box-shadow .15s}
+.kf:hover{box-shadow:var(--sh2)}
+.kf-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px}
+.kf-name{font-size:.88rem;font-weight:600;color:var(--tx)}
+.kf-source{font-family:'DM Mono',monospace;font-size:.58rem;color:var(--tx3);margin-top:2px}
+.kf-body{display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:center}
+.kf-val{font-family:'DM Serif Display',serif;font-size:2.1rem;line-height:1;margin-bottom:3px}
 .kf-bench{font-size:.72rem;color:var(--tx2)}
-.kf-spark{height:44px;margin-top:8px}
-
-/* ── TRAINING BARS ───────────────────────────── */
-.tb-row{display:flex;align-items:center;gap:10px;margin-bottom:9px}
-.tb-dept{font-size:.78rem;width:100px;flex-shrink:0}
-.tb-pct{font-family:'DM Mono',monospace;font-size:.7rem;width:36px;text-align:right;flex-shrink:0}
-
-/* ── VAGAS FUNNEL ────────────────────────────── */
-.funnel{display:flex;align-items:flex-end;gap:6px;height:110px;margin:14px 0}
-.fs{display:flex;flex-direction:column;align-items:center;flex:1}
-.fb{width:100%;border-radius:4px 4px 0 0;background:var(--acc);opacity:.75;min-height:6px;transition:opacity .15s}
-.fb:hover{opacity:1}
-.fv{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:600;margin-bottom:4px;color:var(--tx)}
-.fl{font-size:.6rem;color:var(--tx3);text-align:center;margin-top:5px;line-height:1.3}
-
-/* ── ORG CHART ───────────────────────────────── */
-.org-wrap{overflow-x:auto;padding:16px 0}
-.org-tree{display:flex;flex-direction:column;align-items:center;gap:0;min-width:800px}
-.org-level{display:flex;gap:0;align-items:flex-start;position:relative;padding-top:22px}
-.org-level::before{
+.kf-proj{font-size:.72rem;margin-top:5px;font-weight:500}
+.kf-proj.up  {color:var(--crit)}
+.kf-proj.down{color:var(--ok)}
+.kf-proj.flat{color:var(--tx3)}
+/* ──────────────────────────────────────────────
+   TRAINING
+────────────────────────────────────────────── */
+.td-bar-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--bdr)}
+.td-bar-row:last-child{border-bottom:none}
+.td-dept{font-size:.78rem;font-weight:500;width:110px;flex-shrink:0}
+.td-pct{font-family:'DM Mono',monospace;font-size:.7rem;width:34px;text-align:right;flex-shrink:0}
+/* ──────────────────────────────────────────────
+   VAGAS FUNNEL
+────────────────────────────────────────────── */
+.funnel{display:flex;align-items:flex-end;gap:4px;height:120px;padding:0 4px}
+.fstep{display:flex;flex-direction:column;align-items:center;flex:1}
+.fbar{width:100%;border-radius:4px 4px 0 0;min-height:6px;transition:opacity .15s,height 1s}
+.fbar:hover{opacity:.85}
+.fval{font-family:'DM Mono',monospace;font-size:.72rem;font-weight:600;color:var(--tx);margin-bottom:4px}
+.flbl{font-size:.58rem;color:var(--tx3);text-align:center;margin-top:6px;line-height:1.3}
+.funnel-wrap{display:flex;flex-direction:column}
+.funnel-arrow{font-size:.65rem;color:var(--tx3);text-align:center;margin-top:4px;letter-spacing:.04em}
+/* ──────────────────────────────────────────────
+   ORG CHART — CSS tree pattern
+────────────────────────────────────────────── */
+.org-scroll{overflow-x:auto;padding:8px 0 20px}
+.org-tree{display:inline-flex;flex-direction:column;align-items:center;min-width:700px;width:100%}
+/* tree list */
+.tree-ul{
+  display:flex;align-items:flex-start;padding-top:24px;
+  position:relative;list-style:none;
+}
+/* Vertical line from parent down to the horizontal connector */
+.tree-ul::before{
   content:'';position:absolute;top:0;left:50%;
-  width:1.5px;height:22px;background:var(--bdr);transform:translateX(-50%);
+  height:24px;width:2px;background:var(--bdr2);
+  transform:translateX(-50%);
 }
-.org-hline{
-  position:absolute;top:0;background:var(--bdr);height:1.5px;
+.tree-li{
+  display:flex;flex-direction:column;align-items:center;
+  padding:0 10px;position:relative;
 }
-.org-branch{display:flex;flex-direction:column;align-items:center;gap:0;padding:0 18px;position:relative}
-.org-branch::before{
-  content:'';position:absolute;top:0;left:50%;
-  width:1.5px;height:22px;background:var(--bdr);transform:translateX(-50%);
+/* Horizontal connector lines */
+.tree-li::before,.tree-li::after{
+  content:'';position:absolute;top:0;width:50%;height:24px;border-top:2px solid var(--bdr2);
 }
+.tree-li::before{right:50%}
+.tree-li::after {left:50%}
+.tree-li:only-child::before,.tree-li:only-child::after{display:none}
+.tree-li:only-child{padding-top:0}
+.tree-li:first-child::before{border:none}
+.tree-li:last-child::after{border:none}
+.tree-li:first-child::after{border-radius:6px 0 0 0}
+.tree-li:last-child::before{border-radius:0 6px 0 0}
+/* Vertical line from horizontal connector down to node */
+.tree-node-wrap{display:flex;flex-direction:column;align-items:center}
+.tree-vline{width:2px;height:20px;background:var(--bdr2);flex-shrink:0}
+/* ── Org Card ── */
 .oc{
   background:var(--surf);border:1.5px solid var(--bdr);border-radius:10px;
-  padding:11px 14px;text-align:center;min-width:128px;max-width:155px;
-  position:relative;box-shadow:var(--sh);transition:border-color .15s,transform .15s,box-shadow .15s;
-  cursor:pointer;
+  padding:10px 12px;text-align:center;min-width:118px;max-width:145px;
+  position:relative;box-shadow:var(--sh);cursor:pointer;
+  transition:border-color .15s,transform .15s,box-shadow .15s;
 }
 .oc:hover{border-color:var(--acc);transform:translateY(-2px);box-shadow:var(--sh2)}
-.oc.ceo{background:var(--acc);border-color:var(--acc);color:#fff;min-width:150px}
-.oc.vp{border-color:#c7d2fe;background:#eef2ff}
-.oc .on{font-weight:600;font-size:.75rem;display:block;line-height:1.3}
-.oc.ceo .on{color:#fff}
-.oc .or{font-size:.62rem;color:var(--tx3);margin-top:2px;display:block}
-.oc.ceo .or{color:rgba(255,255,255,.6)}
-.oc .oh{font-family:'DM Mono',monospace;font-size:.6rem;color:var(--acc);margin-top:4px;display:block}
-.oc.ceo .oh{color:rgba(255,255,255,.7)}
-.risk{
-  position:absolute;top:7px;right:7px;width:8px;height:8px;border-radius:50%;
-}
+.oc.ceo {background:linear-gradient(135deg,#4f46e5,#6366f1);border:none;color:#fff;min-width:140px}
+.oc.vp  {background:linear-gradient(135deg,#f0f4ff,#fff);border-color:#c7d2fe}
+.oc.crit-card{border-color:#fca5a5;background:#fff5f5}
+.oc-emoji{font-size:1.4rem;display:block;margin-bottom:4px;line-height:1}
+.oc-name{font-size:.72rem;font-weight:600;color:var(--tx);display:block;line-height:1.3}
+.oc.ceo .oc-name{color:#fff}
+.oc-role{font-size:.6rem;color:var(--tx3);display:block;margin-top:2px;line-height:1.3}
+.oc.ceo .oc-role{color:rgba(255,255,255,.65)}
+.oc-hc  {font-family:'DM Mono',monospace;font-size:.58rem;color:var(--acc);margin-top:4px;display:block}
+.oc.ceo .oc-hc{color:rgba(255,255,255,.75)}
+.oc-risk{position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%}
 .r-ok  {background:var(--ok)}
 .r-warn{background:var(--warn)}
-.r-crit{background:var(--crit)}
-.org-children{overflow:hidden;transition:max-height .35s ease,opacity .28s}
-.org-children.collapsed{max-height:0!important;opacity:0}
-.collapse-btn{
-  background:none;border:1px solid var(--bdr);border-radius:10px;
-  font-size:.6rem;font-family:'DM Mono',monospace;color:var(--tx3);
-  padding:2px 7px;cursor:pointer;margin-top:4px;transition:background .13s;
+.r-crit{background:var(--crit);animation:blink 1.5s infinite}
+/* Collapse toggle */
+.tree-toggle{
+  font-size:.58rem;font-family:'DM Mono',monospace;
+  background:var(--bg);border:1px solid var(--bdr);
+  color:var(--tx3);padding:2px 8px;border-radius:8px;
+  cursor:pointer;margin-top:6px;transition:background .13s,color .13s;
+  display:inline-block;
 }
-.collapse-btn:hover{background:var(--bg);color:var(--tx)}
-.org-vline{width:1.5px;height:18px;background:var(--bdr);margin:0 auto}
-
-/* ── ORG TOOLTIP ─────────────────────────────── */
+.tree-toggle:hover{background:var(--surf);color:var(--tx)}
+.tree-children{overflow:hidden;transition:max-height .35s ease,opacity .28s}
+.tree-children.collapsed{max-height:0!important;opacity:0}
+/* ──────────────────────────────────────────────
+   ORG TOOLTIP
+────────────────────────────────────────────── */
 .org-tt{
-  position:fixed;background:#1e293b;color:#e2e8f0;padding:10px 13px;
-  border-radius:8px;font-size:.73rem;line-height:1.65;pointer-events:none;
-  z-index:9999;min-width:175px;box-shadow:var(--sh2);
-  opacity:0;transition:opacity .15s;
+  position:fixed;background:#1e293b;color:#e2e8f0;padding:11px 14px;
+  border-radius:8px;font-size:.74rem;line-height:1.65;pointer-events:none;
+  z-index:9999;min-width:180px;box-shadow:var(--sh3);
+  opacity:0;transition:opacity .14s;
 }
 .org-tt.vis{opacity:1}
-.org-tt .ttname{font-weight:600;color:#fff;margin-bottom:5px;display:block}
-.org-tt .ttrow{display:flex;justify-content:space-between;gap:14px}
-.org-tt .ttk{color:#64748b;font-size:.7rem}
-.org-tt .ttv{font-family:'DM Mono',monospace;font-size:.72rem}
-.ttv.ok  {color:#4ade80}
-.ttv.warn{color:#fbbf24}
-.ttv.crit{color:#f87171}
+.org-tt .tn{font-weight:700;color:#fff;margin-bottom:5px;font-size:.8rem;display:block}
+.org-tt .tr{display:flex;justify-content:space-between;gap:16px}
+.org-tt .tk{color:#64748b;font-size:.68rem}
+.org-tt .tv{font-family:'DM Mono',monospace;font-size:.72rem}
+.tv.ok  {color:#4ade80}
+.tv.warn{color:#fbbf24}
+.tv.crit{color:#f87171}
+/* ──────────────────────────────────────────────
+   WELCOME PAGE
+────────────────────────────────────────────── */
+.welcome-outer{
+  min-height:calc(100vh - 52px);display:flex;align-items:center;justify-content:center;
+  padding:40px 28px;background:linear-gradient(135deg,#f0f4ff 0%,#f8fafc 50%,#faf5ff 100%);
+}
+.welcome-card{
+  background:var(--surf);border:1px solid var(--bdr);border-radius:24px;
+  padding:48px 52px;max-width:800px;width:100%;box-shadow:var(--sh3);
+  display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:start;
+}
+.welcome-avatar{
+  width:110px;height:110px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#8b5cf6);
+  display:flex;align-items:center;justify-content:center;font-size:3rem;flex-shrink:0;
+  box-shadow:0 8px 32px rgba(99,102,241,.25);
+}
+.welcome-name{font-family:'DM Serif Display',serif;font-size:2rem;color:var(--tx);line-height:1.1;margin-bottom:4px}
+.welcome-title{font-size:.9rem;color:var(--acc);font-weight:500;margin-bottom:16px}
+.welcome-stats{display:flex;gap:24px;flex-wrap:wrap;margin-bottom:20px;padding:16px 0;border-top:1px solid var(--bdr);border-bottom:1px solid var(--bdr)}
+.wstat{text-align:center}
+.wstat-val{font-family:'DM Serif Display',serif;font-size:1.7rem;color:var(--tx);display:block;line-height:1}
+.wstat-lbl{font-family:'DM Mono',monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--tx3);margin-top:3px}
+.welcome-about{font-size:.84rem;color:var(--tx2);line-height:1.7;margin-bottom:20px}
+.welcome-stack{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:24px}
+.stack-tag{
+  font-family:'DM Mono',monospace;font-size:.65rem;
+  background:var(--surf2);border:1px solid var(--bdr);
+  color:var(--tx2);padding:4px 10px;border-radius:20px;
+  transition:background .14s,color .14s;
+}
+.stack-tag:hover{background:var(--acc-l);color:var(--acc);border-color:#c7d2fe}
+.welcome-links{display:flex;gap:10px;flex-wrap:wrap}
+.wlink{
+  display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;
+  font-size:.78rem;font-weight:500;text-decoration:none;transition:all .15s;
+}
+.wlink-primary{background:var(--acc);color:#fff;box-shadow:0 2px 8px rgba(99,102,241,.3)}
+.wlink-primary:hover{background:var(--acc-h);box-shadow:0 4px 16px rgba(99,102,241,.4);transform:translateY(-1px)}
+.wlink-outline{background:transparent;color:var(--tx);border:1.5px solid var(--bdr)}
+.wlink-outline:hover{border-color:var(--acc);color:var(--acc);background:var(--acc-l)}
+.welcome-nav-hint{
+  margin-top:24px;padding:14px 18px;background:var(--surf2);border-radius:10px;
+  font-size:.78rem;color:var(--tx2);border:1px solid var(--bdr);
+  display:flex;align-items:center;gap:10px;
+}
+/* ──────────────────────────────────────────────
+   RESPONSIVE
+────────────────────────────────────────────── */
+@media(max-width:900px){
+  .welcome-card{grid-template-columns:1fr;gap:24px}
+  .kpi-row{grid-template-columns:repeat(2,1fr)}
+  .g2,.g3,.g-5-3{grid-template-columns:1fr}
+  .kf-grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 <div class="app">
 
-<!-- ═══ SIDEBAR ════════════════════════════════ -->
+<!-- ══════════ SIDEBAR ════════════════════════ -->
 <aside class="sidebar">
   <div class="sb-logo">
-    <div class="sb-co">Innova Pessoas S.A.</div>
+    <div class="sb-company">Innova Pessoas S.A.</div>
     <div class="sb-tag">People Analytics · Q2 2026</div>
   </div>
 
-  <div class="sb-sect" data-pt="Páginas" data-en="Pages">Páginas</div>
+  <div class="sb-section" data-pt="Navegação" data-en="Navigation">Navegação</div>
   <ul class="sb-nav">
-    <li><a class="active" data-page="home" onclick="nav('home')">
-      <span class="ic">🏠</span><span data-pt="Início" data-en="Home">Início</span>
+    <li><a class="sb-link active" data-page="welcome" onclick="nav('welcome')">
+      <span class="ic">🦇</span>
+      <span data-pt="Boas-vindas" data-en="Welcome">Boas-vindas</span>
     </a></li>
-    <li><a data-page="kpis" onclick="nav('kpis')">
-      <span class="ic">📊</span><span data-pt="KPIs" data-en="KPIs">KPIs</span>
-      <span class="bdg">10</span>
+    <li><a class="sb-link" data-page="home" onclick="nav('home')">
+      <span class="ic">🏠</span>
+      <span data-pt="Início" data-en="Home">Início</span>
     </a></li>
-    <li><a data-page="td" onclick="nav('td')">
-      <span class="ic">🎓</span><span data-pt="T&amp;D" data-en="L&amp;D">T&amp;D</span>
+    <li><a class="sb-link" data-page="kpis" onclick="nav('kpis')">
+      <span class="ic">📊</span>
+      <span data-pt="KPIs" data-en="KPIs">KPIs</span>
+      <span class="sb-badge">10</span>
     </a></li>
-    <li><a data-page="vagas" onclick="nav('vagas')">
-      <span class="ic">🔍</span><span data-pt="Vagas" data-en="Vacancies">Vagas</span>
-      <span class="bdg" id="sb-vagas-count">8</span>
+    <li><a class="sb-link" data-page="td" onclick="nav('td')">
+      <span class="ic">🎓</span>
+      <span data-pt="T&amp;D" data-en="L&amp;D">T&amp;D</span>
     </a></li>
-    <li><a data-page="org" onclick="nav('org')">
-      <span class="ic">🏢</span><span data-pt="Organograma" data-en="Org Chart">Organograma</span>
+    <li><a class="sb-link" data-page="vagas" onclick="nav('vagas')">
+      <span class="ic">🔍</span>
+      <span data-pt="Vagas" data-en="Vacancies">Vagas</span>
+      <span class="sb-badge" id="sb-vcount">8</span>
+    </a></li>
+    <li><a class="sb-link" data-page="org" onclick="nav('org')">
+      <span class="ic">🏢</span>
+      <span data-pt="Organograma" data-en="Org Chart">Organograma</span>
     </a></li>
   </ul>
 
-  <div class="sb-sect" data-pt="Referências" data-en="References">Referências</div>
-  <div class="sb-bottom">
-    <a href="https://www.shrm.org" target="_blank">SHRM</a> ·
-    <a href="https://www.aihr.com" target="_blank">AIHR</a> ·
-    <a href="https://business.linkedin.com/talent-solutions" target="_blank">LinkedIn</a><br>
-    <a href="https://www.michaelpage.com.br" target="_blank">Michael Page</a> ·
-    <a href="https://www.abrhf.org.br" target="_blank">ABRHF</a>
+  <div class="sb-divider"></div>
+  <div class="sb-section" data-pt="Referências" data-en="References">Referências</div>
+  <div class="sb-refs">
+    <a href="https://www.shrm.org" target="_blank" rel="noopener">SHRM</a> ·
+    <a href="https://www.aihr.com" target="_blank" rel="noopener">AIHR</a> ·
+    <a href="https://business.linkedin.com/talent-solutions" target="_blank" rel="noopener">LinkedIn</a><br>
+    <a href="https://www.michaelpage.com.br" target="_blank" rel="noopener">Michael Page</a> ·
+    <a href="https://www.abrhf.org.br" target="_blank" rel="noopener">ABRHF</a>
   </div>
 </aside>
 
-<!-- ═══ MAIN ════════════════════════════════════ -->
+<!-- ══════════ MAIN ═══════════════════════════ -->
 <div class="main">
+
+  <!-- TOPBAR -->
   <header class="topbar">
-    <div class="tb-title" id="tb-title">Briefing Executivo</div>
+    <div class="tb-title" id="tb-title">Boas-vindas</div>
     <div class="tb-right">
-      <div class="tb-date" data-pt="Atualizado: Jun 2026" data-en="Updated: Jun 2026">Atualizado: Jun 2026</div>
+      <div class="tb-date">
+        <span class="tb-dot"></span>
+        <span data-pt="Dados: Jun 2026" data-en="Data: Jun 2026">Dados: Jun 2026</span>
+      </div>
       <div class="lang-bar">
         <button class="lb active" data-lang="pt" onclick="setLang('pt')">PT</button>
         <button class="lb" data-lang="en" onclick="setLang('en')">EN</button>
@@ -310,135 +454,185 @@ body{font-family:'Geist',system-ui,sans-serif;background:var(--bg);color:var(--t
 
   <div class="content">
 
-  <!-- ════ PAGE: HOME ════════════════════════════ -->
-  <div id="page-home" class="page active">
-    <div class="ph">
-      <div class="ph-eye" data-pt="01 · BRIEFING EXECUTIVO" data-en="01 · EXECUTIVE BRIEFING">01 · BRIEFING EXECUTIVO</div>
-      <div class="ph-title" data-pt="Visão Geral de People Analytics" data-en="People Analytics Overview">Visão Geral de People Analytics</div>
-      <div class="ph-sub" data-pt="Innova Pessoas S.A. · 312 colaboradores · 6 departamentos · São Paulo, BR"
-           data-en="Innova Pessoas S.A. · 312 employees · 6 departments · São Paulo, BR">Innova Pessoas S.A. · 312 colaboradores · 6 departamentos · São Paulo, BR</div>
-    </div>
-
-    <!-- KPI TILES -->
-    <div class="kpi-grid" id="home-tiles"></div>
-
-    <!-- ALERT PANEL -->
-    <div class="alert-panel">
-      <div class="alert-hdr">
+  <!-- ══ PAGE: BOAS-VINDAS ═══════════════════ -->
+  <div id="page-welcome" class="page active" style="padding:0">
+    <div class="welcome-outer">
+      <div class="welcome-card">
+        <div class="welcome-avatar">🦇</div>
         <div>
-          <div class="alert-hdr-title" data-pt="🎯 O que precisa de mais atenção?" data-en="🎯 What needs the most attention?">🎯 O que precisa de mais atenção?</div>
-          <div class="alert-hdr-sub" data-pt="Score automático: desvio × peso do KPI · ordenado por prioridade"
-               data-en="Auto-score: deviation × KPI weight · sorted by priority">Score automático: desvio × peso do KPI · ordenado por prioridade</div>
+          <div class="welcome-name">Fernando L. Paoli</div>
+          <div class="welcome-title" data-pt="Tech Recruiter · People Analytics Enthusiast · São Paulo, BR"
+               data-en="Tech Recruiter · People Analytics Enthusiast · São Paulo, BR">Tech Recruiter · People Analytics Enthusiast · São Paulo, BR</div>
+          <div class="welcome-stats">
+            <div class="wstat">
+              <span class="wstat-val">200+</span>
+              <span class="wstat-lbl" data-pt="Contratações" data-en="Hires">Contratações</span>
+            </div>
+            <div class="wstat">
+              <span class="wstat-val">10K+</span>
+              <span class="wstat-lbl" data-pt="LinkedIn" data-en="LinkedIn">LinkedIn</span>
+            </div>
+            <div class="wstat">
+              <span class="wstat-val">2</span>
+              <span class="wstat-lbl" data-pt="Setores" data-en="Sectors">Setores</span>
+            </div>
+            <div class="wstat">
+              <span class="wstat-val">SP</span>
+              <span class="wstat-lbl" data-pt="Brasil" data-en="Brazil">Brasil</span>
+            </div>
+          </div>
+          <p class="welcome-about" data-pt="Sou um recrutador de tecnologia com especialização em Gestão de Recursos Humanos, apaixonado por People Analytics e pelo poder dos dados para transformar decisões de RH. Trabalho com contratações em Tecnologia e Engenharia Civil, ajudo pessoas na transição de carreira e na revisão de currículos. Este dashboard é um exemplo real de como aplico conceitos de People Analytics no dia a dia."
+             data-en="I'm a tech recruiter with a specialization in Human Resources Management, passionate about People Analytics and the power of data to transform HR decisions. I work with hiring in Technology and Civil Engineering, help people transition careers and review resumes. This dashboard is a real example of how I apply People Analytics concepts every day.">
+            Sou um recrutador de tecnologia com especialização em Gestão de Recursos Humanos, apaixonado por People Analytics e pelo poder dos dados para transformar decisões de RH. Trabalho com contratações em Tecnologia e Engenharia Civil, ajudo pessoas na transição de carreira e na revisão de currículos. Este dashboard é um exemplo real de como aplico conceitos de People Analytics no dia a dia.
+          </p>
+          <div class="welcome-stack">
+            <span class="stack-tag">Power BI</span>
+            <span class="stack-tag">DAX</span>
+            <span class="stack-tag">SQL</span>
+            <span class="stack-tag">Python</span>
+            <span class="stack-tag">Excel</span>
+            <span class="stack-tag">HTML/CSS/JS</span>
+            <span class="stack-tag">Git</span>
+            <span class="stack-tag">LinkedIn Recruiter</span>
+            <span class="stack-tag">Boolean Search</span>
+          </div>
+          <div class="welcome-links">
+            <a class="wlink wlink-primary" href="https://www.linkedin.com/in/fernandopaoli" target="_blank" rel="noopener">
+              🔗 <span data-pt="LinkedIn" data-en="LinkedIn">LinkedIn</span>
+            </a>
+            <a class="wlink wlink-outline" href="https://fernandotrecruiter.github.io/people-analytics-guide/" target="_blank" rel="noopener">
+              📗 <span data-pt="Guia de People Analytics" data-en="People Analytics Guide">Guia de People Analytics</span>
+            </a>
+            <a class="wlink wlink-outline" onclick="nav('home')" style="cursor:pointer">
+              📊 <span data-pt="Abrir Dashboard" data-en="Open Dashboard">Abrir Dashboard</span>
+            </a>
+          </div>
+          <div class="welcome-nav-hint">
+            💡 <span data-pt="Use a barra lateral para navegar pelas 5 seções do dashboard: KPIs, Treinamento, Vagas e Organograma."
+                     data-en="Use the sidebar to navigate the 5 dashboard sections: KPIs, Training, Vacancies and Org Chart.">Use a barra lateral para navegar pelas 5 seções do dashboard: KPIs, Treinamento, Vagas e Organograma.</span>
+          </div>
         </div>
       </div>
-      <div class="alert-row" style="background:#fafafa;font-family:'DM Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--tx3)">
+    </div>
+  </div>
+
+  <!-- ══ PAGE: HOME ══════════════════════════ -->
+  <div id="page-home" class="page">
+    <div class="ph">
+      <div class="ph-eye" data-pt="01 · BRIEFING EXECUTIVO" data-en="01 · EXECUTIVE BRIEFING">01 · BRIEFING EXECUTIVO</div>
+      <div class="ph-title" data-pt="Visão Geral · Innova Pessoas S.A." data-en="Overview · Innova Pessoas S.A.">Visão Geral · Innova Pessoas S.A.</div>
+      <div class="ph-sub" data-pt="312 colaboradores · 6 departamentos · São Paulo, BR · Q2 2026"
+           data-en="312 employees · 6 departments · São Paulo, BR · Q2 2026">312 colaboradores · 6 departamentos · São Paulo, BR · Q2 2026</div>
+    </div>
+    <div class="kpi-row" id="home-tiles"></div>
+    <div class="alert-box">
+      <div class="alert-head">
+        <div>
+          <div class="alert-head-title" data-pt="🎯 O que precisa de mais atenção?" data-en="🎯 What needs the most attention?">🎯 O que precisa de mais atenção?</div>
+          <div class="alert-head-sub" data-pt="Score automático por KPI · desvio do benchmark × peso estratégico · atualizado em tempo real"
+               data-en="Auto-score per KPI · deviation from benchmark × strategic weight · updated in real time">Score automático por KPI · desvio do benchmark × peso estratégico · atualizado em tempo real</div>
+        </div>
+      </div>
+      <div class="alert-cols">
         <div></div>
-        <div data-pt="KPI" data-en="KPI">KPI</div>
-        <div data-pt="Valor atual" data-en="Current">Valor atual</div>
+        <div data-pt="Indicador" data-en="Indicator">Indicador</div>
+        <div data-pt="Atual" data-en="Current">Atual</div>
         <div data-pt="Benchmark" data-en="Benchmark">Benchmark</div>
         <div data-pt="Desvio" data-en="Deviation">Desvio</div>
-        <div data-pt="Ação" data-en="Action">Ação</div>
+        <div data-pt="Recomendação" data-en="Recommendation">Recomendação</div>
       </div>
       <div id="alert-list"></div>
     </div>
-
-    <!-- CHARTS ROW -->
     <div class="g2">
       <div class="card">
-        <div class="card-lbl" data-pt="Turnover por departamento" data-en="Turnover by department">Turnover por departamento</div>
-        <div class="cw"><canvas id="c-home-turnover"></canvas></div>
+        <div class="card-label" data-pt="Turnover por departamento vs. benchmark 12%" data-en="Turnover by department vs. 12% benchmark">Turnover por departamento vs. benchmark 12%</div>
+        <div class="ch200"><canvas id="c-home-turnover"></canvas></div>
       </div>
       <div class="card">
-        <div class="card-lbl" data-pt="Tendência eNPS — últimos 6 trimestres" data-en="eNPS Trend — last 6 quarters">Tendência eNPS — últimos 6 trimestres</div>
-        <div class="cw"><canvas id="c-home-enps"></canvas></div>
+        <div class="card-label" data-pt="Tendência eNPS — 6 trimestres (benchmark: 30)" data-en="eNPS Trend — 6 quarters (benchmark: 30)">Tendência eNPS — 6 trimestres (benchmark: 30)</div>
+        <div class="ch200"><canvas id="c-home-enps"></canvas></div>
       </div>
     </div>
-
-    <!-- DEPT SCORECARD -->
     <div class="card">
-      <div class="card-lbl" data-pt="Saúde organizacional por departamento" data-en="Organizational health by department">Saúde organizacional por departamento</div>
+      <div class="card-label" data-pt="Scorecard de saúde organizacional por departamento" data-en="Organizational health scorecard by department">Scorecard de saúde organizacional por departamento</div>
       <table class="dt" id="dept-table"></table>
     </div>
-  </div><!-- /home -->
+  </div>
 
-  <!-- ════ PAGE: KPIs ═════════════════════════════ -->
+  <!-- ══ PAGE: KPIs ══════════════════════════ -->
   <div id="page-kpis" class="page">
     <div class="ph">
-      <div class="ph-eye" data-pt="02 · INDICADORES" data-en="02 · INDICATORS">02 · INDICADORES</div>
-      <div class="ph-title" data-pt="10 KPIs Estratégicos" data-en="10 Strategic KPIs">10 KPIs Estratégicos</div>
-      <div class="ph-sub" data-pt="Comparativo com benchmarks SHRM · AIHR · LinkedIn Talent Trends"
-           data-en="Compared against SHRM · AIHR · LinkedIn Talent Trends benchmarks">Comparativo com benchmarks SHRM · AIHR · LinkedIn Talent Trends</div>
+      <div class="ph-eye" data-pt="02 · KPIs ESTRATÉGICOS" data-en="02 · STRATEGIC KPIs">02 · KPIs ESTRATÉGICOS</div>
+      <div class="ph-title" data-pt="10 Indicadores com Projeções" data-en="10 KPIs with Projections">10 Indicadores com Projeções</div>
+      <div class="ph-sub" data-pt="Benchmarks: SHRM · AIHR · LinkedIn Talent Trends · tendência 6 trimestres + projeção Q3 2026"
+           data-en="Benchmarks: SHRM · AIHR · LinkedIn Talent Trends · 6-quarter trend + Q3 2026 projection">Benchmarks: SHRM · AIHR · LinkedIn Talent Trends · tendência 6 trimestres + projeção Q3 2026</div>
     </div>
     <div class="kf-grid" id="kpi-cards"></div>
   </div>
 
-  <!-- ════ PAGE: T&D ══════════════════════════════ -->
+  <!-- ══ PAGE: T&D ════════════════════════════ -->
   <div id="page-td" class="page">
     <div class="ph">
       <div class="ph-eye" data-pt="03 · TREINAMENTO &amp; DESENVOLVIMENTO" data-en="03 · LEARNING &amp; DEVELOPMENT">03 · TREINAMENTO &amp; DESENVOLVIMENTO</div>
-      <div class="ph-title" data-pt="Capacitação e Crescimento" data-en="Training &amp; Growth">Capacitação e Crescimento</div>
-      <div class="ph-sub" data-pt="Taxa de conclusão, top cursos e investimento por colaborador"
-           data-en="Completion rate, top courses and investment per employee">Taxa de conclusão, top cursos e investimento por colaborador</div>
+      <div class="ph-title" data-pt="Capacitação e Crescimento" data-en="Learning &amp; Growth">Capacitação e Crescimento</div>
+      <div class="ph-sub" data-pt="Conclusão por departamento · top cursos · investimento e ROI"
+           data-en="Completion by department · top courses · investment and ROI">Conclusão por departamento · top cursos · investimento e ROI</div>
     </div>
-
-    <!-- KPI tiles T&D -->
-    <div class="kpi-grid" style="grid-template-columns:repeat(3,1fr)" id="td-tiles"></div>
-
-    <div class="g2">
+    <div class="kpi-row cols-3" id="td-tiles"></div>
+    <div class="g-5-3">
       <div class="card">
-        <div class="card-lbl" data-pt="Conclusão de treinamento por departamento (%)" data-en="Training completion by department (%)">Conclusão de treinamento por departamento (%)</div>
-        <div id="td-bars"></div>
+        <div class="card-label" data-pt="Taxa de conclusão por departamento (%)" data-en="Completion rate by department (%)">Taxa de conclusão por departamento (%)</div>
+        <div id="td-bars" style="padding-top:6px"></div>
       </div>
       <div class="card">
-        <div class="card-lbl" data-pt="Distribuição do orçamento de T&amp;D" data-en="L&amp;D budget distribution">Distribuição do orçamento de T&amp;D</div>
-        <div class="cw"><canvas id="c-td-budget"></canvas></div>
+        <div class="card-label" data-pt="Alocação do orçamento de T&amp;D" data-en="L&amp;D budget allocation">Alocação do orçamento de T&amp;D</div>
+        <div class="ch200"><canvas id="c-td-budget"></canvas></div>
       </div>
     </div>
-
     <div class="card">
-      <div class="card-lbl" data-pt="Top cursos — conclusão e avaliação" data-en="Top courses — completion and rating">Top cursos — conclusão e avaliação</div>
+      <div class="card-label" data-pt="Top cursos — matrículas, conclusão e avaliação" data-en="Top courses — enrollment, completion and rating">Top cursos — matrículas, conclusão e avaliação</div>
       <table class="dt" id="courses-table"></table>
     </div>
   </div>
 
-  <!-- ════ PAGE: VAGAS ════════════════════════════ -->
+  <!-- ══ PAGE: VAGAS ══════════════════════════ -->
   <div id="page-vagas" class="page">
     <div class="ph">
       <div class="ph-eye" data-pt="04 · VAGAS &amp; RECRUTAMENTO" data-en="04 · VACANCIES &amp; RECRUITING">04 · VAGAS &amp; RECRUTAMENTO</div>
       <div class="ph-title" data-pt="Pipeline de Contratação" data-en="Hiring Pipeline">Pipeline de Contratação</div>
-      <div class="ph-sub" data-pt="Funil, vagas abertas e métricas de TA"
-           data-en="Funnel, open positions and TA metrics">Funil, vagas abertas e métricas de TA</div>
+      <div class="ph-sub" data-pt="Funil ativo · vagas abertas · Time to Fill e OAR"
+           data-en="Active funnel · open positions · Time to Fill and OAR">Funil ativo · vagas abertas · Time to Fill e OAR</div>
     </div>
-
-    <div class="kpi-grid" id="vagas-tiles"></div>
-
+    <div class="kpi-row" id="vagas-tiles"></div>
     <div class="g2">
       <div class="card">
-        <div class="card-lbl" data-pt="Funil de recrutamento — candidatos ativos" data-en="Recruiting funnel — active candidates">Funil de recrutamento — candidatos ativos</div>
-        <div class="funnel" id="vagas-funnel"></div>
+        <div class="card-label" data-pt="Funil de recrutamento — candidatos por etapa" data-en="Recruiting funnel — candidates by stage">Funil de recrutamento — candidatos por etapa</div>
+        <div class="funnel-wrap">
+          <div class="funnel" id="vagas-funnel"></div>
+          <div class="funnel-arrow" data-pt="Conversão total: 358 → 9 contratados (2.5%)" data-en="Total conversion: 358 → 9 hired (2.5%)">Conversão total: 358 → 9 contratados (2.5%)</div>
+        </div>
       </div>
       <div class="card">
-        <div class="card-lbl" data-pt="Time to Fill por vaga (dias)" data-en="Time to Fill by vacancy (days)">Time to Fill por vaga (dias)</div>
-        <div class="cw"><canvas id="c-vagas-ttf"></canvas></div>
+        <div class="card-label" data-pt="Time to Fill por vaga (dias abertos vs. meta)" data-en="Time to Fill by vacancy (days open vs. target)">Time to Fill por vaga (dias abertos vs. meta)</div>
+        <div class="ch200"><canvas id="c-vagas-ttf"></canvas></div>
       </div>
     </div>
-
-    <div class="card">
-      <div class="card-lbl" data-pt="Vagas abertas" data-en="Open positions">Vagas abertas</div>
+    <div class="card" style="margin-bottom:0">
+      <div class="card-label" data-pt="Vagas abertas — detalhe" data-en="Open positions — detail">Vagas abertas — detalhe</div>
       <table class="dt" id="vagas-table"></table>
     </div>
   </div>
 
-  <!-- ════ PAGE: ORG ══════════════════════════════ -->
+  <!-- ══ PAGE: ORG ════════════════════════════ -->
   <div id="page-org" class="page">
     <div class="ph">
       <div class="ph-eye" data-pt="05 · ORGANOGRAMA" data-en="05 · ORG CHART">05 · ORGANOGRAMA</div>
       <div class="ph-title" data-pt="Estrutura Organizacional" data-en="Organizational Structure">Estrutura Organizacional</div>
-      <div class="ph-sub" data-pt="Clique nos times para expandir/recolher · Passe o mouse para métricas individuais"
-           data-en="Click teams to expand/collapse · Hover for individual metrics">Clique nos times para expandir/recolher · Passe o mouse para métricas individuais</div>
+      <div class="ph-sub" data-pt="Clique nos cards de VP para expandir/recolher a equipe · Passe o mouse para ver métricas individuais"
+           data-en="Click VP cards to expand/collapse the team · Hover to see individual metrics">Clique nos cards de VP para expandir/recolher a equipe · Passe o mouse para ver métricas individuais</div>
     </div>
     <div class="card">
-      <div class="org-wrap">
+      <div class="org-scroll">
         <div class="org-tree" id="org-tree"></div>
       </div>
     </div>
@@ -448,665 +642,673 @@ body{font-family:'Geist',system-ui,sans-serif;background:var(--bg);color:var(--t
 </div><!-- /main -->
 </div><!-- /app -->
 
-<!-- ── ORG TOOLTIP ────────────────────────────── -->
 <div class="org-tt" id="org-tt"></div>
 
 <script>
-/* ══════════════════════════════════════════════
-   DATA
-══════════════════════════════════════════════ */
-const DATA = {
-  company: { name_pt:'Innova Pessoas S.A.', name_en:'Innova Pessoas S.A.', hc:312 },
-
+/* ═══════════════════════════════════════════════
+   MOCK DATA
+═══════════════════════════════════════════════ */
+const D = {
   depts:[
-    {id:'eng',  pt:'Engenharia',  en:'Engineering',    hc:87,  turnover:9.1,  eNPS:38, absent:2.1, manager:'Carlos Santos'},
-    {id:'prod', pt:'Produto',     en:'Product',        hc:41,  turnover:11.2, eNPS:32, absent:1.8, manager:'Ana Lima'},
-    {id:'sales',pt:'Vendas',      en:'Sales',          hc:63,  turnover:28.3, eNPS:14, absent:6.2, manager:'Pedro Gomes'},
-    {id:'hr',   pt:'RH',          en:'HR',             hc:22,  turnover:8.0,  eNPS:41, absent:1.5, manager:'Mariana Costa'},
-    {id:'fin',  pt:'Financeiro',  en:'Finance',        hc:35,  turnover:13.5, eNPS:24, absent:3.1, manager:'Roberto Dias'},
-    {id:'mkt',  pt:'Marketing',   en:'Marketing',      hc:64,  turnover:17.2, eNPS:19, absent:4.3, manager:'Juliana Ferreira'},
+    {id:'eng',  pt:'Engenharia',  en:'Engineering', hc:87,  to:9.1,  enps:38, abs:2.1, mgr:'Carlos Santos',   emoji:'👨‍💻'},
+    {id:'prod', pt:'Produto',     en:'Product',      hc:41,  to:11.2, enps:32, abs:1.8, mgr:'Ana Lima',        emoji:'👩‍🚀'},
+    {id:'sales',pt:'Vendas',      en:'Sales',        hc:63,  to:28.3, enps:14, abs:6.2, mgr:'Pedro Gomes',     emoji:'👨‍💼'},
+    {id:'hr',   pt:'RH',          en:'HR',           hc:22,  to:8.0,  enps:41, abs:1.5, mgr:'Mariana Costa',   emoji:'👩‍💼'},
+    {id:'fin',  pt:'Financeiro',  en:'Finance',      hc:35,  to:13.5, enps:24, abs:3.1, mgr:'Roberto Dias',    emoji:'👨‍🏦'},
+    {id:'mkt',  pt:'Marketing',   en:'Marketing',    hc:64,  to:17.2, enps:19, abs:4.3, mgr:'Juliana Ferreira',emoji:'👩‍🎨'},
   ],
 
   kpis:[
-    {key:'turnover',    pt:'Turnover Rate',        en:'Turnover Rate',        v:14.8, bench:12,   dir:'lower', unit:'%', w:10, src:'SHRM',   trend:[12.1,13.4,14.2,14.8,15.2,14.8]},
-    {key:'retention',   pt:'Retention Rate',       en:'Retention Rate',       v:85.2, bench:88,   dir:'higher',unit:'%', w:7,  src:'SHRM',   trend:[90,89,88,87,86,85.2]},
-    {key:'eNPS',        pt:'eNPS',                 en:'eNPS',                 v:22,   bench:30,   dir:'higher',unit:'',  w:9,  src:'AIHR',   trend:[34,31,28,25,22,22]},
-    {key:'absent',      pt:'Absenteísmo',          en:'Absenteeism',          v:3.8,  bench:3.5,  dir:'lower', unit:'%', w:8,  src:'AIHR',   trend:[2.8,3.1,3.4,3.6,3.9,3.8]},
-    {key:'ttf',         pt:'Time to Fill',         en:'Time to Fill',         v:34,   bench:35,   dir:'lower', unit:'d', w:7,  src:'SHRM',   trend:[42,38,36,34,32,34]},
-    {key:'oar',         pt:'Offer Acceptance Rate',en:'Offer Acceptance Rate',v:82,   bench:85,   dir:'higher',unit:'%', w:8,  src:'LinkedIn',trend:[88,86,85,83,82,82]},
-    {key:'cph',         pt:'Cost per Hire',        en:'Cost per Hire',        v:4200, bench:4700, dir:'lower', unit:'R$',w:6,  src:'SHRM',   trend:[5100,4800,4600,4400,4200,4200]},
-    {key:'qoh',         pt:'Quality of Hire',      en:'Quality of Hire',      v:78,   bench:70,   dir:'higher',unit:'',  w:8,  src:'AIHR',   trend:[62,65,68,72,76,78]},
-    {key:'volturn',     pt:'Voluntary Turnover',   en:'Voluntary Turnover',   v:11.2, bench:10,   dir:'lower', unit:'%', w:9,  src:'SHRM',   trend:[8.5,9.1,9.8,10.4,11.0,11.2]},
-    {key:'tth',         pt:'Time to Hire',         en:'Time to Hire',         v:22,   bench:25,   dir:'lower', unit:'d', w:6,  src:'LinkedIn',trend:[30,27,25,23,21,22]},
+    {key:'to',   pt:'Turnover Rate',         en:'Turnover Rate',         v:14.8, bench:12,   bench_max:15, dir:'lower', u:'%',  w:10, src:'SHRM',    trend:[12.1,13.4,14.2,14.8,15.2,14.8]},
+    {key:'ret',  pt:'Retention Rate',        en:'Retention Rate',        v:85.2, bench:88,   bench_max:92, dir:'higher',u:'%',  w:7,  src:'SHRM',    trend:[90.1,89.3,88.5,87.4,86.1,85.2]},
+    {key:'enps', pt:'eNPS',                  en:'eNPS',                  v:22,   bench:30,   bench_max:50, dir:'higher',u:'',   w:9,  src:'AIHR',    trend:[34,31,28,25,22,22]},
+    {key:'abs',  pt:'Absenteísmo',           en:'Absenteeism',           v:3.8,  bench:3.5,  bench_max:6,  dir:'lower', u:'%',  w:8,  src:'AIHR',    trend:[2.8,3.1,3.4,3.6,3.9,3.8]},
+    {key:'ttf',  pt:'Time to Fill',          en:'Time to Fill',          v:34,   bench:35,   bench_max:45, dir:'lower', u:'d',  w:7,  src:'SHRM',    trend:[42,38,36,34,32,34]},
+    {key:'oar',  pt:'Offer Acceptance Rate', en:'Offer Acceptance Rate', v:82,   bench:85,   bench_max:95, dir:'higher',u:'%',  w:8,  src:'LinkedIn',trend:[88,86,85,83,82,82]},
+    {key:'cph',  pt:'Cost per Hire',         en:'Cost per Hire',         v:4200, bench:4700, bench_max:6000,dir:'lower',u:'R$', w:5,  src:'SHRM',    trend:[5100,4800,4600,4400,4200,4200]},
+    {key:'qoh',  pt:'Quality of Hire',       en:'Quality of Hire',       v:78,   bench:70,   bench_max:100,dir:'higher',u:'',   w:8,  src:'AIHR',    trend:[62,65,68,72,76,78]},
+    {key:'vto',  pt:'Voluntary Turnover',    en:'Voluntary Turnover',    v:11.2, bench:10,   bench_max:14, dir:'lower', u:'%',  w:9,  src:'SHRM',    trend:[8.5,9.1,9.8,10.4,11.0,11.2]},
+    {key:'tth',  pt:'Time to Hire',          en:'Time to Hire',          v:22,   bench:25,   bench_max:35, dir:'lower', u:'d',  w:6,  src:'LinkedIn',trend:[30,27,25,23,21,22]},
   ],
 
   training:{
     depts:[
-      {pt:'RH',          en:'HR',          pct:94},
-      {pt:'Produto',     en:'Product',     pct:82},
-      {pt:'Engenharia',  en:'Engineering', pct:78},
-      {pt:'Marketing',   en:'Marketing',   pct:71},
-      {pt:'Financeiro',  en:'Finance',     pct:68},
-      {pt:'Vendas',      en:'Sales',       pct:45},
+      {pt:'RH',         en:'HR',          pct:94, target:90},
+      {pt:'Produto',    en:'Product',     pct:82, target:85},
+      {pt:'Engenharia', en:'Engineering', pct:78, target:85},
+      {pt:'Marketing',  en:'Marketing',   pct:71, target:80},
+      {pt:'Financeiro', en:'Finance',     pct:68, target:80},
+      {pt:'Vendas',     en:'Sales',       pct:45, target:80},
     ],
     budget:[
-      {pt:'Power BI & Analytics',     en:'Power BI & Analytics',     val:35},
-      {pt:'Liderança & Gestão',       en:'Leadership & Management',  val:25},
-      {pt:'Soft Skills',              en:'Soft Skills',              val:20},
-      {pt:'Idiomas',                  en:'Languages',                val:12},
-      {pt:'Outros',                   en:'Other',                    val:8},
+      {pt:'Power BI & Analytics',en:'Power BI & Analytics',  pct:35},
+      {pt:'Liderança',           en:'Leadership',             pct:25},
+      {pt:'Soft Skills',         en:'Soft Skills',            pct:20},
+      {pt:'Idiomas',             en:'Languages',              pct:12},
+      {pt:'Outros',              en:'Other',                  pct:8},
     ],
     courses:[
-      {pt:'Power BI Essentials',   en:'Power BI Essentials',   enr:87, done:74, rating:4.8},
-      {pt:'Data Storytelling',     en:'Data Storytelling',     enr:63, done:51, rating:4.6},
-      {pt:'Excel Avançado',        en:'Advanced Excel',        enr:112,done:89, rating:4.4},
-      {pt:'SQL para RH',           en:'SQL for HR',            enr:34, done:28, rating:4.7},
-      {pt:'Python Básico',         en:'Python Basics',         enr:41, done:22, rating:4.2},
+      {pt:'Power BI Essentials',  en:'Power BI Essentials',  enr:87, done:74, rating:4.8},
+      {pt:'Data Storytelling',    en:'Data Storytelling',    enr:63, done:51, rating:4.6},
+      {pt:'Excel Avançado',       en:'Advanced Excel',       enr:112,done:89, rating:4.4},
+      {pt:'SQL para RH',          en:'SQL for HR',           enr:34, done:28, rating:4.7},
+      {pt:'Python Básico',        en:'Python Basics',        enr:41, done:22, rating:4.2},
+      {pt:'Liderança Situacional',en:'Situational Leadership',enr:58,done:41, rating:4.5},
     ],
-    investPerHead:1840, roi:312, hrsAvg:28,
+    investHead:1840, roi:312, hrsAvg:28,
   },
 
   vagas:[
-    {id:1,pt:'Senior Full Stack Dev',      en:'Senior Full Stack Dev',      dept_pt:'Engenharia', dept_en:'Engineering',days:28,target:35,apps:47,stage:'Interview',   recruiter:'Beatriz A.'},
-    {id:2,pt:'Product Manager',            en:'Product Manager',            dept_pt:'Produto',    dept_en:'Product',   days:19,target:35,apps:31,stage:'Phone Screen',  recruiter:'Beatriz A.'},
-    {id:3,pt:'Executivo de Vendas',        en:'Sales Executive',            dept_pt:'Vendas',     dept_en:'Sales',     days:51,target:30,apps:83,stage:'Offer',         recruiter:'Lucas M.'},
-    {id:4,pt:'Executivo de Vendas',        en:'Sales Executive',            dept_pt:'Vendas',     dept_en:'Sales',     days:47,target:30,apps:61,stage:'Interview',     recruiter:'Lucas M.'},
-    {id:5,pt:'Analista de Dados',          en:'Data Analyst',               dept_pt:'Engenharia', dept_en:'Engineering',days:12,target:35,apps:28,stage:'Sourcing',      recruiter:'Beatriz A.'},
-    {id:6,pt:'Analista de Marketing',      en:'Marketing Analyst',          dept_pt:'Marketing',  dept_en:'Marketing', days:33,target:35,apps:55,stage:'Interview',     recruiter:'Lucas M.'},
-    {id:7,pt:'Analista Financeiro',        en:'Financial Analyst',          dept_pt:'Financeiro', dept_en:'Finance',   days:22,target:35,apps:34,stage:'Phone Screen',  recruiter:'Beatriz A.'},
-    {id:8,pt:'HR Business Partner',        en:'HR Business Partner',        dept_pt:'RH',         dept_en:'HR',        days:8, target:35,apps:19,stage:'Sourcing',      recruiter:'Lucas M.'},
+    {pt:'Senior Full Stack Dev',    en:'Senior Full Stack Dev',    dpt:'Engenharia', den:'Engineering',days:28,target:35,apps:47,stage:'Interview',   rctr:'Beatriz A.'},
+    {pt:'Product Manager',          en:'Product Manager',          dpt:'Produto',    den:'Product',    days:19,target:35,apps:31,stage:'Screen',       rctr:'Beatriz A.'},
+    {pt:'Executivo de Vendas',      en:'Sales Executive',          dpt:'Vendas',     den:'Sales',      days:51,target:30,apps:83,stage:'Offer',        rctr:'Lucas M.'},
+    {pt:'Executivo de Vendas',      en:'Sales Executive',          dpt:'Vendas',     den:'Sales',      days:47,target:30,apps:61,stage:'Interview',    rctr:'Lucas M.'},
+    {pt:'Analista de Dados',        en:'Data Analyst',             dpt:'Engenharia', den:'Engineering',days:12,target:35,apps:28,stage:'Sourcing',     rctr:'Beatriz A.'},
+    {pt:'Analista de Marketing',    en:'Marketing Analyst',        dpt:'Marketing',  den:'Marketing',  days:33,target:35,apps:55,stage:'Interview',    rctr:'Lucas M.'},
+    {pt:'Analista Financeiro',      en:'Financial Analyst',        dpt:'Financeiro', den:'Finance',    days:22,target:35,apps:34,stage:'Screen',       rctr:'Beatriz A.'},
+    {pt:'HR Business Partner',      en:'HR Business Partner',      dpt:'RH',         den:'HR',         days:8, target:35,apps:19,stage:'Sourcing',     rctr:'Lucas M.'},
   ],
 
   funnel:[
-    {pt:'Candidatos',   en:'Applicants',    v:358},
-    {pt:'Triagem',      en:'Screen',        v:127},
-    {pt:'Entrevistas',  en:'Interviews',    v:68},
-    {pt:'Propostas',    en:'Offers',        v:14},
-    {pt:'Contratados',  en:'Hired',         v:9},
+    {pt:'Candidatos',en:'Applicants',  v:358, color:'#6366f1'},
+    {pt:'Triagem',   en:'Screening',   v:127, color:'#8b5cf6'},
+    {pt:'Entrevistas',en:'Interviews', v:68,  color:'#a78bfa'},
+    {pt:'Propostas', en:'Offers',      v:14,  color:'#c4b5fd'},
+    {pt:'Contratados',en:'Hired',      v:9,   color:'#22c55e'},
   ],
 
   org:{
-    name:'Fernanda Ortiz', role_pt:'CEO', role_en:'CEO',
-    hc:312, risk:'ok', dept_pt:'Diretoria', dept_en:'Board',
-    tenure:7, enps:41, perf:95,
+    name:'Fernanda Ortiz',  role_pt:'CEO',  role_en:'CEO',
+    emoji:'👩‍💼', hc:312, risk:'ok', tenure:7, enps:41, perf:95,
     children:[
-      {name:'Carlos Santos', role_pt:'VP Engenharia', role_en:'VP Engineering',
-       hc:87, risk:'ok', tenure:4, enps:38, perf:88,
-       children:[
-         {name:'Lucas Silva',  role_pt:'Gerente Backend',  role_en:'Backend Manager',  hc:44, risk:'ok', tenure:3, enps:40, perf:86},
-         {name:'Marina Torres',role_pt:'Gerente Frontend', role_en:'Frontend Manager', hc:43, risk:'warn',tenure:2, enps:35, perf:82},
-       ]},
-      {name:'Ana Lima', role_pt:'VP Produto', role_en:'VP Product',
-       hc:41, risk:'ok', tenure:3, enps:32, perf:90,
-       children:[
-         {name:'Rafael Souza',role_pt:'PM Lead',role_en:'PM Lead',hc:41,risk:'ok',tenure:2,enps:33,perf:87},
-       ]},
-      {name:'Pedro Gomes', role_pt:'VP Vendas', role_en:'VP Sales',
-       hc:63, risk:'crit', tenure:1, enps:14, perf:68,
-       children:[
-         {name:'Camila Nunes', role_pt:'Gerente Regional SP', role_en:'Regional Mgr SP', hc:32, risk:'crit', tenure:1, enps:12, perf:65},
-         {name:'Bruno Lopes',  role_pt:'Gerente Regional RJ', role_en:'Regional Mgr RJ', hc:31, risk:'warn', tenure:2, enps:18, perf:71},
-       ]},
-      {name:'Mariana Costa', role_pt:'VP RH', role_en:'VP HR',
-       hc:22, risk:'ok', tenure:5, enps:41, perf:92,
-       children:[
-         {name:'Daniela Mendes',role_pt:'HRBP Lead',role_en:'HRBP Lead',hc:22,risk:'ok',tenure:3,enps:42,perf:90},
-       ]},
-      {name:'Roberto Dias', role_pt:'VP Financeiro', role_en:'VP Finance',
-       hc:35, risk:'warn', tenure:2, enps:24, perf:79,
-       children:[
-         {name:'André Figueiredo',role_pt:'Controller',role_en:'Controller',hc:35,risk:'warn',tenure:2,enps:25,perf:78},
-       ]},
-      {name:'Juliana Ferreira', role_pt:'VP Marketing', role_en:'VP Marketing',
-       hc:64, risk:'warn', tenure:2, enps:19, perf:75,
-       children:[
-         {name:'Thiago Carvalho',role_pt:'Growth Lead',    role_en:'Growth Lead',     hc:32,risk:'warn',tenure:2,enps:20,perf:76},
-         {name:'Isabela Moura',  role_pt:'Brand Manager',  role_en:'Brand Manager',   hc:32,risk:'ok',  tenure:3,enps:22,perf:80},
-       ]},
+      { name:'Carlos Santos', role_pt:'VP Engenharia', role_en:'VP Engineering',
+        emoji:'👨‍💻', hc:87, risk:'ok', tenure:4, enps:38, perf:88,
+        children:[
+          {name:'Lucas Silva',   role_pt:'Gerente Backend',  role_en:'Backend Mgr',  emoji:'👨‍🔬', hc:44, risk:'ok',   tenure:3, enps:40, perf:86},
+          {name:'Marina Torres', role_pt:'Gerente Frontend', role_en:'Frontend Mgr', emoji:'👩‍🔬', hc:43, risk:'warn', tenure:2, enps:35, perf:82},
+        ]},
+      { name:'Ana Lima', role_pt:'VP Produto', role_en:'VP Product',
+        emoji:'👩‍🚀', hc:41, risk:'ok', tenure:3, enps:32, perf:90,
+        children:[
+          {name:'Rafael Souza', role_pt:'PM Lead', role_en:'PM Lead', emoji:'🧑‍💼', hc:41, risk:'ok', tenure:2, enps:33, perf:87},
+        ]},
+      { name:'Pedro Gomes', role_pt:'VP Vendas', role_en:'VP Sales',
+        emoji:'😰', hc:63, risk:'crit', tenure:1, enps:14, perf:68,
+        children:[
+          {name:'Camila Nunes', role_pt:'Gerente SP', role_en:'Manager SP', emoji:'😟', hc:32, risk:'crit', tenure:1, enps:12, perf:65},
+          {name:'Bruno Lopes',  role_pt:'Gerente RJ', role_en:'Manager RJ', emoji:'😕', hc:31, risk:'warn', tenure:2, enps:18, perf:71},
+        ]},
+      { name:'Mariana Costa', role_pt:'VP RH', role_en:'VP HR',
+        emoji:'👩‍💼', hc:22, risk:'ok', tenure:5, enps:41, perf:92,
+        children:[
+          {name:'Daniela Mendes', role_pt:'HRBP Lead', role_en:'HRBP Lead', emoji:'🧑‍💼', hc:22, risk:'ok', tenure:3, enps:42, perf:90},
+        ]},
+      { name:'Roberto Dias', role_pt:'VP Financeiro', role_en:'VP Finance',
+        emoji:'👨‍🏦', hc:35, risk:'warn', tenure:2, enps:24, perf:79,
+        children:[
+          {name:'André Figueiredo', role_pt:'Controller', role_en:'Controller', emoji:'📊', hc:35, risk:'warn', tenure:2, enps:25, perf:78},
+        ]},
+      { name:'Juliana Ferreira', role_pt:'VP Marketing', role_en:'VP Marketing',
+        emoji:'👩‍🎨', hc:64, risk:'warn', tenure:2, enps:19, perf:75,
+        children:[
+          {name:'Thiago Carvalho', role_pt:'Growth Lead',   role_en:'Growth Lead',   emoji:'📈', hc:32, risk:'warn', tenure:2, enps:20, perf:76},
+          {name:'Isabela Moura',   role_pt:'Brand Manager', role_en:'Brand Manager', emoji:'🎨', hc:32, risk:'ok',   tenure:3, enps:22, perf:80},
+        ]},
     ]
   }
 };
 
-/* ══════════════════════════════════════════════
-   I18N
-══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   I18N & STATE
+═══════════════════════════════════════════════ */
 const I18N = {
   pt:{
-    pageTitles:{home:'Briefing Executivo',kpis:'KPIs Estratégicos',td:'Treinamento & Desenvolvimento',vagas:'Pipeline de Vagas',org:'Organograma'},
-    action_crit:'Ação imediata', action_warn:'Monitorar', action_ok:'Dentro do esperado',
-    bench:'bench', curr:'Atual',
-    deptHdr:['Departamento','HC','Turnover','eNPS','Absentee','Gestor','Saúde'],
-    vagasHdr:['Cargo','Dpto','Dias aberto','Meta TTF','Apps','Fase','Recruiter','Progresso'],
-    courseHdr:['Curso','Inscritos','Concluídos','Taxa','Avaliação'],
-    stageMap:{Sourcing:'Mapeamento','Phone Screen':'Triagem',Interview:'Entrevistas',Offer:'Proposta'},
+    pages:{welcome:'Boas-vindas',home:'Briefing Executivo',kpis:'KPIs Estratégicos',td:'Treinamento & Desenvolvimento',vagas:'Pipeline de Vagas',org:'Organograma'},
+    act_crit:'🚨 Ação imediata', act_warn:'⚠️ Monitorar', act_ok:'✅ Dentro do esperado',
+    bench:'bench',
+    proj_up:'▲ Projeção Q3',proj_down:'▼ Projeção Q3',proj_flat:'→ Projeção Q3',
+    dept_hdr:['Departamento','HC','Turnover','eNPS','Absenteísmo','Gestor','Saúde Geral'],
+    vagas_hdr:['Cargo','Depto','Dias aberto','Meta','Candidatos','Fase','Recruiter','Progresso TTF'],
+    course_hdr:['Curso','Inscritos','Concluídos','Taxa','Avaliação'],
+    stages:{Sourcing:'Mapeamento',Screen:'Triagem',Interview:'Entrevistas',Offer:'Proposta'},
+    expand:'▼ Recolher', collapse:'▶ Expandir',
+    people:'colab.', years:'anos',
   },
   en:{
-    pageTitles:{home:'Executive Briefing',kpis:'Strategic KPIs',td:'Learning & Development',vagas:'Hiring Pipeline',org:'Org Chart'},
-    action_crit:'Immediate action', action_warn:'Monitor', action_ok:'Within expected range',
-    bench:'bench', curr:'Current',
-    deptHdr:['Department','HC','Turnover','eNPS','Absenteeism','Manager','Health'],
-    vagasHdr:['Role','Dept','Days open','TTF Target','Apps','Stage','Recruiter','Progress'],
-    courseHdr:['Course','Enrolled','Completed','Rate','Rating'],
-    stageMap:{Sourcing:'Sourcing','Phone Screen':'Screening',Interview:'Interviews',Offer:'Offer'},
+    pages:{welcome:'Welcome',home:'Executive Briefing',kpis:'Strategic KPIs',td:'Learning & Development',vagas:'Hiring Pipeline',org:'Org Chart'},
+    act_crit:'🚨 Immediate action', act_warn:'⚠️ Monitor', act_ok:'✅ Within expected',
+    bench:'bench',
+    proj_up:'▲ Q3 Projection',proj_down:'▼ Q3 Projection',proj_flat:'→ Q3 Projection',
+    dept_hdr:['Department','HC','Turnover','eNPS','Absenteeism','Manager','Health'],
+    vagas_hdr:['Role','Dept','Days open','Target','Applicants','Stage','Recruiter','TTF Progress'],
+    course_hdr:['Course','Enrolled','Completed','Rate','Rating'],
+    stages:{Sourcing:'Sourcing',Screen:'Screening',Interview:'Interviews',Offer:'Offer'},
+    expand:'▼ Collapse', collapse:'▶ Expand',
+    people:'people', years:'yrs',
   }
 };
 
-/* ══════════════════════════════════════════════
-   STATE
-══════════════════════════════════════════════ */
 let lang = 'pt';
-const charts = {};
+const CC = {}; // chart cache
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    UTILS
-══════════════════════════════════════════════ */
-function t(key){ return I18N[lang][key]; }
-function L(obj){ return obj[lang] || obj.pt; }
-function severity(k){ const d=dev(k); return k.dir==='lower'?k.v>k.bench*(1+.2)?'crit':k.v>k.bench?'warn':'ok':k.v<k.bench*(1-.2)?'crit':k.v<k.bench?'warn':'ok'; }
-function dev(k){ return k.dir==='lower'?Math.max(0,(k.v-k.bench)/k.bench):Math.max(0,(k.bench-k.v)/k.bench); }
-function fmtKPI(k){ return k.unit==='R$'?`R$${k.v.toLocaleString('pt-BR')}`:k.v+k.unit; }
-function statusPill(s){ return `<span class="pill ${s}">● ${s==='ok'?'OK':s==='warn'?'Atenção':'Crítico'}</span>`; }
-function riskLabel(r){ return {ok:'🟢',warn:'🟡',crit:'🔴'}[r]; }
+═══════════════════════════════════════════════ */
+const T  = () => I18N[lang];
+const L  = o  => o[lang] || o.pt;
+function sev(k){
+  if(k.dir==='lower')  return k.v > k.bench*1.2 ? 'crit' : k.v > k.bench ? 'warn' : 'ok';
+  return k.v < k.bench*0.8 ? 'crit' : k.v < k.bench ? 'warn' : 'ok';
+}
+function dev(k){
+  return k.dir==='lower' ? Math.max(0,(k.v-k.bench)/k.bench) : Math.max(0,(k.bench-k.v)/k.bench);
+}
+function fv(k){
+  if(k.u==='R$') return `R$${k.v.toLocaleString('pt-BR')}`;
+  return k.v + k.u;
+}
+function projection(k){
+  const t = k.trend, n = t.length;
+  if(n < 3) return null;
+  const d1 = t[n-1]-t[n-2], d2 = t[n-2]-t[n-3];
+  const avg = (d1+d2)/2;
+  return +(t[n-1]+avg).toFixed(1);
+}
+function projDirection(k){
+  const p = projection(k);
+  if(!p) return 'flat';
+  const delta = p - k.v;
+  if(Math.abs(delta) < 0.2) return 'flat';
+  // "up" = getting worse
+  if(k.dir==='lower')  return delta > 0 ? 'up' : 'down';
+  return delta < 0 ? 'up' : 'down';
+}
+function severityClass(d){ return d>20?'crit':d>12?'warn':'ok'; }
+function colorBySev(s){ return {ok:'#16a34a',warn:'#d97706',crit:'#dc2626'}[s]; }
+function starsHTML(r){
+  const full=Math.round(r), empty=5-full;
+  return `<span style="color:#f59e0b;letter-spacing:1px">${'★'.repeat(full)}${'☆'.repeat(empty)}</span> <span style="font-size:.68rem;color:#94a3b8">${r}</span>`;
+}
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    NAVIGATION
-══════════════════════════════════════════════ */
+═══════════════════════════════════════════════ */
 function nav(id){
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
   document.getElementById('page-'+id).classList.add('active');
-  document.querySelectorAll('.sb-nav a').forEach(a=>a.classList.toggle('active',a.dataset.page===id));
-  document.getElementById('tb-title').textContent = t('pageTitles')[id];
-  if(id==='kpis'   && !charts.kpiBar)  initKPICharts();
-  if(id==='td'     && !charts.tdDough) initTDCharts();
-  if(id==='vagas'  && !charts.vagaTTF) initVagasCharts();
-  if(id==='org')   buildOrgChart();
+  document.querySelectorAll('.sb-link').forEach(a=>a.classList.toggle('active',a.dataset.page===id));
+  document.getElementById('tb-title').textContent = T().pages[id]||id;
+  if(id==='home'  && !CC.homeTurn) initHomeCharts();
+  if(id==='kpis'  && !CC.kpiDone)  { renderKPICards(); CC.kpiDone=true; }
+  if(id==='td'    && !CC.tdBudget) initTDCharts();
+  if(id==='vagas' && !CC.vagaTTF)  initVagasCharts();
+  if(id==='org')                   buildOrgChart();
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    LANGUAGE
-══════════════════════════════════════════════ */
+═══════════════════════════════════════════════ */
 function setLang(l){
   lang = l;
   document.documentElement.lang = l;
-  document.querySelectorAll('[data-pt]').forEach(el=>{ el.textContent = l==='pt'?el.dataset.pt:el.dataset.en; });
+  document.querySelectorAll('[data-pt]').forEach(el=>{
+    if(el.dataset.en) el.textContent = l==='pt'?el.dataset.pt:el.dataset.en;
+  });
   document.querySelectorAll('.lb').forEach(b=>b.classList.toggle('active',b.dataset.lang===l));
-  // Re-render dynamic content
+  document.getElementById('tb-title').textContent = T().pages[document.querySelector('.page.active').id.replace('page-','')]||'';
+  // Re-render dynamic sections
   renderAlerts();
-  renderDeptTable();
   renderHomeTiles();
+  renderDeptTable();
   renderTDTiles(); renderTDBars(); renderCoursesTable();
   renderVagasTiles(); renderFunnel(); renderVagasTable();
-  const cur = document.querySelector('.page.active');
-  if(cur) document.getElementById('tb-title').textContent = t('pageTitles')[cur.id.replace('page-','')];
-  updateCharts();
+  // Update chart labels
+  if(CC.homeTurn){ CC.homeTurn.data.labels=D.depts.map(d=>L(d)); CC.homeTurn.update(); }
+  if(CC.vagaTTF){ CC.vagaTTF.data.labels=D.vagas.map(v=>L(v)); CC.vagaTTF.update(); }
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    ALERTS ENGINE
-══════════════════════════════════════════════ */
-function getAlerts(){
-  return DATA.kpis.map(k=>{
-    const sev = severity(k);
-    const d   = dev(k);
-    return {...k, sev, d};
-  }).sort((a,b)=>b.d-a.d||b.w-a.w);
-}
+═══════════════════════════════════════════════ */
 function renderAlerts(){
-  const alerts = getAlerts();
-  document.getElementById('alert-list').innerHTML = alerts.map(a=>{
-    const name = lang==='pt'?a.pt:a.en;
-    const bench_s = a.unit==='R$'?`R$${a.bench.toLocaleString('pt-BR')}`:a.bench+a.unit;
-    const pct = Math.min(a.d*200, 100);
-    const action = t(`action_${a.sev}`);
+  const sorted = [...D.kpis].map(k=>({...k,_sev:sev(k),_dev:dev(k)})).sort((a,b)=>b._dev-a._dev||b.w-a.w);
+  document.getElementById('alert-list').innerHTML = sorted.map(k=>{
+    const pct = Math.min(k._dev*200,100);
+    const bench_s = k.u==='R$'?`R$${k.bench.toLocaleString('pt-BR')}`:k.bench+k.u;
+    const action  = T()[`act_${k._sev}`];
     return `<div class="alert-row">
-      <div class="adot ${a.sev}"></div>
-      <div class="a-kpi">${name}</div>
-      <div class="a-val">${fmtKPI(a)}</div>
-      <div class="a-bench">${t('bench')}: ${bench_s}</div>
-      <div class="a-bar-wrap"><div class="a-bar"><div class="a-bar-fill fill-${a.sev}" style="width:${pct}%"></div></div></div>
-      <div class="a-action ${a.sev}">${action}</div>
+      <div class="adot ${k._sev}"></div>
+      <div class="a-name">${L(k)}</div>
+      <div class="a-mono">${fv(k)}</div>
+      <div class="a-mono">${bench_s}</div>
+      <div class="a-bar-wrap">
+        <div style="font-family:'DM Mono',monospace;font-size:.62rem;color:var(--tx3)">${k._dev>0?'▲ '+(k._dev*100).toFixed(0)+'%':T().act_ok.split(' ').pop()}</div>
+        <div class="a-bar"><div class="a-bar-fill fill-${k._sev}" style="width:${pct}%"></div></div>
+      </div>
+      <div class="a-action ${k._sev}">${action}</div>
     </div>`;
   }).join('');
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    HOME TILES
-══════════════════════════════════════════════ */
+═══════════════════════════════════════════════ */
 function renderHomeTiles(){
-  const show = ['turnover','eNPS','absent','ttf'];
+  const show = ['to','enps','abs','ttf'];
   document.getElementById('home-tiles').innerHTML = show.map(key=>{
-    const k = DATA.kpis.find(x=>x.key===key);
-    const sev = severity(k);
-    const bench_s = k.unit==='R$'?`R$${k.bench.toLocaleString('pt-BR')}`:k.bench+k.unit;
-    const d = dev(k); const pct = (d*100).toFixed(0);
-    const chip = d>0?`<span class="chip chip-${sev}">${sev==='crit'?'▲ ':''}${pct}% desvio</span>`:'';
-    return `<div class="kti ${sev}">
-      <div class="kti-lbl">${lang==='pt'?k.pt:k.en}</div>
-      <div class="kti-val">${fmtKPI(k)}</div>
-      <div class="kti-meta"><span>bench: ${bench_s}</span>${chip}</div>
+    const k = D.kpis.find(x=>x.key===key);
+    const s = sev(k), d = dev(k);
+    const bench_s = k.u==='R$'?`R$${k.bench.toLocaleString('pt-BR')}`:k.bench+k.u;
+    const p = projection(k);
+    const pd = projDirection(k);
+    const pLabel = p!==null?`${T()['proj_'+pd]}: ${p}${k.u}`:'';
+    const chip = d>0?`<span class="kti-chip chip-${s}">${pd==='up'?'▲':'▼'} ${(d*100).toFixed(0)}%</span>`:'<span class="kti-chip chip-ok">✓ OK</span>';
+    return `<div class="kti ${s}">
+      <div class="kti-label">${L(k)}</div>
+      <div class="kti-val">${fv(k)}</div>
+      <div class="kti-meta"><span style="color:var(--tx3);font-size:.68rem">bench: ${bench_s}</span>${chip}</div>
+      ${pLabel?`<div class="kti-proj" style="color:${pd==='up'?'var(--crit)':pd==='down'?'var(--ok)':'var(--tx3)'}">${pLabel}</div>`:''}
     </div>`;
   }).join('');
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    DEPT TABLE
-══════════════════════════════════════════════ */
+═══════════════════════════════════════════════ */
 function renderDeptTable(){
-  const hdr = t('deptHdr');
-  let html = `<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-  DATA.depts.forEach(d=>{
-    const ts = d.turnover>20?'crit':d.turnover>15?'warn':'ok';
-    const es = d.eNPS<20?'crit':d.eNPS<30?'warn':'ok';
-    const as_ = d.absent>6?'crit':d.absent>3.5?'warn':'ok';
-    const health = ts==='crit'||es==='crit'||as_==='crit'?'crit':ts==='warn'||es==='warn'||as_==='warn'?'warn':'ok';
-    html += `<tr>
-      <td><strong>${lang==='pt'?d.pt:d.en}</strong></td>
+  const hdr = T().dept_hdr;
+  let html=`<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  D.depts.forEach(d=>{
+    const ts = d.to>20?'crit':d.to>15?'warn':'ok';
+    const es = d.enps<20?'crit':d.enps<30?'warn':'ok';
+    const as = d.abs>6?'crit':d.abs>3.5?'warn':'ok';
+    const hs = ts==='crit'||es==='crit'||as==='crit'?'crit':ts==='warn'||es==='warn'||as==='warn'?'warn':'ok';
+    const hlbl = {ok:{pt:'Saudável',en:'Healthy'},warn:{pt:'Atenção',en:'Watch'},crit:{pt:'Crítico',en:'Critical'}}[hs];
+    html+=`<tr>
+      <td><strong>${d.emoji} ${L(d)}</strong></td>
       <td>${d.hc}</td>
-      <td><span class="pill ${ts}">${d.turnover}%</span></td>
-      <td><span class="pill ${es}">${d.eNPS}</span></td>
-      <td><span class="pill ${as_}">${d.absent}%</span></td>
-      <td>${d.manager}</td>
-      <td>${statusPill(health)}</td>
+      <td><span class="pill ${ts}">${d.to}%</span></td>
+      <td><span class="pill ${es}">${d.enps}</span></td>
+      <td><span class="pill ${as}">${d.abs}%</span></td>
+      <td>${d.mgr}</td>
+      <td><span class="pill ${hs}">● ${L(hlbl)}</span></td>
     </tr>`;
   });
-  html += '</tbody>';
-  document.getElementById('dept-table').innerHTML = html;
+  html+='</tbody>';
+  document.getElementById('dept-table').innerHTML=html;
 }
 
-/* ══════════════════════════════════════════════
-   KPI FULL CARDS
-══════════════════════════════════════════════ */
-function renderKPICards(){
-  const qtrs = ['Q1','Q2','Q3','Q4','Q5','Q6'];
-  document.getElementById('kpi-cards').innerHTML = DATA.kpis.map((k,i)=>{
-    const sev = severity(k);
-    const bench_s = k.unit==='R$'?`R$${k.bench.toLocaleString('pt-BR')}`:k.bench+k.unit;
-    return `<div class="kf">
-      <div class="kf-top">
-        <div>
-          <div class="kf-name">${lang==='pt'?k.pt:k.en}</div>
-          <div style="font-size:.65rem;color:var(--tx3);margin-top:2px">Benchmark: ${bench_s} · ${k.src}</div>
-        </div>
-        <span class="chip chip-${sev}">${sev==='ok'?'✓ OK':sev==='warn'?'▲ Watch':'● Critical'}</span>
-      </div>
-      <div class="kf-val" style="color:var(--${sev==='ok'?'ok':sev==='warn'?'warn':'crit'})">${fmtKPI(k)}</div>
-      <div class="kf-bench" style="margin-bottom:6px">${lang==='pt'?'Benchmark':'Benchmark'}: ${bench_s}</div>
-      <canvas id="spark-${i}" class="kf-spark"></canvas>
-    </div>`;
-  }).join('');
-  // Init sparklines
-  DATA.kpis.forEach((k,i)=>{
-    const sev = severity(k);
-    const colors = {ok:'#16a34a',warn:'#d97706',crit:'#dc2626'};
-    new Chart(document.getElementById('spark-'+i),{
-      type:'line',
-      data:{
-        labels:['Q1','Q2','Q3','Q4','Q5','Q6'],
-        datasets:[{
-          data:k.trend,borderColor:colors[sev],backgroundColor:colors[sev]+'22',
-          borderWidth:2,pointRadius:2,fill:true,tension:.3
-        }]
-      },
-      options:{
-        responsive:true,maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{enabled:true}},
-        scales:{x:{display:false},y:{display:false}}
-      }
-    });
-  });
-}
-
-/* ══════════════════════════════════════════════
-   T&D TILES
-══════════════════════════════════════════════ */
-function renderTDTiles(){
-  const tiles = [
-    {lpt:'Investimento/colaborador',len:'Investment/employee',v:`R$ ${DATA.training.investPerHead.toLocaleString('pt-BR')}`,s:'ok'},
-    {lpt:'ROI do treinamento',      len:'Training ROI',       v:`${DATA.training.roi}%`,s:'ok'},
-    {lpt:'Horas médias/colaborador',len:'Avg hrs/employee',   v:`${DATA.training.hrsAvg}h`,s:'warn'},
-  ];
-  document.getElementById('td-tiles').innerHTML = tiles.map(t=>`
-    <div class="kti ${t.s}">
-      <div class="kti-lbl">${lang==='pt'?t.lpt:t.len}</div>
-      <div class="kti-val">${t.v}</div>
-    </div>`).join('');
-}
-function renderTDBars(){
-  const sorted = [...DATA.training.depts].sort((a,b)=>b.pct-a.pct);
-  document.getElementById('td-bars').innerHTML = sorted.map(d=>{
-    const s = d.pct>=80?'ok':d.pct>=60?'warn':'crit';
-    return `<div class="tb-row">
-      <div class="tb-dept">${lang==='pt'?d.pt:d.en}</div>
-      <div class="pb-wrap" style="flex:1">
-        <div class="pb-track"><div class="pb-fill ${s}" style="width:${d.pct}%"></div></div>
-      </div>
-      <div class="tb-pct">${d.pct}%</div>
-    </div>`;
-  }).join('');
-}
-function renderCoursesTable(){
-  const hdr = t('courseHdr');
-  let html = `<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-  DATA.training.courses.forEach(c=>{
-    const rate = Math.round(c.done/c.enr*100);
-    const s = rate>=80?'ok':rate>=65?'warn':'crit';
-    const stars = '★'.repeat(Math.round(c.rating))+'☆'.repeat(5-Math.round(c.rating));
-    html += `<tr>
-      <td><strong>${lang==='pt'?c.pt:c.en}</strong></td>
-      <td>${c.enr}</td><td>${c.done}</td>
-      <td><span class="pill ${s}">${rate}%</span></td>
-      <td style="color:#f59e0b;letter-spacing:1px">${stars} <span style="color:var(--tx2);font-size:.72rem">${c.rating}</span></td>
-    </tr>`;
-  });
-  html += '</tbody>';
-  document.getElementById('courses-table').innerHTML = html;
-}
-
-/* ══════════════════════════════════════════════
-   VAGAS
-══════════════════════════════════════════════ */
-function renderVagasTiles(){
-  const overdue = DATA.vagas.filter(v=>v.days>v.target).length;
-  const avgTTF  = Math.round(DATA.vagas.reduce((s,v)=>s+v.days,0)/DATA.vagas.length);
-  const tiles = [
-    {lpt:'Vagas abertas',     len:'Open positions', v:DATA.vagas.length,s:'warn'},
-    {lpt:'Avg Time to Fill',  len:'Avg Time to Fill',v:`${avgTTF}d`,s:avgTTF<=35?'ok':'warn'},
-    {lpt:'Vagas atrasadas',   len:'Overdue vacancies',v:overdue,s:overdue>2?'crit':'warn'},
-    {lpt:'Total aplicações',  len:'Total applications',v:DATA.vagas.reduce((s,v)=>s+v.apps,0),s:'ok'},
-  ];
-  document.getElementById('vagas-tiles').innerHTML = tiles.map(t=>`
-    <div class="kti ${t.s}">
-      <div class="kti-lbl">${lang==='pt'?t.lpt:t.len}</div>
-      <div class="kti-val">${t.v}</div>
-    </div>`).join('');
-}
-function renderFunnel(){
-  const max = DATA.funnel[0].v;
-  document.getElementById('vagas-funnel').innerHTML = DATA.funnel.map(f=>{
-    const h = Math.max(8, Math.round(f.v/max*100));
-    return `<div class="fs">
-      <div class="fv">${f.v}</div>
-      <div class="fb" style="height:${h}px"></div>
-      <div class="fl">${lang==='pt'?f.pt:f.en}</div>
-    </div>`;
-  }).join('');
-}
-function renderVagasTable(){
-  const hdr = t('vagasHdr');
-  const sm = t('stageMap');
-  let html = `<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
-  DATA.vagas.forEach(v=>{
-    const over = v.days>v.target;
-    const s = over?'crit':v.days>v.target*.8?'warn':'ok';
-    const pct = Math.min(Math.round(v.days/v.target*100),100);
-    html += `<tr>
-      <td><strong>${lang==='pt'?v.pt:v.en}</strong></td>
-      <td>${lang==='pt'?v.dept_pt:v.dept_en}</td>
-      <td><span class="pill ${s}">${v.days}d</span></td>
-      <td>${v.target}d</td><td>${v.apps}</td>
-      <td><span style="font-size:.72rem;color:var(--tx2)">${sm[v.stage]||v.stage}</span></td>
-      <td>${v.recruiter}</td>
-      <td style="min-width:110px">
-        <div class="pb-wrap">
-          <div class="pb-track"><div class="pb-fill ${s}" style="width:${pct}%"></div></div>
-          <span style="font-family:'DM Mono',monospace;font-size:.65rem;color:var(--tx3);width:32px;text-align:right">${pct}%</span>
-        </div>
-      </td>
-    </tr>`;
-  });
-  html += '</tbody>';
-  document.getElementById('vagas-table').innerHTML = html;
-}
-
-/* ══════════════════════════════════════════════
-   CHARTS — HOME
-══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   HOME CHARTS
+═══════════════════════════════════════════════ */
 function initHomeCharts(){
-  const depts   = DATA.depts.map(d=>lang==='pt'?d.pt:d.en);
-  const colors  = DATA.depts.map(d=>d.turnover>20?'#dc2626':d.turnover>15?'#d97706':'#6366f1');
-
-  charts.homeTurn = new Chart(document.getElementById('c-home-turnover'),{
+  // Turnover by dept
+  const colors=D.depts.map(d=>d.to>20?'#dc2626':d.to>15?'#d97706':'#6366f1');
+  CC.homeTurn=new Chart(document.getElementById('c-home-turnover'),{
     type:'bar',
     data:{
-      labels:DATA.depts.map(d=>lang==='pt'?d.pt:d.en),
-      datasets:[{
-        label:'Turnover %',data:DATA.depts.map(d=>d.turnover),
-        backgroundColor:colors,borderRadius:5
-      },{
-        label:'Benchmark',data:DATA.depts.map(()=>12),
-        type:'line',borderColor:'#94a3b8',borderDash:[4,4],
-        borderWidth:1.5,pointRadius:0,fill:false
-      }]
-    },
-    options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{y:{beginAtZero:true,grid:{color:'#f1f5f9'}}}}
-  });
-
-  const eNPSquarters=['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25'];
-  const eNPS_trend = DATA.kpis.find(k=>k.key==='eNPS').trend;
-  charts.homeEnps = new Chart(document.getElementById('c-home-enps'),{
-    type:'line',
-    data:{
-      labels:eNPSquarters,
+      labels:D.depts.map(d=>L(d)),
       datasets:[
-        {label:'eNPS',data:eNPS_trend,borderColor:'#6366f1',backgroundColor:'#6366f133',borderWidth:2,fill:true,tension:.35,pointRadius:3},
-        {label:lang==='pt'?'Benchmark':'Benchmark',data:eNPS_trend.map(()=>30),borderColor:'#16a34a',borderDash:[5,5],borderWidth:1.5,pointRadius:0,fill:false}
+        {label:'Turnover %',data:D.depts.map(d=>d.to),backgroundColor:colors,borderRadius:6,maxBarThickness:36},
+        {label:'Benchmark 12%',data:D.depts.map(()=>12),type:'line',borderColor:'#94a3b8',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false}
       ]
     },
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{size:11}}}},
+      plugins:{legend:{labels:{font:{size:11}}}},
+      scales:{y:{beginAtZero:true,grid:{color:'#f1f5f9'},ticks:{callback:v=>v+'%'}}}}
+  });
+  // eNPS trend
+  const eq=['Q1 24','Q2 24','Q3 24','Q4 24','Q1 25','Q2 25'];
+  const et=D.kpis.find(k=>k.key==='enps').trend;
+  CC.homeEnps=new Chart(document.getElementById('c-home-enps'),{
+    type:'line',
+    data:{
+      labels:eq,
+      datasets:[
+        {label:'eNPS',data:et,borderColor:'#6366f1',backgroundColor:'rgba(99,102,241,.12)',borderWidth:2.5,fill:true,tension:.35,pointRadius:4,pointHoverRadius:6},
+        {label:'Benchmark 30',data:et.map(()=>30),borderColor:'#16a34a',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false}
+      ]
+    },
+    options:{responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{size:11}}}},
       scales:{y:{grid:{color:'#f1f5f9'}}}}
   });
 }
 
-/* ══════════════════════════════════════════════
-   CHARTS — KPIs page (sparklines built inline)
-══════════════════════════════════════════════ */
-function initKPICharts(){
-  renderKPICards();
+/* ═══════════════════════════════════════════════
+   KPI FULL CARDS WITH SPARKLINES
+═══════════════════════════════════════════════ */
+function renderKPICards(){
+  const qtrs=['Q1','Q2','Q3','Q4','Q5','Q6'];
+  document.getElementById('kpi-cards').innerHTML = D.kpis.map((k,i)=>{
+    const s=sev(k), p=projection(k), pd=projDirection(k);
+    const bench_s=k.u==='R$'?`R$${k.bench.toLocaleString('pt-BR')}`:k.bench+k.u;
+    const pLabel=p!==null?`${T()['proj_'+pd]}: ${p}${k.u}`:'';
+    const badgeTxt=s==='ok'?'✓ OK':s==='warn'?'⚠ Watch':'● Critical';
+    return `<div class="kf">
+      <div class="kf-head">
+        <div>
+          <div class="kf-name">${L(k)}</div>
+          <div class="kf-source">Source: ${k.src} · benchmark: ${bench_s}</div>
+        </div>
+        <span class="kti-chip chip-${s}">${badgeTxt}</span>
+      </div>
+      <div class="kf-body">
+        <div>
+          <div class="kf-val" style="color:${colorBySev(s)}">${fv(k)}</div>
+          <div class="kf-bench">Benchmark: ${bench_s}</div>
+          ${pLabel?`<div class="kf-proj ${pd}">${pLabel}</div>`:''}
+        </div>
+        <div style="position:relative;height:70px">
+          <canvas id="sp-${i}"></canvas>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // Init sparklines AFTER DOM is updated
+  requestAnimationFrame(()=>{
+    D.kpis.forEach((k,i)=>{
+      const canvas=document.getElementById('sp-'+i);
+      if(!canvas) return;
+      const s=sev(k), c=colorBySev(s);
+      new Chart(canvas,{
+        type:'line',
+        data:{
+          labels:['Q1','Q2','Q3','Q4','Q5','Q6'],
+          datasets:[{
+            data:k.trend, borderColor:c,
+            backgroundColor:c+'22', borderWidth:2,
+            pointRadius:2, fill:true, tension:.3
+          }]
+        },
+        options:{
+          responsive:true, maintainAspectRatio:false,
+          plugins:{legend:{display:false},tooltip:{enabled:false}},
+          scales:{x:{display:false},y:{display:false}}
+        }
+      });
+    });
+  });
 }
 
-/* ══════════════════════════════════════════════
-   CHARTS — T&D
-══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   T&D
+═══════════════════════════════════════════════ */
+function renderTDTiles(){
+  const tiles=[
+    {pt:'Investimento/colaborador',en:'Investment/employee',v:`R$ ${D.training.investHead.toLocaleString('pt-BR')}`,s:'ok'},
+    {pt:'ROI do treinamento',      en:'Training ROI',       v:`${D.training.roi}%`,s:'ok'},
+    {pt:'Horas médias/colaborador',en:'Avg hrs/employee',   v:`${D.training.hrsAvg}h`,s:'warn'},
+  ];
+  document.getElementById('td-tiles').innerHTML=tiles.map(t=>`
+    <div class="kti ${t.s}">
+      <div class="kti-label">${lang==='pt'?t.pt:t.en}</div>
+      <div class="kti-val">${t.v}</div>
+    </div>`).join('');
+}
+function renderTDBars(){
+  document.getElementById('td-bars').innerHTML=[...D.training.depts].sort((a,b)=>b.pct-a.pct).map(d=>{
+    const s=d.pct>=d.target?'ok':d.pct>=d.target-15?'warn':'crit';
+    return `<div class="td-bar-row">
+      <div class="td-dept">${L(d)}</div>
+      <div class="pb" style="flex:1">
+        <div class="pb-track"><div class="pb-fill ${s}" style="width:${d.pct}%"></div></div>
+      </div>
+      <div class="td-pct">${d.pct}%</div>
+      <div style="font-size:.62rem;color:var(--tx3);width:60px;text-align:right">meta: ${d.target}%</div>
+    </div>`;
+  }).join('');
+}
+function renderCoursesTable(){
+  const hdr=T().course_hdr;
+  let html=`<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  D.training.courses.forEach(c=>{
+    const rate=Math.round(c.done/c.enr*100);
+    const s=rate>=80?'ok':rate>=65?'warn':'crit';
+    html+=`<tr>
+      <td><strong>${L(c)}</strong></td>
+      <td>${c.enr}</td><td>${c.done}</td>
+      <td><span class="pill ${s}">${rate}%</span></td>
+      <td>${starsHTML(c.rating)}</td>
+    </tr>`;
+  });
+  html+='</tbody>';
+  document.getElementById('courses-table').innerHTML=html;
+}
 function initTDCharts(){
   renderTDTiles(); renderTDBars(); renderCoursesTable();
-  const budget = DATA.training.budget;
-  charts.tdDough = new Chart(document.getElementById('c-td-budget'),{
+  CC.tdBudget=new Chart(document.getElementById('c-td-budget'),{
     type:'doughnut',
     data:{
-      labels:budget.map(b=>lang==='pt'?b.pt:b.en),
+      labels:D.training.budget.map(b=>L(b)),
       datasets:[{
-        data:budget.map(b=>b.val),
+        data:D.training.budget.map(b=>b.pct),
         backgroundColor:['#6366f1','#22d3ee','#f59e0b','#f43f5e','#94a3b8'],
-        borderWidth:0
+        borderWidth:2,borderColor:'#fff'
       }]
     },
     options:{responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}}
+      plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:10}}}}
   });
 }
 
-/* ══════════════════════════════════════════════
-   CHARTS — VAGAS
-══════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════
+   VAGAS
+═══════════════════════════════════════════════ */
+function renderVagasTiles(){
+  const over=D.vagas.filter(v=>v.days>v.target).length;
+  const avg=Math.round(D.vagas.reduce((s,v)=>s+v.days,0)/D.vagas.length);
+  const tiles=[
+    {pt:'Vagas abertas',     en:'Open positions', v:D.vagas.length,s:'warn'},
+    {pt:'Avg Time to Fill',  en:'Avg Time to Fill',v:`${avg}d`,s:avg<=35?'ok':'warn'},
+    {pt:'Vagas atrasadas',   en:'Overdue',         v:over,       s:over>=3?'crit':'warn'},
+    {pt:'Total candidaturas',en:'Total applications',v:D.vagas.reduce((s,v)=>s+v.apps,0),s:'ok'},
+  ];
+  document.getElementById('vagas-tiles').innerHTML=tiles.map(t=>`
+    <div class="kti ${t.s}">
+      <div class="kti-label">${lang==='pt'?t.pt:t.en}</div>
+      <div class="kti-val">${t.v}</div>
+    </div>`).join('');
+}
+function renderFunnel(){
+  const max=D.funnel[0].v;
+  document.getElementById('vagas-funnel').innerHTML=D.funnel.map(f=>{
+    const h=Math.max(8,Math.round(f.v/max*110));
+    return `<div class="fstep">
+      <div class="fval">${f.v}</div>
+      <div class="fbar" style="height:${h}px;background:${f.color}"></div>
+      <div class="flbl">${L(f)}</div>
+    </div>`;
+  }).join('');
+}
+function renderVagasTable(){
+  const hdr=T().vagas_hdr, stages=T().stages;
+  let html=`<thead><tr>${hdr.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>`;
+  D.vagas.forEach(v=>{
+    const over=v.days>v.target;
+    const pct=Math.min(Math.round(v.days/v.target*100),100);
+    const s=over?'crit':v.days>v.target*.8?'warn':'ok';
+    html+=`<tr>
+      <td><strong>${L(v)}</strong></td>
+      <td>${lang==='pt'?v.dpt:v.den}</td>
+      <td><span class="pill ${s}">${v.days}d</span></td>
+      <td style="color:var(--tx3);font-size:.78rem">${v.target}d</td>
+      <td>${v.apps}</td>
+      <td><span style="font-size:.75rem;color:var(--tx2)">${stages[v.stage]||v.stage}</span></td>
+      <td>${v.rctr}</td>
+      <td style="min-width:120px">
+        <div class="pb">
+          <div class="pb-track"><div class="pb-fill ${s}" style="width:${pct}%"></div></div>
+          <span class="pb-val">${pct}%</span>
+        </div>
+      </td>
+    </tr>`;
+  });
+  html+='</tbody>';
+  document.getElementById('vagas-table').innerHTML=html;
+}
 function initVagasCharts(){
   renderVagasTiles(); renderFunnel(); renderVagasTable();
-  charts.vagaTTF = new Chart(document.getElementById('c-vagas-ttf'),{
+  CC.vagaTTF=new Chart(document.getElementById('c-vagas-ttf'),{
     type:'bar',
     data:{
-      labels:DATA.vagas.map(v=>lang==='pt'?v.pt:v.en),
-      datasets:[{
-        label:'Days open',
-        data:DATA.vagas.map(v=>v.days),
-        backgroundColor:DATA.vagas.map(v=>v.days>v.target?'#dc2626':v.days>v.target*.8?'#d97706':'#6366f1'),
-        borderRadius:4
-      },{
-        label:'Target',data:DATA.vagas.map(v=>v.target),
-        type:'line',borderColor:'#94a3b8',borderDash:[4,4],
-        borderWidth:1.5,pointRadius:0,fill:false
-      }]
+      labels:D.vagas.map(v=>L(v)),
+      datasets:[
+        {label:'Days open',data:D.vagas.map(v=>v.days),
+         backgroundColor:D.vagas.map(v=>v.days>v.target?'#dc2626':v.days>v.target*.8?'#d97706':'#6366f1'),
+         borderRadius:5,maxBarThickness:24},
+        {label:'Target',data:D.vagas.map(v=>v.target),
+         type:'line',borderColor:'#94a3b8',borderDash:[5,4],borderWidth:1.5,pointRadius:0,fill:false}
+      ]
     },
-    options:{
-      indexAxis:'y',responsive:true,maintainAspectRatio:false,
-      plugins:{legend:{display:false}},
-      scales:{x:{beginAtZero:true,grid:{color:'#f1f5f9'}},y:{ticks:{font:{size:10}}}}
-    }
+    options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+      plugins:{legend:{labels:{font:{size:11}}}},
+      scales:{x:{beginAtZero:true,grid:{color:'#f1f5f9'},ticks:{callback:v=>v+'d'}},
+              y:{ticks:{font:{size:10}}}}}
   });
 }
 
-/* ══════════════════════════════════════════════
-   UPDATE CHARTS LABELS ON LANG CHANGE
-══════════════════════════════════════════════ */
-function updateCharts(){
-  if(charts.homeTurn){
-    charts.homeTurn.data.labels = DATA.depts.map(d=>lang==='pt'?d.pt:d.en);
-    charts.homeTurn.update();
-  }
-  if(charts.vagaTTF){
-    charts.vagaTTF.data.labels = DATA.vagas.map(v=>lang==='pt'?v.pt:v.en);
-    charts.vagaTTF.update();
-  }
-}
-
-/* ══════════════════════════════════════════════
-   ORG CHART
-══════════════════════════════════════════════ */
-let orgBuilt = false;
+/* ═══════════════════════════════════════════════
+   ORG CHART — CSS tree via JS
+═══════════════════════════════════════════════ */
+let orgReady=false;
 function buildOrgChart(){
-  if(orgBuilt) return;
-  orgBuilt = true;
-  const tree = document.getElementById('org-tree');
-  tree.innerHTML = '';
+  if(orgReady) return;
+  orgReady=true;
+  const root=document.getElementById('org-tree');
+  root.innerHTML='';
 
-  // CEO
-  const ceoWrap = document.createElement('div');
-  ceoWrap.style.display='flex';ceoWrap.style.flexDirection='column';ceoWrap.style.alignItems='center';
-  ceoWrap.innerHTML = makeOrgCard(DATA.org, true);
-  tree.appendChild(ceoWrap);
+  // CEO node
+  const ceoWrap=document.createElement('div');
+  ceoWrap.style.cssText='display:flex;flex-direction:column;align-items:center;';
+  ceoWrap.appendChild(makeOcEl(D.org,true,false));
+  const vDown=document.createElement('div');
+  vDown.className='tree-vline';
+  ceoWrap.appendChild(vDown);
+  root.appendChild(ceoWrap);
 
-  // Vertical line from CEO
-  const vl = document.createElement('div');
-  vl.className='org-vline';
-  ceoWrap.appendChild(vl);
+  // VPs as <ul class="tree-ul">
+  const vpUl=document.createElement('ul');
+  vpUl.className='tree-ul';
+  vpUl.style.cssText='margin:0;padding:0;';
 
-  // VPs row
-  const vpRow = document.createElement('div');
-  vpRow.style.cssText='display:flex;align-items:flex-start;position:relative;';
-  ceoWrap.appendChild(vpRow);
+  D.org.children.forEach(vp=>{
+    const li=document.createElement('li');
+    li.className='tree-li';
 
-  // Horizontal line connecting VPs
-  // We'll use a CSS trick via a container
-  const vpContainer = document.createElement('div');
-  vpContainer.style.cssText='display:flex;gap:0;position:relative;';
-  vpRow.appendChild(vpContainer);
-
-  DATA.org.children.forEach((vp, idx)=>{
-    const branch = document.createElement('div');
-    branch.style.cssText='display:flex;flex-direction:column;align-items:center;padding:0 14px;';
-
-    // Top connector line for each VP
-    const tl = document.createElement('div');
-    tl.className='org-vline';
-    branch.appendChild(tl);
+    const nodeWrap=document.createElement('div');
+    nodeWrap.className='tree-node-wrap';
 
     // VP card
-    const vpCardEl = document.createElement('div');
-    vpCardEl.innerHTML = makeOrgCard(vp, false, true);
-    branch.appendChild(vpCardEl);
+    const vpCard=makeOcEl(vp,false,true);
+    nodeWrap.appendChild(vpCard);
 
-    // Children (managers)
-    if(vp.children && vp.children.length>0){
-      const collapsed = document.createElement('div');
-      collapsed.className='org-children';
-      collapsed.style.maxHeight='500px';
+    // Toggle btn
+    const btn=document.createElement('button');
+    btn.className='tree-toggle';
+    btn.textContent=T().expand;
+    nodeWrap.appendChild(btn);
 
-      const innerVl = document.createElement('div');
-      innerVl.className='org-vline';
-      collapsed.appendChild(innerVl);
+    // Children ul (collapsed initially for cleaner look)
+    const childrenDiv=document.createElement('div');
+    childrenDiv.className='tree-children';
+    const childH=estimateChildrenH(vp.children);
+    childrenDiv.style.maxHeight=childH+'px';
 
-      const mgrsRow = document.createElement('div');
-      mgrsRow.style.cssText='display:flex;gap:0;';
-      vp.children.forEach(mgr=>{
-        const mb = document.createElement('div');
-        mb.style.cssText='display:flex;flex-direction:column;align-items:center;padding:0 8px;';
-        const mvl = document.createElement('div');
-        mvl.className='org-vline';
-        mb.appendChild(mvl);
-        const mc = document.createElement('div');
-        mc.innerHTML = makeOrgCard(mgr, false, false);
-        mb.appendChild(mc);
-        mgrsRow.appendChild(mb);
-      });
-      collapsed.appendChild(mgrsRow);
-      branch.appendChild(collapsed);
+    const childUl=document.createElement('ul');
+    childUl.className='tree-ul';
+    childUl.style.cssText='margin:0;padding:0;';
 
-      // Toggle button on VP card
-      const btn = document.createElement('button');
-      btn.className='collapse-btn';
-      btn.textContent=lang==='pt'?'▼ Recolher':'▼ Collapse';
-      btn.onclick=function(e){
-        e.stopPropagation();
-        const isCollapsed = collapsed.classList.toggle('collapsed');
-        btn.textContent = isCollapsed?(lang==='pt'?'▶ Expandir':'▶ Expand'):(lang==='pt'?'▼ Recolher':'▼ Collapse');
-      };
-      branch.appendChild(btn);
-    }
+    (vp.children||[]).forEach(mgr=>{
+      const mgrLi=document.createElement('li');
+      mgrLi.className='tree-li';
+      const mWrap=document.createElement('div');
+      mWrap.className='tree-node-wrap';
+      mWrap.appendChild(makeOcEl(mgr,false,false));
+      mgrLi.appendChild(mWrap);
+      childUl.appendChild(mgrLi);
+    });
 
-    vpContainer.appendChild(branch);
+    childrenDiv.appendChild(childUl);
+    nodeWrap.appendChild(childrenDiv);
+
+    // Toggle logic
+    let expanded=true;
+    btn.onclick=()=>{
+      expanded=!expanded;
+      if(expanded){
+        childrenDiv.classList.remove('collapsed');
+        childrenDiv.style.maxHeight=childH+'px';
+        btn.textContent=T().expand;
+      } else {
+        childrenDiv.classList.add('collapsed');
+        btn.textContent=T().collapse;
+      }
+    };
+
+    li.appendChild(nodeWrap);
+    vpUl.appendChild(li);
   });
 
-  // Attach tooltip hover logic
+  root.appendChild(vpUl);
   attachOrgHover();
 }
 
-function makeOrgCard(p, isCEO=false, isVP=false){
-  const riskClass = {ok:'r-ok',warn:'r-warn',crit:'r-crit'}[p.risk];
-  const cls = isCEO?'oc ceo':isVP?'oc vp':'oc';
-  const role = lang==='pt'?p.role_pt:p.role_en;
-  return `<div class="${cls}"
-    data-name="${p.name}" data-role="${role}" data-hc="${p.hc}"
-    data-tenure="${p.tenure}" data-enps="${p.enps}" data-perf="${p.perf}" data-risk="${p.risk}">
-    <span class="risk ${riskClass}"></span>
-    <span class="on">${p.name}</span>
-    <span class="or">${role}</span>
-    <span class="oh">${p.hc} ${lang==='pt'?'colab.':'people'}</span>
-  </div>`;
+function estimateChildrenH(ch){ return ch&&ch.length>0?160:0; }
+
+function makeOcEl(p,isCeo,isVp){
+  const el=document.createElement('div');
+  const riskCls={ok:'r-ok',warn:'r-warn',crit:'r-crit'}[p.risk];
+  el.className=`oc${isCeo?' ceo':isVp?' vp':p.risk==='crit'?' crit-card':''}`;
+  el.dataset.name=p.name;
+  el.dataset.role=lang==='pt'?p.role_pt:p.role_en;
+  el.dataset.hc=p.hc;
+  el.dataset.tenure=p.tenure;
+  el.dataset.enps=p.enps;
+  el.dataset.perf=p.perf;
+  el.dataset.risk=p.risk;
+  el.innerHTML=`
+    <div class="oc-risk ${riskCls}"></div>
+    <span class="oc-emoji">${p.emoji}</span>
+    <span class="oc-name">${p.name}</span>
+    <span class="oc-role">${lang==='pt'?p.role_pt:p.role_en}</span>
+    <span class="oc-hc">${p.hc} ${T().people}</span>`;
+  return el;
 }
 
 function attachOrgHover(){
-  const tt = document.getElementById('org-tt');
+  const tt=document.getElementById('org-tt');
   document.querySelectorAll('.oc').forEach(card=>{
-    card.addEventListener('mouseenter', e=>{
-      const d = card.dataset;
-      const riskLabel = {ok:lang==='pt'?'Baixo':'Low', warn:lang==='pt'?'Médio':'Medium', crit:lang==='pt'?'Alto':'High'}[d.risk];
-      const riskCls = d.risk;
-      tt.innerHTML = `<span class="ttname">${d.name}</span>
-        <div class="ttrow"><span class="ttk">${lang==='pt'?'Cargo':'Role'}</span><span class="ttv">${d.role}</span></div>
-        <div class="ttrow"><span class="ttk">HC</span><span class="ttv">${d.hc}</span></div>
-        <div class="ttrow"><span class="ttk">${lang==='pt'?'Tempo na empresa':'Tenure'}</span><span class="ttv">${d.tenure} ${lang==='pt'?'anos':'yrs'}</span></div>
-        <div class="ttrow"><span class="ttk">eNPS</span><span class="ttv ${d.enps>=30?'ok':d.enps>=20?'warn':'crit'}">${d.enps}</span></div>
-        <div class="ttrow"><span class="ttk">${lang==='pt'?'Performance':'Performance'}</span><span class="ttv ${d.perf>=80?'ok':d.perf>=70?'warn':'crit'}">${d.perf}</span></div>
-        <div class="ttrow"><span class="ttk">Flight Risk</span><span class="ttv ${riskCls}">${riskLabel}</span></div>`;
+    card.addEventListener('mouseenter',()=>{
+      const d=card.dataset;
+      const rLabel={ok:lang==='pt'?'Baixo':'Low',warn:lang==='pt'?'Médio':'Medium',crit:lang==='pt'?'Alto':'High'}[d.risk];
+      const eClass=d.enps>=30?'ok':d.enps>=20?'warn':'crit';
+      const pClass=d.perf>=80?'ok':d.perf>=70?'warn':'crit';
+      const rClass=d.risk;
+      tt.innerHTML=`
+        <span class="tn">${d.name}</span>
+        <div class="tr"><span class="tk">${lang==='pt'?'Cargo':'Role'}</span><span class="tv">${d.role}</span></div>
+        <div class="tr"><span class="tk">HC</span><span class="tv">${d.hc} ${T().people}</span></div>
+        <div class="tr"><span class="tk">${lang==='pt'?'Tempo de empresa':'Tenure'}</span><span class="tv">${d.tenure} ${T().years}</span></div>
+        <div class="tr"><span class="tk">eNPS</span><span class="tv ${eClass}">${d.enps}</span></div>
+        <div class="tr"><span class="tk">Performance</span><span class="tv ${pClass}">${d.perf}/100</span></div>
+        <div class="tr"><span class="tk">Flight Risk</span><span class="tv ${rClass}">${rLabel}</span></div>`;
       tt.classList.add('vis');
     });
-    card.addEventListener('mousemove', e=>{
-      tt.style.left = (e.clientX+14)+'px';
-      tt.style.top  = (e.clientY-10)+'px';
+    card.addEventListener('mousemove',e=>{
+      tt.style.left=(e.clientX+16)+'px';
+      tt.style.top=(e.clientY-10)+'px';
     });
-    card.addEventListener('mouseleave', ()=> tt.classList.remove('vis'));
+    card.addEventListener('mouseleave',()=>tt.classList.remove('vis'));
   });
 }
 
-/* ══════════════════════════════════════════════
+/* ═══════════════════════════════════════════════
    INIT
-══════════════════════════════════════════════ */
+═══════════════════════════════════════════════ */
 document.addEventListener('DOMContentLoaded',()=>{
-  renderAlerts();
-  renderDeptTable();
-  renderHomeTiles();
-  initHomeCharts();
+  // welcome page is default, no chart init needed
 });
 </script>
 </body>
