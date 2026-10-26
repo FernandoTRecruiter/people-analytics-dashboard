@@ -1,0 +1,6 @@
+tests/fotos/
+__pycache__/
+# lista local de nomes internos que os testes procuram na tela (não pode subir)
+tests/proibidos.txt
+# página de teste do CSV, gerada pelo gera_powerbi.py
+powerbi/teste_csv.html

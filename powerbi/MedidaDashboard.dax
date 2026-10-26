@@ -1,0 +1,1522 @@
+DashboardHTML =
+-- Gerado por powerbi/gera_powerbi.py em 2026-10-25. Os blocos _h saem do gerador: nao edite, rode de novo.
+-- PASSO 1: troque 'Pessoas' e 'Vagas' e os nomes entre colchetes pelos do SEU modelo (veja powerbi/LEIA-ME.md).
+-- A tabela de pessoas precisa ter ativos E desligados dos ultimos 21 meses (sem desligados nao ha turnover).
+
+VAR _pessoas =
+    "[" & CONCATENATEX(
+        'Pessoas',
+        "{" &
+        """id"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Matricula], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """nome"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Nome], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """genero"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Genero], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """raca"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Raca], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """nascimento"":""" & IF(ISBLANK('Pessoas'[Nascimento]), "", FORMAT('Pessoas'[Nascimento], "yyyy-mm-dd")) & """," &
+        """area"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Area], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """unidade"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Unidade], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """nivel"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Nivel], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """vinculo"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[Vinculo], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """admissao"":""" & IF(ISBLANK('Pessoas'[Admissao]), "", FORMAT('Pessoas'[Admissao], "yyyy-mm-dd")) & """," &
+        """desligamento"":""" & IF(ISBLANK('Pessoas'[Desligamento]), "", FORMAT('Pessoas'[Desligamento], "yyyy-mm-dd")) & """," &
+        """motivo"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Pessoas'[MotivoDesligamento], """", "'"), "\", "/"), UNICHAR(10), " ") & """" &
+        "}",
+        ","
+    ) & "]"
+
+-- Sem tabela de vagas? Troque o bloco abaixo por:  VAR _vagas = "[]"
+VAR _vagas =
+    "[" & CONCATENATEX(
+        'Vagas',
+        "{" &
+        """id"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Vagas'[Vaga], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """area"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Vagas'[Area], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """unidade"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Vagas'[Unidade], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """nivel"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Vagas'[Nivel], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """abertura"":""" & IF(ISBLANK('Vagas'[Abertura]), "", FORMAT('Vagas'[Abertura], "yyyy-mm-dd")) & """," &
+        """fechamento"":""" & IF(ISBLANK('Vagas'[Fechamento]), "", FORMAT('Vagas'[Fechamento], "yyyy-mm-dd")) & """," &
+        """status"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Vagas'[Status], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """etapa"":""" & SUBSTITUTE(SUBSTITUTE(SUBSTITUTE('Vagas'[Etapa], """", "'"), "\", "/"), UNICHAR(10), " ") & """," &
+        """inscritos"":" & IF(ISBLANK('Vagas'[Inscritos]), "0", FORMAT('Vagas'[Inscritos], "0")) & "," &
+        """triagem"":" & IF(ISBLANK('Vagas'[Triagem]), "0", FORMAT('Vagas'[Triagem], "0")) & "," &
+        """entrevistas"":" & IF(ISBLANK('Vagas'[Entrevistas]), "0", FORMAT('Vagas'[Entrevistas], "0")) & "," &
+        """ofertas"":" & IF(ISBLANK('Vagas'[Ofertas]), "0", FORMAT('Vagas'[Ofertas], "0")) & "," &
+        """contratados"":" & IF(ISBLANK('Vagas'[Contratados]), "0", FORMAT('Vagas'[Contratados], "0")) & "" &
+        "}",
+        ","
+    ) & "]"
+
+-- Data de corte: o ultimo dia do mes da admissao ou desligamento mais recente.
+VAR _dataRef = FORMAT(EOMONTH(MAX(MAX('Pessoas'[Admissao]), MAX('Pessoas'[Desligamento])), 0), "yyyy-mm-dd")
+VAR _empresa = "Minha empresa"
+
+VAR _a1 = "<!doctype html><html lang=""pt-BR""><head><meta charset=""utf-8""><meta name=""viewport"" content=""width=device-width, initial-scale=1""><title>Dashboard</title><style>:root {
+  --fundo: #F6F5F2; --sup: #FFFFFF; --sup2: #FAF9F7; --borda: #E7E4DE; --borda2: #D6D2CA;
+  --tx: #17151F; --tx2: #56526A; --tx3: #8A869B;
+  --acc: #6D5AE6; --acc-forte: #5643D4; --acc-suave: rgba(109, 90, 230, .11);
+  --ok: #12855A; --ok-s: rgba(18, 133, 90, .12); --warn: #B07114; --warn-s: rgba(176, 113, 20, .14);
+  --bad: #C0392F; --bad-s: rgba(192, 57, 47, .11);
+  --escuro: #17151F; --escuro-num: #B8ACFF; --f: #6D5AE6; --m: #2E8C9A; --n: #A29EB0;
+  --sombra: 0 1px 2px rgba(23, 21, 31, .05), 0 8px 24px rgba(23, 21, 31, .05);
+  --raio: 16px;
+  color-scheme: light;
+}
+:root[data-theme=""dark""] {
+  --fundo: #0E0D14; --sup: #16151F; --sup2: #1C1B27; --borda: #2A2838; --borda2: #3A374B;
+  --tx: #EEECF6; --tx2: #AAA6BD; --tx3: #78748B;
+  --acc: #9D8CFF; --acc-forte: #B6AAFF; --acc-suave: rgba(157, 140, 255, .15);
+  --ok: #3FCB8C; --ok-s: rgba(63, 203, 140, .14); --warn: #E8B04E; --warn-s: rgba(232, 176, 78, .15);
+  --bad: #F2766B; --bad-s: rgba(242, 118, 107, .14);
+  --escuro: #08070D; --escuro-num: #B6AAFF; --f: #9D8CFF; --m: #4FC0CF; --n: #6F6B80;
+  --sombra: 0 1px 2px rgba(0, 0, 0, .4), 0 10px 30px rgba(0, 0, 0, .25);
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--fundo); color: var(--tx);
+  font: 14px/1.5 ""DM Sans"", system-ui, -apple-system, ""Segoe UI"", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+.mono, .h-num, .g-rot, .g-rot2, .g-eixo, .eyebrow { font-family: ""DM Mono"", ui-monospace, Consolas, monospace; }
+button, select, input { font: inherit; color: inherit; }
+button { cursor: pointer; }
+:focus-visible { outline: 2px solid var(--acc); outline-offset: 2px; border-radius: 6px; }
+#app { max-width: 1320px; margin: 0 auto; padding: 24px 24px 40px; }
+.topo { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+.marca { display: flex; align-items: center; gap: 14px; }
+.icone { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--escuro); color: var(--escuro-num); }
+.icone svg { width: 30px; height: 30px; }
+.eyebrow { font-size: 10.5px; letter-spacing: .16em; color: var(--tx3); }
+h1 { margin: 2px 0 0; font-size: 25px; line-height: 1.15; font-weight: 700; letter-spacing: -.01em; }
+h1 .sec { font-weight: 400; color: var(--tx3); }
+.empresa { font-size: 12.5px; color: var(--tx2); margin-top: 2px; }
+.acoes { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.seg-botoes { display: inline-flex; background: var(--sup); border: 1px solid var(--borda); border-radius: 999px; padding: 3px; }
+.seg-botoes button { border: 0; background: transparent; padding: 6px 13px; border-radius: 999px; font-size: 12.5px; color: var(--tx2); }
+.seg-botoes button.ativo { background: var(--tx); color: var(--fundo); }
+.botao { border: 1px solid var(--borda2); background: var(--sup); padding: 7px 14px; border-radius: 999px; font-size: 12.5px; font-weight: 500; }
+.botao:hover:not(:disabled) { border-color: var(--acc); }
+.botao:disabled { opacity: .45; cursor: default; }
+.botao.leve { background: transparent; }
+.linha-abas { display: flex; justify-content: space-between; align-items: flex-end; gap: 12px; margin-top: 18px; border-bottom: 1px solid var(--borda); flex-wrap: wrap; }
+.abas { display: flex; flex-wrap: wrap; gap: 4px; }
+.abas button { border: 0; background: none; padding: 11px 16px 12px; font-size: 14px; color: var(--tx2); border-bottom: 2px solid transparent; margin-bottom: -1px; white-space: nowrap; }
+.abas button.ativa { color: var(--tx); font-weight: 600; border-bottom-color: var(--acc); }
+.selo-data { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 6px 12px; margin-bottom: 8px; border-radius: 999px; background: var(--ok-s); color: var(--tx); font-size: 12.5px; cursor: help; }
+.selo-data i { width: 7px; height: 7px; border-radius: 50%; background: var(--ok); box-shadow: 0 0 0 3px var(--ok-s); }
+.selo-data small { flex-basis: 100%; padding-left: 13px; color: var(--ok); font-weight: 600; font-size: 11.5px; }
+.quem { margin-top: 12px; font-size: 13px; color: var(--tx2); line-height: 1.7; }
+.filtros { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)) auto; gap: 10px; align-items: end; margin-top: 16px; }
+.filtro { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.filtro > span { font-family: ""DM Mono"", monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx3); }
+.filtro select { height: 36px; width: 100%; min-width: 0; padding: 0 30px 0 12px; border: 1px solid var(--borda); border-radius: 10px; background: var(--sup) url(""data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M1 1l4 4 4-4' fill='none' stroke='%238A869B' stroke-width='1.5'/%3E%3C/svg%3E"") no-repeat right 11px center; appearance: none; font-size: 13px; }
+.limpar { height: 36px; color: var(--tx3); }
+.limpar.ativo { color: var(--bad); border-color: var(--bad); background: var(--bad-s); }
+.alertas { margin-top: 16px; border-radius: 12px; background: var(--acc-suave); font-size: 13px; }
+.alertas summary { list-style: none; cursor: pointer; padding: 10px 14px; display: flex; align-items: center; gap: 8px; color: var(--tx); }
+.alertas summary::-webkit-details-marker { display: none; }
+.alertas .sino { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--acc); color: #fff; font-weight: 700; font-size: 12px; }
+.alertas .seta { margin-left: auto; color: var(--tx3); transition: transform .2s; }
+.alertas[open] .seta { transform: rotate(180deg); }
+.alertas ul { margin: 0; padding: 0 14px 12px 42px; display: grid; gap: 6px; color: var(--tx2); }
+.alertas.zero { padding: 10px 14px; color: var(--tx2); background: var(--ok-s); }
+.link { border: 0; background: none; padding: 0; color: var(--acc); text-decoration: underline dotted; text-underline-offset: 3px; font-size: inherit; }
+.corpo { display: grid; grid-template-columns: 196px minmax(0, 1fr); gap: 28px; margin-top: 8px; }
+.trilho { position: sticky; top: 20px; align-self: start; display: grid; gap: 8px; margin-top: 28px; }
+.trilho button { display: flex; align-items: center; gap: 10px; text-align: left; border: 1px solid var(--borda); background: var(--sup); border-radius: 999px; padding: 8px 14px 8px 8px; font-size: 13px; color: var(--tx); }
+.trilho .n { width: 22px; height: 22px; flex: none; border-radius: 50%; display: grid; place-items: center; border: 1px solid var(--borda2); font-size: 11px; color: var(--tx3); font-family: ""DM Mono"", monospace; }
+.trilho button.ativo { border-color: var(--acc); background: var(--acc-suave); }
+.trilho button.ativo .n { border-color: var(--acc); color: var(--acc); }
+.secao { margin-top: 28px; scroll-margin-top: 16px; }
+.s-cab { margin-bottom: 12px; }
+.s-cab h2 { margin: 0; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx2); font-weight: 600; }
+.s-cab p { margin: 3px 0 0; font-size: 12.5px; color: var(--tx3); }
+.resumo { margin: 12px 2px 0; font-size: 13px; color: var(--tx2); }
+.herois { display: grid; grid-template-columns: repeat(auto-fit, minmax(176px, 1fr)); gap: 14px; }
+.herois.h3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.herois.h4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.heroi { background: var(--sup); border: 1px solid var(--borda); border-radius: var(--raio); padding: 18px 20px; box-shadow: var(--sombra); min-width: 0; }
+.h-rot { display: flex; align-items: flex-start; gap: 6px; min-height: 28px; font-family: ""DM Mono"", monospace; font-size: 10.5px; line-height: 1.35; letter-spacing: .12em; text-transform: uppercase; color: var(--tx3); }
+.h-rot .info { margin-top: -1px; flex: none; }
+.info { width: 17px; height: 17px; border-radius: 50%; border: 1px solid var(--borda2); background: transparent; font: italic 600 10px/1 Georgia, serif; color: var(--tx3); display: inline-grid; place-items: center; padding: 0; }
+.info:hover { border-color: var(--acc); color: var(--acc); }
+.h-num { margin-top: 4px; font-size: 28px; line-height: 1.15; font-weight: 500; letter-spacing: -.02em; display: flex; align-items: center; gap: 6px 8px; flex-wrap: wrap; }
+.h-num .chip { font-size: 10.5px; padding: 3px 8px; }
+.h-num small { font-size: 15px; color: var(--tx2); font-weight: 400; }
+.h-sub { margin-top: 6px; font-size: 12.5px; color: var(--tx2); }
+.heroi.escuro { background: var(--escuro); border-color: var(--escuro); color: #F4F2FA; }
+.heroi.escuro .h-num { color: var(--escuro-num); }
+.heroi.escuro .h-rot, .heroi.escuro .h-sub { color: #A7A2BA; }
+.heroi.escuro .info { border-color: #4A4660; color: #A7A2BA; }
+.pos { color: var(--ok); } .neg { color: var(--bad); }
+.barra-sep { color: var(--tx3); font-weight: 300; }
+.chip { display: inline-block; font: 600 11px/1 ""DM Sans"", sans-serif; padding: 4px 9px; border-radius: 999px; letter-spacing: 0; }
+.chip.ok { background: var(--ok-s); color: var(--ok); } .chip.warn { background: var(--warn-s); color: var(--warn); }
+.chip.bad { background: var(--bad-s); color: var(--bad); } .chip.neutro { background: var(--sup2); color: var(--tx2); border: 1px solid var(--borda); }
+.cartao { background: var(--sup); border: 1px solid var(--borda); border-radius: var(--raio); padding: 18px 20px; box-shadow: var(--sombra); min-width: 0; }
+.cartao h3 { margin: 0 0 12px; font-size: 11.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx2); font-weight: 600; }
+.herois + .cartao, .herois + .grade2, .herois + .grade3, .cartao + .grade2, .secao > .cartao + .cartao, .faixa-tipo + .herois { margin-top: 14px; }
+.grade2 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.grade3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; }
+.grade2.g-larga { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); }
+.pilha { display: grid; gap: 14px; }
+.secao > .botao { margin-top: 14px; }
+.g-linha, .g-barras { width: 100%; height: auto; display: block; }
+.g-traco { fill: none; stroke: var(--acc); stroke-width: 2.6; }
+.g-ponto { fill: var(--sup); stroke: var(--acc); stroke-width: 2; }
+.g-ponto.fora, .g-barra.fora { opacity: .35; }
+.g-banda { fill: var(--acc-suave); opacity: .7; }
+.g-grade { stroke: var(--borda); stroke-dasharray: 3 5; }
+.g-rot { font-size: 12.5px; font-weight: 600; fill: var(--tx); }
+.g-rot2 { font-size: 10.5px; fill: var(--tx2); }
+.g-rot2 .pos { fill: var(--ok); } .g-rot2 .neg { fill: var(--bad); }
+.g-eixo { font-size: 10.5px; fill: var(--tx3); }
+.g-alvo { fill: transparent; }
+.g-alvo:hover { fill: var(--acc-suave); }
+.g-barra.ok { fill: var(--ok); } .g-barra.warn { fill: var(--warn); } .g-barra.bad { fill: var(--bad); }
+.g-lim { stroke-dasharray: 4 4; stroke-width: 1; } .g-lim.l0 { stroke: var(--ok); } .g-lim.l1 { stroke: var(--warn); }
+.lb { display: grid; gap: 6px; }
+.lb-linha { display: grid; grid-template-columns: minmax(0, 1fr) 54px 58px; align-items: center; gap: 8px; font-size: 13px; }
+.lb-rot { position: relative; height: 30px; min-width: 0; }
+.lb-fundo { position: absolute; inset: 0 auto 0 0; background: var(--acc-suave); border-radius: 8px; min-width: 4px; }
+.lb-txt { position: relative; display: block; padding: 0 10px; line-height: 30px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lb-val { text-align: right; font-family: ""DM Mono"", monospace; font-size: 13px; white-space: nowrap; }
+.lb.larga .lb-linha { grid-template-columns: minmax(0, 1fr) 78px 98px; }
+.lb.larga .lb-pct { white-space: nowrap; }
+.lb-pct { text-align: right; font-family: ""DM Mono"", monospace; font-size: 12px; color: var(--tx3); }
+.seg { display: grid; gap: 8px; }
+.seg-linha { display: grid; grid-template-columns: 108px minmax(0, 1fr) 36px; gap: 10px; align-items: center; font-size: 12.5px; }
+.seg-barra { display: flex; height: 24px; border-radius: 7px; overflow: hidden; background: var(--sup2); }
+.seg-p { display: grid; place-items: center; color: #fff; font: 600 10.5px ""DM Mono"", monospace; }
+.seg-p.f { background: var(--f); } .seg-p.m { background: var(--m); } .seg-p.n { background: var(--n); }
+.seg-tot { text-align: right; font-family: ""DM Mono"", monospace; color: var(--tx3); }
+.seg-leg { display: flex; gap: 16px; margin-top: 6px; font-size: 12px; color: var(--tx2); }
+.seg-leg span { display: inline-flex; align-items: center; gap: 6px; }
+.seg-leg i { width: 10px; height: 10px; border-radius: 3px; display: inline-block; }
+.funil { display: grid; gap: 8px; }
+.fu-linha { display: grid; grid-template-columns: 110px minmax(0, 1fr) 118px; gap: 12px; align-items: center; font-size: 13px; }
+.fu-trilho { display: flex; justify-content: center; }
+.fu-barra { height: 32px; border-radius: 9px; background: linear-gradient(90deg, var(--acc), var(--acc-forte)); display: grid; place-items: center; min-width: 46px; }
+.fu-barra span { color: #fff; font: 600 12.5px ""DM Mono"", monospace; }
+.fu-conv { font-family: ""DM Mono"", monospace; font-size: 11.5px; color: var(--tx3); }
+.faixa-tipo { padding: 12px 16px; }
+.ft-linha { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.ft-rot { font-family: ""DM Mono"", monospace; font-size: 10.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx3); margin-right: 6px; }
+.pilula { border: 1px solid var(--borda); background: var(--sup); border-radius: 999px; padding: 5px 11px; font-size: 12.5px; color: var(--tx2); }
+.pilula b { font-family: ""DM Mono"", monospace; font-weight: 500; color: var(--tx3); margin-left: 3px; }
+.pilula.ativa { background: var(--tx); border-color: var(--tx); color: var(--fundo); }
+.pilula.ativa b { color: var(--fundo); opacity: .7; }
+.ft-nota { margin-top: 8px; font-size: 12px; color: var(--tx3); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; }
+.leg { display: inline-flex; align-items: center; gap: 5px; font-family: ""DM Mono"", monospace; font-size: 11px; }
+.leg i { width: 9px; height: 9px; border-radius: 3px; display: inline-block; }
+.leg i.ok { background: var(--ok); } .leg i.warn { background: var(--warn); } .leg i.bad { background: var(--bad); }
+.tabela-cartao { padding: 0; overflow: hidden; }
+.tb-barra { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--borda); }
+.busca { flex: 1; max-width: 360px; height: 36px; border: 1px solid var(--borda); border-radius: 999px; padding: 0 14px; background: var(--sup2); }
+.tb-conta { font-family: ""DM Mono"", monospace; font-size: 12px; color: var(--tx3); }
+.tb-rolagem { overflow-x: auto; }
+.tabela { width: 100%; border-collapse: collapse; font-size: 13px; }
+.tabela th { position: sticky; top: 0; background: var(--sup2); text-align: left; padding: 0; border-bottom: 1px solid var(--borda); white-space: nowrap; font: 500 10.5px ""DM Mono"", monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--tx3); }
+.tabela th button, .tabela th:not(:has(button)) { padding: 10px 14px; }
+.tabela th button { border: 0; background: none; font: inherit; letter-spacing: inherit; text-transform: inherit; color: inherit; width: 100%; text-align: left; }
+.tabela th button.ativo { color: var(--acc); }
+.tabela th button.asc::after { content: "" ▲""; } .tabela th button.desc::after { content: "" ▼""; }
+.tabela th button { cursor: pointer; } .tabela th.dir button { text-align: right; }
+.tabela th button:focus-visible { outline: 2px solid var(--acc); outline-offset: -2px; }
+.tabela td { padding: 9px 14px; border-bottom: 1px solid var(--borda); white-space: nowrap; }
+.tabela tr:hover td { background: var(--sup2); }
+.tabela .dir { text-align: right; }
+.vazio { text-align: center; color: var(--tx3); padding: 26px !important; }
+.avatar-mini { width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; margin-right: 9px; background: var(--acc-suave); color: var(--acc); font: 600 10px ""DM Mono"", monospace; vertical-align: middle; }
+.tb-pag { display: flex; justify-content: center; align-items: center; gap: 14px; padding: 12px; font-size: 12.5px; color: var(--tx2); }
+.dias { display: grid; grid-template-columns: 110px auto; align-items: center; gap: 10px; }
+.dias-barra { height: 6px; border-radius: 6px; background: var(--acc); display: block; }
+.dias-barra.bad { background: var(--bad); }
+.dica { position: fixed; top: 0; left: 0; z-index: 50; max-width: 320px; padding: 7px 10px; border-radius: 9px; background: #17151F; color: #F4F2FA; font-size: 12px; pointer-events: none; opacity: 0; transition: opacity .12s; box-shadow: 0 8px 24px rgba(0, 0, 0, .25); }
+.dica.visivel { opacity: 1; }
+.conta-pop { position: fixed; z-index: 60; background: var(--sup); border: 1px solid var(--borda2); border-radius: 14px; padding: 14px; box-shadow: 0 18px 48px rgba(0, 0, 0, .22); font-size: 13px; }
+.conta-pop[hidden] { display: none !important; }
+.cp-cab { display: flex; justify-content: space-between; gap: 10px; color: var(--tx2); font-size: 12.5px; }
+.cp-cab b { color: var(--tx); }
+.cp-cab button { border: 0; background: none; color: var(--tx3); }
+.cp-formula { margin-top: 10px; padding: 10px 12px; border-radius: 9px; background: var(--acc-suave); color: var(--tx); font-size: 12.5px; line-height: 1.45; }
+.cp-sub { margin-top: 10px; font-family: ""DM Mono"", monospace; font-size: 10px; letter-spacing: .12em; text-transform: uppercase; color: var(--tx3); }
+.conta-pop table { width: 100%; border-collapse: collapse; margin-top: 4px; }
+.conta-pop td { padding: 5px 0; border-bottom: 1px dashed var(--borda); }
+.conta-pop td.mono { text-align: right; }
+.cp-nota { margin-top: 8px; font-size: 12px; color: var(--tx3); }
+.rodape { margin-top: 44px; padding-top: 16px; border-top: 1px solid var(--borda); display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-size: 12.5px; color: var(--tx3); }
+.rodape a { color: var(--acc); font-weight: 600; text-decoration: none; }
+.clicavel, .g-alvo[data-drill], .num-drill { cursor: pointer; }
+.lb-linha.clicavel:hover .lb-fundo, .lb-linha.clicavel:focus-visible .lb-fundo { background: color-mix(in srgb, var(--acc) 24%, transparent); }
+.lb-linha.clicavel:hover .lb-txt { color: var(--acc); }
+.seg-p.clicavel:hover { filter: brightness(1.12); }
+.num-drill { all: unset; cursor: pointer; border-bottom: 1px dashed transparent; line-height: 1.1; }
+.num-drill:hover, .num-drill:focus-visible { border-bottom-color: currentColor; }
+.dica-clique { color: var(--acc); }
+.resumo-cartao { margin-top: 14px; }
+.insights { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.ins { all: unset; box-sizing: border-box; display: flex; justify-content: space-between; align-items: center; gap: 12px; width: 100%; padding: 9px 12px; border-radius: 10px; cursor: pointer; font-size: 14px; color: var(--tx); }
+.ins:hover, .ins:focus-visible { background: var(--acc-suave); }
+.ins span { color: var(--acc); opacity: .5; transition: transform .15s, opacity .15s; }
+.ins:hover span { opacity: 1; transform: translateX(3px); }
+.nota-cartao { margin: 12px 0 0; font-size: 13px; color: var(--tx2); }
+.cartao h3.sub-h3 { margin-top: 20px; }
+.corpo.cheio { grid-template-columns: minmax(0, 1fr); }
+.corpo.cheio .trilho { display: none; }
+.gaveta-fundo { position: fixed; inset: 0; z-index: 80; background: rgba(8, 7, 13, .42); backdrop-filter: blur(2px); }
+.gaveta { position: fixed; top: 0; right: 0; bottom: 0; z-index: 81; width: min(780px, 100vw); display: flex; flex-direction: column; background: var(--sup); border-left: 1px solid var(--borda2); box-shadow: -24px 0 60px rgba(0, 0, 0, .22); animation: gaveta-entra .22s ease-out; }
+@keyframes gaveta-entra { from { transform: translateX(40px); opacity: 0; } }
+.g-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; padding: 20px 22px 14px; border-bottom: 1px solid var(--borda); }
+.g-cab .eyebrow { text-transform: uppercase; }
+.g-cab h2 { margin: 4px 0 0; font-size: 19px; line-height: 1.25; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.g-x { border: 1px solid var(--borda); background: var(--sup2); border-radius: 50%; width: 34px; height: 34px; color: var(--tx2); flex: none; }
+.g-barra { display: flex; gap: 10px; align-items: center; padding: 12px 22px; border-bottom: 1px solid var(--borda); }
+.g-barra .busca { max-width: none; }
+.g-rolagem { flex: 1; overflow: auto; }
+.g-pe { padding: 10px 22px; font-size: 12px; color: var(--tx3); border-top: 1px solid var(--borda); }
+body.com-gaveta { overflow: hidden; }
+@media (max-width: 1180px) {
+  .corpo { grid-template-columns: minmax(0, 1fr); }
+  .trilho { display: none; }
+}
+@media (max-width: 1100px) {
+  .filtros { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .filtros .limpar { grid-column: 1 / -1; justify-self: start; }
+}
+@media (max-width: 900px) {
+  .herois.h4, .herois.h3 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .grade2, .grade3, .grade2.g-larga { grid-template-columns: minmax(0, 1fr); }
+  .fu-linha { grid-template-columns: 86px minmax(0, 1fr) 92px; }
+}
+@media (max-width: 560px) {
+  #app { padding: 16px 16px 32px; }
+  h1 { font-size: 21px; }
+  .herois, .herois.h4, .herois.h3 { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .heroi { padding: 14px; }
+  .h-num { font-size: 24px; }
+  .filtros { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .seg-linha { grid-template-columns: 84px minmax(0, 1fr) 30px; }
+  .lb-linha { grid-template-columns: minmax(0, 1fr) 44px 50px; }
+}
+body.embed #app { padding: 16px 18px 24px; }
+body.embed .corpo { grid-template-columns: minmax(0, 1fr); }
+body.embed .trilho { display: none; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; scroll-behavior: auto !important; } }</style></head><body><div id=""app""></div><script>window.MODO_POWERBI = true;</script>"
+VAR _d1 = "<script>window.DADOS_DE_BRUTOS = function (b) {
+  'use strict';
+  const texto = v => (v == null ? '' : String(v)).trim();
+  const semAcento = s => texto(s).normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  function data(v) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(texto(v));
+    return m ? new Date(+m[1], +m[2] - 1, +m[3]) : null;
+  }
+  const numero = v => (isFinite(+v) && texto(v) !== '' ? +v : 0);
+  function cadastro(prefixo, valores, extra) {
+    const out = {}, codigo = {};
+    valores.forEach(v => {
+      const t = texto(v) || '(sem)';
+      if (codigo[t]) return;
+      const c = prefixo + (Object.keys(out).length + 1);
+      codigo[t] = c;
+      out[c] = Object.assign({ pt: t, en: t }, extra ? extra(t) : {});
+    });
+    return { out, codigo: t => codigo[texto(t) || '(sem)'] };
+  }
+  const pessoasB = Array.isArray(b.pessoas) ? b.pessoas : [];
+  const vagasB = Array.isArray(b.vagas) ? b.vagas : [];
+  const ORDEM_NOMES = [['aprendiz', 0], ['estag', 1], ['operac', 2], ['tecnic', 3], ['analist', 4], ['especial', 5], ['coord', 6], ['supervis', 6], ['gerent', 7], ['gerenc', 7], ['head', 7], ['diret', 8], ['c-level', 9], ['presid', 9]];
+  const ordemDoNivel = {};
+  pessoasB.forEach(p => { if (p.nivel_ordem != null && texto(p.nivel_ordem) !== '') ordemDoNivel[texto(p.nivel)] = +p.nivel_ordem; });
+  const ordemPorNome = n => { const s = semAcento(n); const a = ORDEM_NOMES.find(([k]) => s.includes(k)); return a ? a[1] : 4; };
+  const niveis = cadastro('n', pessoasB.map(p => p.nivel).concat(vagasB.map(v => v.nivel)), t => {
+    const ordem = ordemDoNivel[t] != null ? ordemDoNivel[t] : ordemPorNome(t);
+    const liderCol = pessoasB.find(p => texto(p.nivel) === t && texto(p.lider) !== '');
+    return { ordem, lider: liderCol ? /^(s|sim|y|yes|1|true)$/i.test(texto(liderCol.lider)) : ordem >= 6 };
+  });
+  const areas = cadastro('a', pessoasB.map(p => p.area).concat(vagasB.map(v => v.area)));
+  const unidades = cadastro('u', pessoasB.map(p => p.unidade).concat(vagasB.map(v => v.unidade)));
+  const VINCULOS = { clt: { pt: 'CLT', en: 'CLT (employee)' }, pj: { pt: 'PJ', en: 'Contractor' }, est: { pt: 'Estágio', en: 'Internship' }, apr: { pt: 'Aprendiz', en: 'Apprentice' }, tmp: { pt: 'Temporário', en: 'Temporary' } };
+  function vinculoDe(v) {
+    const s = semAcento(v);
+    if (!s || s.includes('clt') || s.includes('efetiv')) return 'clt';
+    if (s.includes('pj') || s.includes('prestador') || s.includes('terceir')) return 'pj';
+    if (s.includes('estag')) return 'est';
+    if (s.includes('aprendiz')) return 'apr';
+    if (s.includes('tempor')) return 'tmp';
+    const c = 'v_' + s.replace(/[^a-z0-9]+/g, '_');
+    if (!VINCULOS[c]) VINCULOS[c] = { pt: texto(v), en: texto(v) };
+    return c;
+  }
+  const generoDe = g => { const s = semAcento(g); return s === 'f' || s.startsWith('fem') || s.startsWith('mulher') ? 'F' : s === 'm' || s.startsWith('masc') || s.startsWith('homem') ? 'M' : 'N'; };
+  const racaDe = r => { const s = semAcento(r); return s.startsWith('parda') || s.startsWith('pardo') ? 'parda' : s.startsWith('branc') ? 'branca' : s.startsWith('pret') || s.startsWith('negr') ? 'preta' : s.startsWith('amarel') ? 'amarela' : s.startsWith('indigen') ? 'indigena' : 'ni'; };
+  const motivoDe = m => { const s = semAcento(m); if (!s) return null; return s.includes('pedido') ? 'pedido' : s.includes('fim') && s.includes('contrat') ? 'fim' : s.includes('demiss') || s.includes('dispens') ? 'demissao' : 'outro'; };
+  const pessoas = pessoasB.filter(p => data(p.admissao)).map((p, i) => ({
+    id: texto(p.id) || 'P' + (i + 1), nome: texto(p.nome) || 'Pessoa ' + (i + 1),
+    genero: generoDe(p.genero), raca: racaDe(p.raca),
+    nascimento: data(p.nascimento) || new Date(1990, 0, 1),
+    area: areas.codigo(p.area), unidade: unidades.codigo(p.unidade), nivel: niveis.codigo(p.nivel), vinculo: vinculoDe(p.vinculo),
+    admissao: data(p.admissao), fimPrevisto: data(p.fim_previsto),
+    desligamento: data(p.desligamento), motivo: data(p.desligamento) ? (motivoDe(p.motivo) || 'outro') : null
+  }));
+  const hoje = new Date();
+  let dataRef = data(b.dataRef);
+  if (!dataRef) dataRef = new Date(hoje.getFullYear(), hoje.getMonth(), 0); // último mês fechado
+  const meses = [];
+  for (let k = 20; k >= 0; k--) meses.push(new Date(dataRef.getFullYear(), dataRef.getMonth() - k + 1, 0));
+  const primeiraAdm = pessoas.reduce((m, p) => (p.admissao < m ? p.admissao : m), dataRef);
+  const mesesUteis = meses.filter(m => m >= new Date(primeiraAdm.getFullYear(), primeiraAdm.getMonth() + 1, 0));
+  const vagas = vagasB.map((v, i) => ({
+    id: texto(v.id) || 'V' + (i + 1), area: areas.codigo(v.area), unidade: unidades.codigo(v.unidade), nivel: niveis.codigo(v.nivel),
+    abertura: data(v.abertura) || dataRef, fechamento: data(v.fechamento),
+    status: ['aberta', 'fechada', 'cancelada'].includes(semAcento(v.status)) ? semAcento(v.status) : (data(v.fechamento) ? 'fechada' : 'aberta'),
+    etapa: ['triagem', 'entrevistas', 'oferta'].includes(semAcento(v.etapa)) ? semAcento(v.etapa) : 'triagem',
+    inscritos: numero(v.inscritos), triagem: numero(v.triagem), entrevistas: numero(v.entrevistas), ofertas: numero(v.ofertas), contratados: numero(v.contratados)
+  }));
+  return {
+    empresa: texto(b.empresa) || 'People Analytics', dataRef, inicio: mesesUteis[0] || dataRef, meses: mesesUteis.length ? mesesUteis : [dataRef],
+    areas: areas.out, unidades: unidades.out, niveis: niveis.out, vinculos: VINCULOS,
+    racas: { parda: { pt: 'Parda', en: 'Brown' }, branca: { pt: 'Branca', en: 'White' }, preta: { pt: 'Preta', en: 'Black' }, amarela: { pt: 'Amarela', en: 'Asian' }, indigena: { pt: 'Indígena', en: 'Indigenous' }, ni: { pt: 'Não informado', en: 'Not stated' } },
+    motivos: { pedido: { pt: 'Pedido de demissão', en: 'Resignation' }, demissao: { pt: 'Demissão', en: 'Dismissal' }, fim: { pt: 'Fim de contrato', en: 'End of contract' }, outro: { pt: 'Outros', en: 'Other' } },
+    pessoas, vagas, ficticio: false
+  };
+};
+window.DADOS = (function () {
+  'use strict';
+  if (window.DADOS_BRUTOS && window.DADOS_DE_BRUTOS) return window.DADOS_DE_BRUTOS(window.DADOS_BRUTOS);
+  function semente(a) {
+    return function () {
+      a |= 0; a = (a + 0x6D2B79F5) | 0;
+      let t = Math.imul(a ^ (a >>> 15), 1 | a);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
+  const R = semente(20261021);
+  const entre = (a, b) => a + R() * (b - a);
+  const inteiro = (a, b) => Math.floor(entre(a, b + 1));
+  function pesado(pesos) {
+    const tot = Object.values(pesos).reduce((s, v) => s + v, 0);
+    let x = R() * tot;
+    for (const [k, v] of Object.entries(pesos)) { if ((x -= v) <= 0) return k; }
+    return Object.keys(pesos)[0];
+  }
+  const dia = (a, m, d) => new Date(a, m, d);
+  const somaDias = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + Math.round(n));
+  const DATA_REF = dia(2026, 8, 30);          // último dia do mês fechado
+  const INICIO = dia(2025, 0, 1);             // começo da série mensal
+  const AREAS = {
+    ops: { pt: 'Operações', en: 'Operations', peso: 34, saida: 0.021, mulheres: 0.22 },
+    man: { pt: 'Manutenção', en: 'Maintenance', peso: 14, saida: 0.013, mulheres: 0.12 },
+    log: { pt: 'Logística', en: 'Logistics', peso: 12, saida: 0.019, mulheres: 0.30 },
+    tec: { pt: 'Tecnologia', en: 'Technology', peso: 9, saida: 0.016, mulheres: 0.33 },
+    com: { pt: 'Comercial', en: 'Sales', peso: 9, saida: 0.018, mulheres: 0.50 },
+    fin: { pt: 'Financeiro', en: 'Finance', peso: 7, saida: 0.008, mulheres: 0.58 },
+    pes: { pt: 'Pessoas & Cultura', en: 'People & Culture', peso: 6, saida: 0.010, mulheres: 0.74 },
+    jur: { pt: 'Jurídico', en: 'Legal', peso: 3, saida: 0.006, mulheres: 0.55 },
+    dir: { pt: 'Diretoria', en: 'Board', peso: 1.6, saida: 0.002, mulheres: 0.34 }
+  };
+  const UNIDADES = {
+    mat: { pt: 'Matriz', en: 'Head office' },
+    fab: { pt: 'Fábrica', en: 'Plant' },
+    cd: { pt: 'Centro de Distribuição', en: 'Distribution center' },
+    rem: { pt: 'Remoto', en: 'Remote' }
+  };
+  const UNIDADE_DA_AREA = {
+    ops: { fab: 90, mat: 10 }, man: { fab: 95, mat: 5 }, log: { cd: 80, fab: 20 },
+    tec: { mat: 55, rem: 45 }, com: { mat: 70, rem: 30 }, fin: { mat: 85, rem: 15 },
+    pes: { mat: 80, fab: 20 }, jur: { mat: 100 }, dir: { mat: 100 }
+  };
+  const NIVEIS = {
+    apr: { pt: 'Aprendiz', en: 'Apprentice', ordem: 0 },
+    est: { pt: 'Estágio', en: 'Intern', ordem: 1 },
+    ope: { pt: 'Operacional', en: 'Operational', ordem: 2 },
+    tcn: { pt: 'Técnico', en: 'Technician', ordem: 3 },
+    ana: { pt: 'Analista', en: 'Analyst', ordem: 4 },
+    esp: { pt: 'Especialista', en: 'Specialist', ordem: 5 },
+    coo: { pt: 'Coordenação', en: 'Coordinator', ordem: 6, lider: true },
+    ger: { pt: 'Gerência', en: 'Manager', ordem: 7, lider: true },
+    dir: { pt: 'Diretoria', en: 'Director', ordem: 8, lider: true }
+  };
+  const NIVEL_DA_AREA = {
+    ops: { apr: 10, ope: 52, tcn: 20, ana: 9, esp: 3, coo: 4 },
+    man: { apr: 10, ope: 28, tcn: 43, ana: 8, esp: 6, coo: 4 },
+    log: { apr: 9, ope: 52, tcn: 10, ana: 20, coo: 5 },
+    tec: { est: 10, ana: 55, esp: 25, coo: 6 },
+    com: { est: 8, ana: 62, esp: 18, coo: 8 },
+    fin: { est: 12, ana: 60, esp: 18, coo: 8 },
+    pes: { est: 12, ana: 62, esp: 14, coo: 8 },
+    jur: { ana: 50, esp: 40, coo: 10 },
+    dir: { dir: 100 }
+  };
+  const VINCULOS = {
+    clt: { pt: 'CLT', en: 'CLT (employee)' },
+    pj: { pt: 'PJ', en: 'Contractor' },
+    est: { pt: 'Estágio', en: 'Internship' },
+    apr: { pt: 'Aprendiz', en: 'Apprentice' },
+    tmp: { pt: 'Temporário', en: 'Temporary' }
+  };
+  const RACAS = {
+    parda: { pt: 'Parda', en: 'Brown', peso: 44 }, branca: { pt: 'Branca', en: 'White', peso: 38 },
+    preta: { pt: 'Preta', en: 'Black', peso: 12 }, amarela: { pt: 'Amarela', en: 'Asian', peso: 2 },
+    indigena: { pt: 'Indígena', en: 'Indigenous', peso: 1 }, ni: { pt: 'Não informado', en: 'Not stated', peso: 3 }
+  };
+  const MOTIVOS = {
+    pedido: { pt: 'Pedido de demissão', en: 'Resignation' },
+    demissao: { pt: 'Demissão', en: 'Dismissal' },
+    fim: { pt: 'Fim de contrato', en: 'End of contract' },
+    outro: { pt: 'Outros', en: 'Other' }
+  };
+  const NOMES_F = ['Ana', 'Beatriz', 'Camila', 'Débora', 'Elisa', 'Gabriela', 'Helena', 'Isabela', 'Júlia', 'Larissa', 'Mariana', 'Natália', 'Olívia', 'Paula', 'Renata', 'Sofia', 'Tatiana', 'Valéria', 'Yasmin', 'Luana', 'Bianca', 'Cecília', 'Priscila', 'Rafaela', 'Lívia', 'Marina', 'Clara', 'Alice', 'Lorena', 'Joana', 'Vitória', 'Bruna'];
+  const NOMES_M = ['André', 'Bruno', 'Caio', 'Diego', 'Eduardo', 'Fábio', 'Gabriel', 'Henrique', 'Igor', 'João', 'Lucas', 'Marcelo', 'Nicolas', 'Otávio', 'Rafael', 'Samuel', 'Thiago', 'Vinícius', 'Wagner', 'Yuri', 'Leonardo', 'Mateus', 'Rodrigo', 'Renan', 'César', 'Murilo', 'Hugo', 'Alexandre', 'Ricardo', 'Vitor', 'Davi', 'Enzo'];
+  const SOBRENOMES = ['Almeida', 'Barbosa', 'Cardoso', 'Dias', 'Esteves', 'Farias', 'Gomes', 'Honorato', 'Jardim', 'Lacerda', 'Moreira', 'Nogueira', 'Oliveira', 'Prado', 'Queiroz', 'Rocha', 'Sales', 'Teixeira', 'Uchoa', 'Vasconcelos', 'Xavier', 'Zanetti', 'Ribeiro', 'Mendes', 'Campos', 'Duarte', 'Freitas', 'Lima', 'Pires', 'Brandão', 'Correia', 'Fontes'];
+  const usados = new Set();
+  function nome(genero) {
+    const lista = genero === 'F' ? NOMES_F : genero === 'M' ? NOMES_M : NOMES_F.concat(NOMES_M);
+    for (let i = 0; i < 50; i++) {
+      const n = lista[inteiro(0, lista.length - 1)] + ' ' + SOBRENOMES[inteiro(0, SOBRENOMES.length - 1)] +
+        (i > 8 ? ' ' + SOBRENOMES[inteiro(0, SOBRENOMES.length - 1)] : '');
+      if (!usados.has(n)) { usados.add(n); return n; }
+    }
+    return 'Pessoa ' + usados.size;
+  }
+  let seq = 0;
+  function pessoa(area, admissao, nivelForcado) {
+    const a = AREAS[area];
+    const nivel = nivelForcado || pesado(NIVEL_DA_AREA[area]);
+    const genero = R() < 0.012 ? 'N' : (R() < a.mulheres * (NIVEIS[nivel].lider ? 0.8 : 1) ? 'F' : 'M');
+    let vinculo = 'clt';
+    if (nivel === 'apr') vinculo = 'apr';
+    else if (nivel === 'est') vinculo = 'est';
+    else if ((nivel === 'esp' || nivel === 'ana') && ['tec', 'jur', 'com'].includes(area) && R() < 0.22) vinculo = 'pj';
+    else if (nivel === 'ope' && ['ops', 'log'].includes(area) && R() < 0.06) vinculo = 'tmp';
+    const idades = { apr: [16, 20], est: [19, 25], ope: [19, 56], tcn: [21, 55], ana: [22, 50], esp: [27, 56], coo: [29, 55], ger: [33, 56], dir: [40, 61] }[nivel];
+    const idade = entre(idades[0], idades[1]);
+    const prazo = { apr: [540, 720], est: [365, 720], tmp: [90, 180] }[vinculo];
+    seq += 1;
+    return {
+      id: 'C' + String(seq).padStart(4, '0'),
+      nome: nome(genero), genero, raca: pesado(Object.fromEntries(Object.entries(RACAS).map(([k, v]) => [k, v.peso]))),
+      area, unidade: pesado(UNIDADE_DA_AREA[area]), nivel, vinculo,
+      nascimento: somaDias(admissao, -idade * 365.25),
+      admissao, fimPrevisto: prazo ? somaDias(admissao, entre(prazo[0], prazo[1])) : null,
+      desligamento: null, motivo: null
+    };
+  }
+  const pessoas = [];
+  const alvoInicial = 238;
+  Object.keys(AREAS).forEach(area => {
+    if (area === 'dir') {
+      for (let i = 0; i < 4; i++) pessoas.push(pessoa('dir', somaDias(INICIO, -entre(500, 3800)), 'dir'));
+    } else {
+      pessoas.push(pessoa(area, somaDias(INICIO, -entre(700, 4200)), 'ger'));
+    }
+  });
+  while (pessoas.length < alvoInicial) {
+    const area = pesado(Object.fromEntries(Object.entries(AREAS).filter(([k]) => k !== 'dir').map(([k, v]) => [k, v.peso])));
+    const casa = Math.min(-Math.log(1 - R()) * 1350, 5000);
+    const p = pessoa(area, somaDias(INICIO, -casa - 5));
+    if (p.fimPrevisto && p.fimPrevisto < INICIO) p.fimPrevisto = somaDias(INICIO, entre(20, 300));
+    pessoas.push(p);
+  }
+  const ativo = (p, d) => p.admissao <= d && (!p.desligamento || p.desligamento > d);
+  const vagas = [];
+  let seqVaga = 0;
+  function novaVaga(area, unidade, nivel, abertura) {
+    seqVaga += 1;
+    const base = { ope: [60, 260], apr: [80, 220], est: [90, 300], tcn: [40, 140] }[nivel] || [25, 130];
+    const inscritos = inteiro(base[0], base[1]);
+    const triagem = Math.round(inscritos * entre(0.22, 0.36));
+    const entrevistas = Math.max(2, Math.round(triagem * entre(0.22, 0.4)));
+    return { id: 'V' + String(seqVaga).padStart(3, '0'), area, unidade, nivel, abertura, fechamento: null,
+      status: 'aberta', etapa: 'triagem', inscritos, triagem, entrevistas, ofertas: 0, contratados: 0 };
+  }
+  const meses = [];
+  for (let m = 0; m < 21; m++) {
+    const ini = dia(2025, m, 1), fim = dia(2025, m + 1, 0);
+    meses.push(fim);
+    pessoas.forEach(p => {
+      if (!ativo(p, ini) || p.admissao > fim) return;
+      if (p.fimPrevisto && p.fimPrevisto >= ini && p.fimPrevisto <= fim) {
+        if ((p.vinculo === 'apr' || p.vinculo === 'est') && R() < 0.3) { p.vinculo = 'clt'; p.nivel = p.area === 'ops' || p.area === 'log' ? 'ope' : 'ana'; p.fimPrevisto = null; return; }
+        p.desligamento = p.fimPrevisto; p.motivo = 'fim'; return;
+      }
+      const novato = (fim - p.admissao) / 864e5 < 365 ? 1.7 : 1;
+      const lider = NIVEIS[p.nivel].lider ? 0.4 : 1;
+      if (R() < AREAS[p.area].saida * novato * lider) {
+        p.desligamento = dia(fim.getFullYear(), fim.getMonth(), inteiro(1, fim.getDate()));
+        p.motivo = pesado({ pedido: 52, demissao: 36, outro: 12 });
+      }
+    });
+    const alvo = Math.round(238 + (262 - 238) * (m / 20) + entre(-2, 2));
+    const ativos = pessoas.filter(p => ativo(p, fim)).length;
+    const contratar = Math.max(0, alvo - ativos);
+    const saidasMes = pessoas.filter(p => p.desligamento && p.desligamento >= ini && p.desligamento <= fim && p.area !== 'dir');
+    saidasMes.sort((a, b) => (['ger', 'coo', 'apr', 'est'].includes(b.nivel) ? 1 : 0) - (['ger', 'coo', 'apr', 'est'].includes(a.nivel) ? 1 : 0));
+    for (let i = 0; i < Math.max(contratar, saidasMes.filter(x => x.nivel === 'ger').length); i++) {
+      const vaga = saidasMes[i] && (R() < 0.7 || ['ger', 'apr'].includes(saidasMes[i].nivel)) ? saidasMes[i] : null;
+      const area = vaga ? vaga.area : pesado(Object.fromEntries(Object.entries(AREAS).filter(([k]) => k !== 'dir').map(([k, v]) => [k, v.peso])));
+      const admissao = dia(fim.getFullYear(), fim.getMonth(), inteiro(1, fim.getDate()));
+      const mesmoNivel = vaga && ['apr', 'est', 'coo', 'ger'].includes(vaga.nivel) ? vaga.nivel : null;
+      const p = pessoa(area, admissao, mesmoNivel);
+      pessoas.push(p);
+      const ttf = { apr: [15, 35], est: [15, 35], ope: [14, 40], tcn: [22, 55], ana: [28, 70], esp: [40, 100], coo: [55, 115] }[p.nivel] || [30, 60];
+      const v = novaVaga(area, p.unidade, p.nivel, somaDias(admissao, -entre(ttf[0], ttf[1]) - 10));
+      v.fechamento = somaDias(admissao, -inteiro(7, 14));
+      v.status = 'fechada'; v.etapa = 'contratado';
+      v.ofertas = R() < 0.18 ? 2 : 1; v.contratados = 1; v.pessoa = p.id;
+      vagas.push(v);
+    }
+    if (R() < 0.35) {
+      const area = pesado({ ops: 3, log: 2, com: 2, tec: 2, fin: 1 });
+      const v = novaVaga(area, pesado(UNIDADE_DA_AREA[area]), pesado(NIVEL_DA_AREA[area]), somaDias(ini, -inteiro(10, 60)));
+      v.status = 'cancelada'; v.etapa = 'entrevistas'; v.fechamento = dia(fim.getFullYear(), fim.getMonth(), inteiro(1, 28));
+      vagas.push(v);
+    }
+  }
+  for (let i = 0; i < 12; i++) {
+    const area = pesado({ ops: 4, man: 2, log: 2, tec: 2, com: 1.5, fin: 1, pes: 0.6 });
+    const v = novaVaga(area, pesado(UNIDADE_DA_AREA[area]), pesado(NIVEL_DA_AREA[area]), somaDias(DATA_REF, -inteiro(6, 128)));
+    v.etapa = pesado({ triagem: 4, entrevistas: 4, oferta: 2 });
+    if (v.etapa === 'triagem') { v.entrevistas = 0; }
+    if (v.etapa === 'oferta') v.ofertas = 1;
+    vagas.push(v);
+  }
+  return {
+    empresa: 'C. & Paoli corp.', dataRef: DATA_REF, inicio: INICIO, meses,
+    areas: AREAS, unidades: UNIDADES, niveis: NIVEIS, vinculos: VINCULOS, racas: RACAS, motivos: MOTIVOS,
+    pessoas, vagas, ficticio: true
+  };
+})();
+window.I18N = (function () {
+  'use strict';
+  const D = {
+    eyebrow: ['PEOPLE ANALYTICS · DEMONSTRAÇÃO', 'PEOPLE ANALYTICS · DEMO'],
+    titulo_exec: ['Dashboard', 'Dashboard'], sub_exec: ['Executivo', 'Executive'],
+    ficticio: ['dados fictícios, gerados no seu navegador', 'fictional data, generated in your browser'],
+    tema_claro: ['Claro', 'Light'], tema_escuro: ['Escuro', 'Dark'],
+    idioma: ['Idioma', 'Language'], secoes: ['Seções da página', 'Page sections'],
+    numeros_de: ['Números de', 'Numbers as of'],
+    dica_data: ['Pessoas e vagas: fechamento do mês. Cada número é recalculado no seu navegador a partir de uma empresa sorteada com semente fixa (mesmo resultado em toda visita).',
+      'People and vacancies: month-end close. Every number is recomputed in your browser from a company drawn with a fixed seed (same result on every visit).'],
+    aba_geral: ['Visão geral', 'Overview'], aba_pessoas: ['Pessoas', 'People'], aba_rs: ['Recrutamento', 'Recruiting'],
+    aba_ambiente: ['Meu ambiente', 'My workplace'],
+    f_periodo: ['Período', 'Period'], f_unidade: ['Unidade', 'Unit'], f_area: ['Área', 'Area'],
+    f_vinculo: ['Vínculo', 'Contract'], f_genero: ['Gênero', 'Gender'], f_nivel: ['Nível', 'Level'],
+    limpar: ['Limpar', 'Clear'], todos: ['Todos', 'All'],
+    p12: ['Últimos 12 meses', 'Last 12 months'], pano: ['{a} até {m}', '{a} to {m}'],
+    panoant: ['Ano de {a}', 'Year {a}'], ptudo: ['Tudo ({n} meses)', 'All ({n} months)'],
+    fonte_real: ['dados do relatório', 'report data'],
+    g_F: ['Mulheres', 'Women'], g_M: ['Homens', 'Men'], g_N: ['Não informado', 'Not stated'],
+    alertas: ['alertas', 'alerts'], alerta: ['alerta', 'alert'], sem_alerta: ['Nenhum alerta com estes filtros', 'No alerts with these filters'],
+    al_turnover: ['Turnover anualizado de {a} em {v}, acima de 25%', 'Annualized turnover in {a} at {v}, above 25%'],
+    al_vagas: ['{n} vagas abertas há mais de 60 dias', '{n} vacancies open for over 60 days'],
+    al_novatos: ['Retenção de novatos em {v}, abaixo de 80%', 'New-hire retention at {v}, below 80%'],
+    al_prazo: ['{n} contratos com prazo terminam em até 60 dias (aprendiz, estágio, temporário)', '{n} fixed-term contracts end within 60 days (apprentice, intern, temporary)'],
+    ir: ['Ir', 'Go'],
+    s_onde: ['Onde estamos', 'Where we stand'], s_evolucao: ['Evolução do quadro', 'Headcount trend'],
+    s_por_area: ['Por área', 'By area'], s_por_nivel: ['Por nível', 'By level'],
+    s_rs_resumo: ['Recrutamento em resumo', 'Recruiting at a glance'],
+    s_quadro: ['Quadro', 'Headcount'], s_turnover: ['Turnover e movimentações', 'Turnover & movements'],
+    s_diversidade: ['Diversidade', 'Diversity'], s_pessoas: ['Colaboradores', 'Employees'],
+    s_rs_geral: ['Vagas e contratações', 'Vacancies & hires'], s_funil: ['Funil de seleção', 'Selection funnel'],
+    s_abertas: ['Vagas abertas', 'Open vacancies'], s_ttf: ['Tempo para contratar', 'Time to fill'],
+    k_hc: ['Quadro', 'Headcount'], k_movs: ['Entradas e saídas', 'Joins and exits'],
+    k_turnover: ['Turnover', 'Turnover'], k_casa: ['Tempo médio de casa', 'Average tenure'],
+    k_mulheres: ['Mulheres', 'Women'], k_vagas: ['Vagas abertas', 'Open vacancies'],
+    k_saiu: ['Pessoas que saíram', 'People who left'], k_antes: ['Tempo de casa antes de sair', 'Time here before leaving'],
+    k_novatos: ['Retenção de novatos', 'New-hire retention'], k_lider: ['Mulheres na liderança', 'Women in leadership'],
+    k_ppi: ['Pretos, pardos e indígenas', 'Black, brown and indigenous'], k_idade: ['Idade média', 'Average age'],
+    k_contrat: ['Contratações', 'Hires'], k_ttf: ['Tempo para contratar', 'Time to fill'],
+    k_aceite: ['Aceite de oferta', 'Offer acceptance'], k_inscritos: ['Inscritos', 'Applicants'],
+    saldo: ['saldo', 'net'], no_periodo: ['no período', 'in the period'], anualizado: ['anualizado', 'annualized'],
+    de: ['de', 'of'], anos: ['anos', 'years'], ano: ['ano', 'year'], meses: ['meses', 'months'], dias: ['dias', 'days'],
+    pessoas: ['pessoas', 'people'], mediana: ['mediana', 'median'], ativos: ['ativos', 'active'],
+    st_saudavel: ['Saudável', 'Healthy'], st_atencao: ['Atenção', 'Watch'], st_alto: ['Alto', 'High'],
+    st_boa: ['Boa', 'Good'], st_baixa: ['Baixa', 'Low'],
+    ficou_ano: ['ficaram um ano inteiro', 'stayed a full year'], sairam_1ano: ['saíram no 1º ano', 'left within a year'],
+    lideres: ['nos níveis de liderança', 'in leadership levels'], informados: ['com raça informada', 'with race stated'],
+    quem_conta: ['Quem conta como saída', 'Who counts as leaving'],
+    t_pedido: ['Só pedidos de demissão', 'Only resignations'], t_demissao: ['Só demissões', 'Only dismissals'],
+    t_outro: ['Só outros', 'Only other'], t_todos: ['Todos que saíram', 'Everyone who left'],
+    fim_fora: ['fim de contrato fica fora da taxa', 'end of contract stays out of the rate'],
+    como_conta: ['como é contado', 'how it is counted'],
+    turnover_mensal: ['Turnover mensal', 'Monthly turnover'], por_motivo: ['Saídas por motivo', 'Exits by reason'],
+    casa_saida: ['Tempo de casa de quem saiu', 'Tenure of who left'],
+    leg_15: ['≤15% ao ano', '≤15% a year'], leg_25: ['≤25%', '≤25%'], leg_acima: ['acima', 'above'],
+    genero_nivel: ['Gênero por nível', 'Gender by level'], raca: ['Raça e cor', 'Race'], faixa_idade: ['Faixa etária', 'Age band'],
+    por_unidade: ['Por unidade', 'By unit'], por_vinculo: ['Por vínculo', 'By contract'],
+    buscar: ['Buscar nome, área ou nível', 'Search name, area or level'],
+    c_nome: ['Nome', 'Name'], c_area: ['Área', 'Area'], c_nivel: ['Nível', 'Level'], c_vinculo: ['Vínculo', 'Contract'],
+    c_unidade: ['Unidade', 'Unit'], c_admissao: ['Admissão', 'Hire date'], c_casa: ['Tempo de casa', 'Tenure'],
+    c_vaga: ['Vaga', 'Vacancy'], c_aberta_ha: ['Aberta há', 'Open for'], c_etapa: ['Etapa', 'Stage'],
+    c_prioridade: ['Prioridade', 'Priority'], c_inscritos: ['Inscritos', 'Applicants'],
+    linhas: ['linhas', 'rows'], anterior: ['Anterior', 'Previous'], proxima: ['Próxima', 'Next'],
+    sem_linhas: ['Nada com esses filtros', 'Nothing with these filters'],
+    e_triagem: ['Triagem', 'Screening'], e_entrevistas: ['Entrevistas', 'Interviews'], e_oferta: ['Oferta', 'Offer'],
+    pr_alta: ['Alta', 'High'], pr_normal: ['Normal', 'Normal'],
+    funil_inscritos: ['Inscritos', 'Applied'], funil_triagem: ['Triagem', 'Screened'],
+    funil_entrevistas: ['Entrevistas', 'Interviewed'], funil_ofertas: ['Ofertas', 'Offers'],
+    funil_contratados: ['Contratados', 'Hired'], conversao: ['conversão', 'conversion'],
+    x_titulo: ['Como é contado', 'How it is counted'], x_fechar: ['Fechar', 'Close'],
+    x_hc: ['pessoas ativas no último dia do período', 'people active on the last day of the period'],
+    x_movs: ['admissões e desligamentos com data dentro do período', 'hires and exits dated inside the period'],
+    x_turnover: ['saídas do tipo escolhido ÷ quadro médio dos meses do período', 'exits of the chosen type ÷ average monthly headcount in the period'],
+    x_casa: ['média de (data de referência − admissão) de quem está ativo', 'average of (reference date − hire date) for active people'],
+    x_novatos: ['contratados há 12 a 24 meses que completaram 1 ano ÷ todos contratados nessa janela', 'hired 12 to 24 months ago who completed 1 year ÷ everyone hired in that window'],
+    x_antes: ['média do tempo de casa no dia da saída', 'average tenure on the exit date'],
+    x_mulheres: ['mulheres ativas ÷ pessoas ativas', 'active women ÷ active people'],
+    x_lider: ['mulheres em Coordenação, Gerência e Diretoria ÷ pessoas nesses níveis', 'women in Coordinator, Manager and Director levels ÷ people in those levels'],
+    x_ppi: ['pretos + pardos + indígenas ÷ ativos com raça informada', 'black + brown + indigenous ÷ active people with race stated'],
+    x_idade: ['média da idade na data de referência', 'average age on the reference date'],
+    x_vagas: ['vagas sem data de fechamento na data de referência', 'vacancies with no closing date on the reference date'],
+    x_contrat: ['vagas fechadas com contratação dentro do período', 'vacancies closed with a hire inside the period'],
+    x_ttf: ['mediana de dias entre abrir e fechar a vaga (vagas fechadas no período)', 'median days between opening and closing (vacancies closed in the period)'],
+    x_aceite: ['contratações ÷ ofertas feitas no período', 'hires ÷ offers made in the period'],
+    x_partes: ['Com os filtros de agora', 'With the current filters'],
+    numerador: ['numerador', 'numerator'], denominador: ['denominador', 'denominator'], resultado: ['resultado', 'result'],
+    rodape: ['Demonstração do portfólio de Fernando Paoli. Inspirada em painéis reais de People Analytics, reescrita do zero com dados fictícios.',
+      ""Fernando Paoli's portfolio demo. Inspired by real People Analytics dashboards, rewritten from scratch with fictional data.""],
+    ver_portfolio: ['Ver portfólio', 'See portfolio'],
+    resumo_onde: ['Desde {d}: {s} saíram · {e} entraram', 'Since {d}: {s} left · {e} joined'],
+    abrir_rs: ['Abrir recrutamento', 'Open recruiting'],
+    faixa_comum: ['faixa mais comum', 'most common band'],
+    s_resumo: ['Resumo do período', 'Period summary'], s_mov: ['Entradas e saídas por mês', 'Joins and exits by month'],
+    s_composicao: ['Composição do quadro', 'Headcount composition'], s_genero_lid: ['Gênero e liderança', 'Gender and leadership'],
+    ins_quadro: ['O quadro foi de {a} para {b} pessoas ({d}).', 'Headcount went from {a} to {b} people ({d}).'],
+    ins_maior: ['A maior área é {a}: {n} pessoas, {p} do quadro.', 'The largest area is {a}: {n} people, {p} of headcount.'],
+    ins_saidas: ['Quem mais perdeu gente foi {a}: {s} saídas no período.', '{a} lost the most people: {s} exits in the period.'],
+    ins_turn: ['Turnover ({t}) de {v} ao ano: {st}.', 'Turnover ({t}) at {v} a year: {st}.'],
+    ins_vagas: ['{n} vagas abertas; {m} delas há mais de 60 dias.', '{n} open vacancies; {m} of them open for over 60 days.'],
+    ins_mulheres: ['Mulheres são {p} do quadro e {l} da liderança.', 'Women are {p} of headcount and {l} of leadership.'],
+    clique_nomes: ['clique para ver os nomes', 'click to see the names'],
+    liderancaF: ['das lideranças são mulheres', 'of leaders are women'],
+    g_titulo: ['Quem está neste número', 'Who is in this number'], g_baixar: ['Baixar CSV', 'Download CSV'],
+    g_fechar: ['Fechar', 'Close'], g_buscar: ['Buscar nome', 'Search name'],
+    c_saida: ['Saída', 'Exit date'], c_motivo: ['Motivo', 'Reason'], c_movimento: ['Movimento', 'Movement'],
+    mov_entrou: ['Entrou', 'Joined'], mov_saiu: ['Saiu', 'Left'],
+    d_quadro: ['Quadro em {d}', 'Headcount on {d}'], d_entradas: ['Entradas no período', 'Joins in the period'],
+    d_saidas: ['Saídas no período', 'Exits in the period'], d_tipo: ['Saídas que contam no turnover', 'Exits counted in turnover'],
+    d_mes: ['Entradas e saídas em {m}', 'Joins and exits in {m}'], d_saidas_mes: ['Saídas em {m} ({t})', 'Exits in {m} ({t})'],
+    d_novatos: ['Contratados há 12 a 24 meses', 'Hired 12 to 24 months ago'], d_lider: ['Liderança', 'Leadership'],
+    ficou: ['Ficou 1 ano', 'Stayed 1 year'], nao_ficou: ['Saiu antes de 1 ano', 'Left within a year'],
+    vaga_1: ['vaga', 'vacancy'], vagas_n: ['vagas', 'vacancies'],
+    al_vagas_1: ['1 vaga aberta há mais de 60 dias', '1 vacancy open for over 60 days'],
+    al_prazo_1: ['1 contrato com prazo termina em até 60 dias (aprendiz, estágio, temporário)', '1 fixed-term contract ends within 60 days (apprentice, intern, temporary)'],
+    leg_in: ['entradas', 'joins'], leg_out: ['saídas', 'exits'], fim_de_mes: ['fim de cada mês', 'end of each month']
+  };
+  let lang = 'pt';
+  function T(chave, vars) {
+    const par = D[chave];
+    let txt = par ? par[lang === 'en' ? 1 : 0] : '[' + chave + ']';
+    if (vars) Object.keys(vars).forEach(k => { txt = txt.split('{' + k + '}').join(vars[k]); });
+    return txt;
+  }
+  return {
+    T,
+    get lang() { return lang; },
+    s"
+VAR _d2 = "et lang(v) { lang = v === 'en' ? 'en' : 'pt'; },
+    nome(obj) { return obj ? (lang === 'en' ? obj.en : obj.pt) : ''; },
+    locale() { return lang === 'en' ? 'en-US' : 'pt-BR'; }
+  };
+})();
+window.METRICAS = (function () {
+  'use strict';
+  const D = window.DADOS;
+  const DIA = 864e5;
+  const ativo = (p, d) => p.admissao <= d && (!p.desligamento || p.desligamento > d);
+  const dentro = (d, ini, fim) => d && d >= ini && d <= fim;
+  const media = l => l.length ? l.reduce((s, v) => s + v, 0) / l.length : null;
+  function mediana(l) {
+    if (!l.length) return null;
+    const o = l.slice().sort((a, b) => a - b), m = Math.floor(o.length / 2);
+    return o.length % 2 ? o[m] : (o[m - 1] + o[m]) / 2;
+  }
+  const div = (a, b) => (b ? a / b : null);
+  function periodo(chave) {
+    let meses = D.meses;
+    const ano = D.dataRef.getFullYear();
+    if (chave === 'p12') meses = D.meses.slice(-12);
+    else if (chave === 'pano') meses = D.meses.filter(m => m.getFullYear() === ano);
+    else if (chave === 'panoant') meses = D.meses.filter(m => m.getFullYear() === ano - 1);
+    if (!meses.length) meses = D.meses;
+    const ini = new Date(meses[0].getFullYear(), meses[0].getMonth(), 1);
+    return { chave, meses, ini, fim: meses[meses.length - 1], n: meses.length };
+  }
+  function filtrarPessoas(f) {
+    return D.pessoas.filter(p =>
+      (!f.unidade || p.unidade === f.unidade) &&
+      (!f.area || p.area === f.area) &&
+      (!f.vinculo || p.vinculo === f.vinculo) &&
+      (!f.genero || p.genero === f.genero) &&
+      (!f.nivel || p.nivel === f.nivel));
+  }
+  function filtrarVagas(f) {
+    return D.vagas.filter(v =>
+      (!f.unidade || v.unidade === f.unidade) &&
+      (!f.area || v.area === f.area) &&
+      (!f.nivel || v.nivel === f.nivel));
+  }
+  const TIPOS = { pedido: ['pedido'], demissao: ['demissao'], outro: ['outro'], todos: ['pedido', 'demissao', 'outro'] };
+  const statusTurnover = anual => anual == null ? null : anual <= 0.15 ? 'saudavel' : anual <= 0.25 ? 'atencao' : 'alto';
+  const statusNovatos = v => v == null ? null : v >= 0.85 ? 'boa' : v >= 0.75 ? 'atencao' : 'baixa';
+  function contar(lista, chave) {
+    const o = {};
+    lista.forEach(p => { o[p[chave]] = (o[p[chave]] || 0) + 1; });
+    return o;
+  }
+  const anosEntre = (a, b) => (b - a) / (365.25 * DIA);
+  function calcular(estado) {
+    const f = estado.filtros, tipo = estado.tipoSaida || 'pedido';
+    const per = periodo(f.periodo);
+    const P = filtrarPessoas(f);
+    const ativosFim = P.filter(p => ativo(p, per.fim));
+    const vespera = new Date(per.ini.getTime() - DIA);
+    const hcIni = P.filter(p => ativo(p, vespera)).length;
+    const serie = D.meses.map(fim => {
+      const ini = new Date(fim.getFullYear(), fim.getMonth(), 1);
+      const antes = new Date(ini.getTime() - DIA);
+      const saidas = P.filter(p => dentro(p.desligamento, ini, fim));
+      const hcA = P.filter(p => ativo(p, antes)).length, hcF = P.filter(p => ativo(p, fim)).length;
+      const saidasTipo = saidas.filter(p => TIPOS[tipo].includes(p.motivo)).length;
+      return {
+        fim, hc: hcF, entradas: P.filter(p => dentro(p.admissao, ini, fim)).length,
+        saidas: saidas.length, saidasTipo, taxa: div(saidasTipo, (hcA + hcF) / 2),
+        noPeriodo: fim >= per.ini && fim <= per.fim
+      };
+    });
+    const doPeriodo = serie.filter(s => s.noPeriodo);
+    const hcMedio = media(doPeriodo.map(s => s.hc));
+    const entradas = P.filter(p => dentro(p.admissao, per.ini, per.fim));
+    const saidas = P.filter(p => dentro(p.desligamento, per.ini, per.fim));
+    const saidasTipo = saidas.filter(p => TIPOS[tipo].includes(p.motivo));
+    const turnover = div(saidasTipo.length, hcMedio);
+    const anual = turnover == null ? null : turnover * 12 / per.n;
+    const j1 = new Date(per.fim.getTime() - 730 * DIA), j2 = new Date(per.fim.getTime() - 365 * DIA);
+    const novatos = P.filter(p => p.admissao > j1 && p.admissao <= j2);
+    const ficaram = novatos.filter(p => !p.desligamento || (p.desligamento - p.admissao) >= 365 * DIA);
+    const casaNaSaida = saidasTipo.map(p => anosEntre(p.admissao, p.desligamento));
+    const lideres = ativosFim.filter(p => D.niveis[p.nivel].lider);
+    const comRaca = ativosFim.filter(p => p.raca !== 'ni');
+    const idades = ativosFim.map(p => anosEntre(p.nascimento, per.fim));
+    const faixas = { '<25': 0, '25-34': 0, '35-44': 0, '45-54': 0, '55+': 0 };
+    idades.forEach(i => { faixas[i < 25 ? '<25' : i < 35 ? '25-34' : i < 45 ? '35-44' : i < 55 ? '45-54' : '55+'] += 1; });
+    const generoNivel = {};
+    Object.keys(D.niveis).forEach(n => { generoNivel[n] = { F: 0, M: 0, N: 0 }; });
+    ativosFim.forEach(p => { generoNivel[p.nivel][p.genero] += 1; });
+    const bandas = { '<1': 0, '1-2': 0, '2-5': 0, '5+': 0 };
+    casaNaSaida.forEach(a => { bandas[a < 1 ? '<1' : a < 2 ? '1-2' : a < 5 ? '2-5' : '5+'] += 1; });
+    const V = filtrarVagas(f);
+    const abertas = V.filter(v => v.abertura <= per.fim && (!v.fechamento || v.fechamento > per.fim))
+      .map(v => {
+        const dias = Math.round((per.fim - v.abertura) / DIA);
+        return Object.assign({}, v, { dias, prioridade: dias > 60 || D.niveis[v.nivel].lider ? 'alta' : 'normal',
+          etapaNaData: v.status === 'aberta' ? v.etapa : (dias > 25 ? 'entrevistas' : 'triagem') });
+      }).sort((a, b) => b.dias - a.dias);
+    const fechadas = V.filter(v => v.status === 'fechada' && dentro(v.fechamento, per.ini, per.fim));
+    const ttfs = fechadas.map(v => Math.round((v.fechamento - v.abertura) / DIA));
+    const ofertas = fechadas.reduce((s, v) => s + v.ofertas, 0);
+    const doFunil = V.filter(v => v.abertura <= per.fim && (!v.fechamento || v.fechamento >= per.ini));
+    const funil = ['inscritos', 'triagem', 'entrevistas', 'ofertas', 'contratados']
+      .map(k => [k, doFunil.reduce((s, v) => s + (k === 'contratados' ? (v.status === 'fechada' && v.fechamento <= per.fim ? 1 : 0) : v[k]), 0)]);
+    const ttfNivel = {};
+    fechadas.forEach(v => { (ttfNivel[v.nivel] = ttfNivel[v.nivel] || []).push(Math.round((v.fechamento - v.abertura) / DIA)); });
+    const alertas = [];
+    if (!f.area) {
+      Object.keys(D.areas).forEach(a => {
+        const Pa = P.filter(p => p.area === a);
+        const sa = Pa.filter(p => dentro(p.desligamento, per.ini, per.fim) && TIPOS.todos.includes(p.motivo)).length;
+        const hm = media(per.meses.map(m => Pa.filter(p => ativo(p, m)).length));
+        const an = hm ? sa / hm * 12 / per.n : 0;
+        if (sa >= 3 && an > 0.25) alertas.push({ tipo: 'turnover', area: a, valor: an, ir: 'turnover' });
+      });
+    }
+    const saidasArea = contar(saidas.filter(p => TIPOS.todos.includes(p.motivo)), 'area');
+    const velhas = abertas.filter(v => v.dias > 60).length;
+    if (velhas) alertas.push({ tipo: 'vagas', n: velhas, ir: 'abertas' });
+    const retNovatos = div(ficaram.length, novatos.length);
+    if (retNovatos != null && novatos.length >= 8 && retNovatos < 0.8) alertas.push({ tipo: 'novatos', valor: retNovatos, ir: 'turnover' });
+    const limite = new Date(per.fim.getTime() + 60 * DIA);
+    const prazo = ativosFim.filter(p => p.fimPrevisto && p.fimPrevisto > per.fim && p.fimPrevisto <= limite).length;
+    if (prazo) alertas.push({ tipo: 'prazo', n: prazo, ir: 'quadro' });
+    const ultimo = doPeriodo[doPeriodo.length - 1];
+    return {
+      per, P, ativosFim, hcIni, hcFim: ativosFim.length, hcMedio, serie, entradas, saidas, saidasTipo, tipo,
+      fimDeContrato: saidas.filter(p => p.motivo === 'fim').length,
+      turnover, anual, stTurnover: statusTurnover(anual),
+      casaMedia: media(ativosFim.map(p => anosEntre(p.admissao, per.fim))),
+      novatos: novatos.length, ficaram: ficaram.length, retNovatos, stNovatos: statusNovatos(retNovatos),
+      casaAntes: media(casaNaSaida), sairam1ano: casaNaSaida.filter(a => a < 1).length, bandas,
+      porMotivo: contar(saidas, 'motivo'),
+      mulheres: ativosFim.filter(p => p.genero === 'F').length, homens: ativosFim.filter(p => p.genero === 'M').length,
+      lideres: lideres.length, lideresF: lideres.filter(p => p.genero === 'F').length,
+      comRaca: comRaca.length, ppi: comRaca.filter(p => ['preta', 'parda', 'indigena'].includes(p.raca)).length,
+      idadeMedia: media(idades), faixas, generoNivel, porRaca: contar(ativosFim, 'raca'),
+      porArea: contar(ativosFim, 'area'), porUnidade: contar(ativosFim, 'unidade'),
+      porNivel: contar(ativosFim, 'nivel'), porVinculo: contar(ativosFim, 'vinculo'),
+      abertas, fechadas: fechadas.length, ttf: mediana(ttfs), ttfs, ofertas, aceite: div(fechadas.length, ofertas),
+      funil, ttfNivel: Object.fromEntries(Object.entries(ttfNivel).map(([k, l]) => [k, { mediana: mediana(l), n: l.length }])),
+      alertas, ultimo: { fim: ultimo.fim, saidas: ultimo.saidas, entradas: ultimo.entradas }, saidasArea, TIPOS,
+      novatosLista: novatos, j1, j2,
+      vagasAtivas: doFunil.length
+    };
+  }
+  return { calcular, periodo, ativo };
+})();
+window.GRAFICOS = (function () {
+  'use strict';
+  const esc = s => String(s).replace(/[&<>""']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '""': '&quot;', ""'"": '&#39;' }[c]));
+  const mesCurto = (d, loc) => d.toLocaleDateString(loc, { month: 'short' }).replace('.', '') + ' ' + String(d.getFullYear()).slice(2);
+  const mesISO = d => d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+  const pctTela = (v, dec, loc) => (v * 100).toLocaleString(loc || (document.documentElement.lang === 'en' ? 'en-US' : 'pt-BR'),
+    { minimumFractionDigits: dec, maximumFractionDigits: dec }) + '%';
+  function curva(pts) {
+    if (pts.length < 2) return '';
+    let d = `M${pts[0][0]},${pts[0][1]}`;
+    for (let i = 0; i < pts.length - 1; i++) {
+      const p0 = pts[i - 1] || pts[i], p1 = pts[i], p2 = pts[i + 1], p3 = pts[i + 2] || p2;
+      const c1 = [p1[0] + (p2[0] - p0[0]) / 6, p1[1] + (p2[1] - p0[1]) / 6];
+      const c2 = [p2[0] - (p3[0] - p1[0]) / 6, p2[1] - (p3[1] - p1[1]) / 6];
+      d += ` C${c1[0].toFixed(1)},${c1[1].toFixed(1)} ${c2[0].toFixed(1)},${c2[1].toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`;
+    }
+    return d;
+  }
+  function linhaQuadro(serie, o) {
+    const W = 920, H = 230, pe = 26, pd = 26, pt = 34, pb = 30;
+    const vals = serie.map(s => s.hc);
+    const min = Math.min(...vals), max = Math.max(...vals);
+    const folga = Math.max(3, (max - min) * 0.25);
+    const y = v => pt + (H - pt - pb) * (1 - (v - (min - folga)) / ((max + folga) - (min - folga)));
+    const x = i => pe + (W - pe - pd) * (i / (serie.length - 1));
+    const pts = serie.map((s, i) => [x(i), y(s.hc)]);
+    const iIni = serie.findIndex(s => s.noPeriodo), iFim = serie.length - 1 - serie.slice().reverse().findIndex(s => s.noPeriodo);
+    const destacar = new Set([iIni, iFim, vals.indexOf(min), vals.indexOf(max)]);
+    let svg = `<svg class=""g-linha"" viewBox=""0 0 ${W} ${H}"" role=""img"" aria-label=""${esc(o.titulo)}"">`;
+    svg += `<defs><linearGradient id=""gArea"" x1=""0"" x2=""0"" y1=""0"" y2=""1""><stop offset=""0"" stop-color=""var(--acc)"" stop-opacity="".22""/><stop offset=""1"" stop-color=""var(--acc)"" stop-opacity=""0""/></linearGradient></defs>`;
+    svg += `<rect class=""g-banda"" x=""${x(iIni) - 8}"" y=""${pt - 18}"" width=""${x(iFim) - x(iIni) + 16}"" height=""${H - pt - pb + 18}"" rx=""8""/>`;
+    [0, 0.5, 1].forEach(t => { const yy = pt + (H - pt - pb) * t; svg += `<line class=""g-grade"" x1=""${pe}"" x2=""${W - pd}"" y1=""${yy}"" y2=""${yy}""/>`; });
+    svg += `<path d=""${curva(pts)} L${x(serie.length - 1)},${H - pb} L${x(0)},${H - pb} Z"" fill=""url(#gArea)""/>`;
+    svg += `<path class=""g-traco"" d=""${curva(pts)}""/>`;
+    serie.forEach((s, i) => {
+      svg += `<circle class=""g-ponto${s.noPeriodo ? '' : ' fora'}"" cx=""${pts[i][0]}"" cy=""${pts[i][1]}"" r=""${destacar.has(i) ? 4.5 : 3}""/>`;
+      if (destacar.has(i)) {
+        const acima = pts[i][1] > pt + 30;
+        svg += `<text class=""g-rot"" x=""${pts[i][0]}"" y=""${pts[i][1] + (acima ? -22 : 20)}"" text-anchor=""middle"">${s.hc}</text>`;
+        svg += `<text class=""g-rot2"" x=""${pts[i][0]}"" y=""${pts[i][1] + (acima ? -9 : 33)}"" text-anchor=""middle""><tspan class=""pos"">+${s.entradas}</tspan> | <tspan class=""neg"">-${s.saidas}</tspan></text>`;
+      }
+      if (i % 2 === 0 || i === serie.length - 1) svg += `<text class=""g-eixo"" x=""${pts[i][0]}"" y=""${H - 8}"" text-anchor=""middle"">${esc(mesCurto(s.fim, o.locale))}</text>`;
+      const larg = (W - pe - pd) / (serie.length - 1);
+      svg += `<rect class=""g-alvo"" x=""${pts[i][0] - larg / 2}"" y=""${pt - 18}"" width=""${larg}"" height=""${H - pt - pb + 18}"" data-tip=""${esc(o.tip(s))}"" data-drill=""mes:${mesISO(s.fim)}""/>`;
+    });
+    return svg + '</svg>';
+  }
+  function barrasMes(serie, o) {
+    const W = 920, H = 210, pe = 26, pd = 10, pt = 26, pb = 30;
+    const vals = serie.map(s => s.taxa || 0);
+    const max = Math.max(0.03, ...vals) * 1.15;
+    const larg = (W - pe - pd) / serie.length;
+    let svg = `<svg class=""g-barras"" viewBox=""0 0 ${W} ${H}"" role=""img"" aria-label=""${esc(o.titulo)}"">`;
+    svg += `<line class=""g-grade"" x1=""${pe}"" x2=""${W - pd}"" y1=""${H - pb}"" y2=""${H - pb}""/>`;
+    const lim = [0.15 / 12, 0.25 / 12];
+    lim.forEach((l, k) => { const yy = pt + (H - pt - pb) * (1 - l / max); svg += `<line class=""g-lim l${k}"" x1=""${pe}"" x2=""${W - pd}"" y1=""${yy}"" y2=""${yy}""/>`; });
+    serie.forEach((s, i) => {
+      const v = s.taxa || 0, h = (H - pt - pb) * (v / max), xx = pe + i * larg + larg * 0.18;
+      const cls = v <= lim[0] ? 'ok' : v <= lim[1] ? 'warn' : 'bad';
+      svg += `<rect class=""g-barra ${cls}${s.noPeriodo ? '' : ' fora'}"" x=""${xx}"" y=""${H - pb - h}"" width=""${larg * 0.64}"" height=""${Math.max(h, 1)}"" rx=""3""/>`;
+      if (s.noPeriodo && v > 0) svg += `<text class=""g-rot2"" x=""${xx + larg * 0.32}"" y=""${H - pb - h - 6}"" text-anchor=""middle"">${pctTela(v, 1, o.locale)}</text>`;
+      if (i % 2 === 0 || i === serie.length - 1) svg += `<text class=""g-eixo"" x=""${xx + larg * 0.32}"" y=""${H - 8}"" text-anchor=""middle"">${esc(mesCurto(s.fim, o.locale))}</text>`;
+      svg += `<rect class=""g-alvo"" x=""${pe + i * larg}"" y=""${pt}"" width=""${larg}"" height=""${H - pt - pb}"" data-tip=""${esc(o.tip(s))}"" data-drill=""saidas:${mesISO(s.fim)}""/>`;
+    });
+    return svg + '</svg>';
+  }
+  function listaBarras(itens, o) {
+    o = o || {};
+    const max = Math.max(1, ...itens.map(i => i.valor));
+    const total = o.total || itens.reduce((s, i) => s + i.valor, 0);
+    return `<div class=""lb${o.semPct ? ' larga' : ''}"">` + itens.map(i => {
+      const pct = total ? i.valor / total : 0;
+      return `<div class=""lb-linha${i.classe ? ' ' + i.classe : ''}${i.drill ? ' clicavel' : ''}""${i.tip ? ` data-tip=""${esc(i.tip)}""` : ''}${i.drill ? ` data-drill=""${esc(i.drill)}"" role=""button"" tabindex=""0""` : ''}>` +
+        `<div class=""lb-rot""><span class=""lb-fundo"" style=""width:${(i.valor / max * 100).toFixed(1)}%""></span><span class=""lb-txt"">${esc(i.rotulo)}</span></div>` +
+        `<div class=""lb-val"">${esc(o.fmtValor ? o.fmtValor(i.valor) : i.valor)}</div>` +
+        `<div class=""lb-pct"">${o.semPct ? (i.extra ? esc(i.extra) : '') : pctTela(pct, 1)}</div></div>`;
+    }).join('') + '</div>';
+  }
+  function segmentos(linhas, legenda) {
+    return '<div class=""seg"">' + linhas.map(l => {
+      const tot = l.partes.reduce((s, p) => s + p.valor, 0) || 1;
+      return `<div class=""seg-linha""><div class=""seg-rot"">${esc(l.rotulo)}</div><div class=""seg-barra"">` +
+        l.partes.map(p => p.valor ? `<span class=""seg-p ${p.classe}${p.drill ? ' clicavel' : ''}"" style=""width:${(p.valor / tot * 100).toFixed(1)}%"" data-tip=""${esc(p.nome + ': ' + p.valor + ' (' + (p.valor / tot * 100).toFixed(0) + '%)')}""${p.drill ? ` data-drill=""${esc(p.drill)}""` : ''}>${p.valor / tot >= 0.12 ? (p.valor / tot * 100).toFixed(0) + '%' : ''}</span>` : '').join('') +
+        `</div><div class=""seg-tot"">${tot}</div></div>`;
+    }).join('') + `<div class=""seg-leg"">${legenda.map(x => `<span><i class=""seg-p ${x.classe}""></i>${esc(x.nome)}</span>`).join('')}</div></div>`;
+  }
+  function barrasMov(serie, o) {
+    const W = 920, H = 230, pe = 26, pd = 10, meio = H / 2 - 4, alto = meio - 26;
+    const max = Math.max(1, ...serie.map(s => Math.max(s.entradas, s.saidas)));
+    const larg = (W - pe - pd) / serie.length;
+    let svg = `<svg class=""g-barras"" viewBox=""0 0 ${W} ${H}"" role=""img"" aria-label=""${esc(o.titulo)}"">`;
+    svg += `<line class=""g-grade"" x1=""${pe}"" x2=""${W - pd}"" y1=""${meio}"" y2=""${meio}""/>`;
+    serie.forEach((s, i) => {
+      const xx = pe + i * larg + larg * 0.2, w = larg * 0.6;
+      const he = alto * s.entradas / max, hs = alto * s.saidas / max;
+      const fora = s.noPeriodo ? '' : ' fora';
+      svg += `<rect class=""g-barra ok${fora}"" x=""${xx}"" y=""${meio - he}"" width=""${w}"" height=""${Math.max(he, 1)}"" rx=""3""/>`;
+      svg += `<rect class=""g-barra bad${fora}"" x=""${xx}"" y=""${meio + 1}"" width=""${w}"" height=""${Math.max(hs, 1)}"" rx=""3""/>`;
+      if (s.noPeriodo) {
+        if (s.entradas) svg += `<text class=""g-rot2"" x=""${xx + w / 2}"" y=""${meio - he - 5}"" text-anchor=""middle"">${s.entradas}</text>`;
+        if (s.saidas) svg += `<text class=""g-rot2"" x=""${xx + w / 2}"" y=""${meio + hs + 13}"" text-anchor=""middle"">${s.saidas}</text>`;
+      }
+      if (i % 2 === 0 || i === serie.length - 1) svg += `<text class=""g-eixo"" x=""${xx + w / 2}"" y=""${H - 4}"" text-anchor=""middle"">${esc(mesCurto(s.fim, o.locale))}</text>`;
+      svg += `<rect class=""g-alvo"" x=""${pe + i * larg}"" y=""0"" width=""${larg}"" height=""${H - 16}"" data-tip=""${esc(o.tip(s))}"" data-drill=""mes:${mesISO(s.fim)}""/>`;
+    });
+    return svg + '</svg>';
+  }
+  function funil(etapas, o) {
+    const max = Math.max(1, ...etapas.map(e => e.valor));
+    return '<div class=""funil"">' + etapas.map((e, i) => {
+      const conv = i ? (etapas[i - 1].valor ? e.valor / etapas[i - 1].valor : 0) : null;
+      return `<div class=""fu-linha""><div class=""fu-rot"">${esc(e.rotulo)}</div>` +
+        `<div class=""fu-trilho""><div class=""fu-barra"" style=""width:${Math.max(2.5, e.valor / max * 100).toFixed(1)}%""><span>${e.valor.toLocaleString(o.locale)}</span></div></div>` +
+        `<div class=""fu-conv"">${conv == null ? '' : pctTela(conv, conv < 0.1 ? 1 : 0, o.locale) + ' ' + esc(o.conversao)}</div></div>`;
+    }).join('') + '</div>';
+  }
+  const vazioOrd = v => v == null || v === '' || (typeof v === 'number' && isNaN(v));
+  const cmpTexto = (a, b) => String(a).localeCompare(String(b), 'pt', { sensitivity: 'base', numeric: true });
+  function ordenar(lista, cols, ordem) {
+    const c = ordem && ordem.col && cols.find(x => x.k === ordem.col);
+    if (!c) return lista.slice();
+    const sentido = (c.tipo === 'texto' ? 1 : -1) * (ordem.passo === 2 ? -1 : 1);
+    const valor = x => { const v = c.v(x); return c.tipo === 'texto' || vazioOrd(v) ? v : +v; };   // data vira número (o instante)
+    return lista.map((x, i) => ({ x, i, v: valor(x) }))
+      .sort((p, q) => {
+        const vp = vazioOrd(p.v), vq = vazioOrd(q.v);
+        if (vp || vq) return vp && vq ? p.i - q.i : vp ? 1 : -1;
+        return (c.tipo === 'texto' ? cmpTexto(p.v, q.v) : p.v - q.v) * sentido || p.i - q.i;
+      }).map(o => o.x);
+  }
+  function proximaOrdem(ordem, k) {
+    if (!ordem || ordem.col !== k) return { col: k, passo: 1 };
+    return ordem.passo === 1 ? { col: k, passo: 2 } : { col: '', passo: 0 };
+  }
+  function thOrdena(c, rotulo, ordem, attr, classe) {
+    const ativo = !!(ordem && ordem.col === c.k);
+    const sobe = ativo && ((c.tipo === 'texto') === (ordem.passo === 1));
+    return `<th${classe ? ` class=""${classe}""` : ''}${ativo ? ` aria-sort=""${sobe ? 'ascending' : 'descending'}""` : ''}>` +
+      `<button type=""button"" ${attr}=""${c.k}"" class=""${ativo ? 'ativo ' + (sobe ? 'asc' : 'desc') : ''}"">${esc(rotulo)}</button></th>`;
+  }
+  return { linhaQuadro, barrasMes, barrasMov, listaBarras, segmentos, funil, esc, mesCurto, mesISO, ordenar, proximaOrdem, thOrdena };
+})();
+window.PAGINAS = (function () {
+  'use strict';
+  const G = window.GRAFICOS, esc = G.esc;
+  function heroi(c, o) {
+    const num = o.drill ? `<button class=""num-drill"" data-drill=""${o.drill}"" data-tip=""${esc(c.T('clique_nomes'))}"">${o.numero}</button>` : o.numero;
+    return `<div class=""heroi${o.escuro ? ' escuro' : ''}"">` +
+      `<div class=""h-rot"">${esc(o.rotulo)}${o.conta ? `<button class=""info"" data-conta=""${o.conta}"" aria-label=""${esc(c.T('x_titulo'))}"">i</button>` : ''}</div>` +
+      `<div class=""h-num"">${num}${o.chip ? ` <span class=""chip ${o.chip[0]}"">${esc(o.chip[1])}</span>` : ''}</div>` +
+      `<div class=""h-sub"">${o.sub || ''}</div></div>`;
+  }
+  const secao = (id, titulo, sub, corpo) =>
+    `<section class=""secao"" id=""s-${id}"" data-titulo=""${esc(titulo)}""><header class=""s-cab""><h2>${esc(titulo)}</h2>${sub ? `<p>${sub}</p>` : ''}</header>${corpo}</section>`;
+  const cartao = (titulo, corpo, extra) => `<div class=""cartao${extra ? ' ' + extra : ''}"">${titulo ? `<h3>${esc(titulo)}</h3>` : ''}${corpo}</div>`;
+  const chipTurn = (c, st) => st ? [{ saudavel: 'ok', atencao: 'warn', alto: 'bad' }[st], c.T('st_' + st)] : null;
+  const chipNov = (c, st) => st ? [{ boa: 'ok', atencao: 'warn', baixa: 'bad' }[st], c.T('st_' + st)] : null;
+  const dica = c => `<span class=""dica-clique"">${esc(c.T('clique_nomes'))}</span>`;
+  function porX(c, contagens, cadastro, prefixo, ordenar) {
+    const itens = Object.entries(contagens).map(([k, v]) => ({ chave: k, rotulo: c.I.nome(cadastro[k]), valor: v, drill: prefixo ? prefixo + ':' + k : null }));
+    itens.sort(ordenar || ((a, b) => b.valor - a.valor));
+    return itens;
+  }
+  const porOrdemNivel = c => (a, b) => c.D.niveis[a.chave].ordem - c.D.niveis[b.chave].ordem;
+  const maiorDe = obj => Object.entries(obj).sort((a, b) => b[1] - a[1])[0] || [null, 0];
+  function contaTurnover(r, c) {
+    const T = c.T;
+    c.conta('turnover', T('k_turnover'), T('x_turnover'), [
+      [T('numerador') + ': ' + c.tipoNome().toLowerCase(), r.saidasTipo.length],
+      [T('denominador') + ': ' + T('k_hc').toLowerCase() + ' · ' + r.per.n + ' ' + T('meses'), c.num(r.hcMedio, 1)],
+      [T('resultado'), c.pct(r.turnover)], [T('anualizado'), c.pct(r.anual)]],
+      `${r.fimDeContrato} · ${T('fim_fora')}`);
+  }
+  function geral(r, c) {
+    const T = c.T, D = c.D;
+    c.conta('hc', T('k_hc'), T('x_hc'), [[T('ativos') + ' ' + c.data(r.per.fim), r.hcFim]]);
+    c.conta('movs', T('k_movs'), T('x_movs'), [['+', r.entradas.length], ['-', r.saidas.length], [T('saldo'), r.entradas.length - r.saidas.length]]);
+    contaTurnover(r, c);
+    c.conta('casa', T('k_casa'), T('x_casa'), [[T('ativos'), r.hcFim], [T('resultado'), c.num(r.casaMedia, 1) + ' ' + T('anos')]]);
+    c.conta('vagas', T('k_vagas'), T('x_vagas'), [[T('k_vagas'), r.abertas.length], ['> 60 ' + T('dias'), r.abertas.filter(v => v.dias > 60).length]]);
+    const saldo = r.entradas.length - r.saidas.length;
+    let h = '<div class=""herois"">' +
+      heroi(c, { escuro: true, rotulo: T('k_hc'), conta: 'hc', drill: 'todos', numero: c.num(r.hcFim), sub: `${c.pct(r.mulheres / (r.hcFim || 1))} ${T('k_mulheres').toLowerCase()} · ${c.num(r.casaMedia, 1)} ${T('anos')}` }) +
+      heroi(c, { rotulo: T('k_movs'), conta: 'movs', numero: `<button class=""num-drill pos"" data-drill=""entradas"">+${r.entradas.length}</button> <span class=""barra-sep"">/</span> <button class=""num-drill neg"" data-drill=""saidas"">-${r.saidas.length}</button>`, sub: `${T('saldo')} ${saldo >= 0 ? '+' : ''}${saldo} ${T('no_periodo')}` }) +
+      heroi(c, { rotulo: T('k_turnover'), conta: 'turnover', drill: 'saidas-tipo', numero: c.pct(r.turnover), chip: chipTurn(c, r.stTurnover), sub: `${r.saidasTipo.length} ${T('de')} ${r.saidas.length} · ${c.tipoNome()}` }) +
+      heroi(c, { rotulo: T('k_casa'), conta: 'casa', numero: `${c.num(r.casaMedia, 1)} <small>${T('anos')}</small>`, sub: `${c.num(r.hcFim)} ${T('ativos')}` }) +
+      heroi(c, { rotulo: T('k_vagas'), conta: 'vagas', drill: 'vagas-abertas', numero: c.num(r.abertas.length), sub: `${r.abertas.filter(v => v.dias > 60).length} > 60 ${T('dias')}` }) +
+      '</div>';
+    const [aMaior, nMaior] = maiorDe(r.porArea), [aSaiu, nSaiu] = maiorDe(r.saidasArea);
+    const lid = r.lideres ? c.pct(r.lideresF / r.lideres, 0) : '-';
+    const frases = [
+      [T('ins_quadro', { a: r.hcIni, b: r.hcFim, d: (r.hcFim - r.hcIni >= 0 ? '+' : '') + (r.hcFim - r.hcIni) }), 'todos'],
+      aMaior ? [T('ins_maior', { a: c.I.nome(D.areas[aMaior]), n: nMaior, p: c.pct(nMaior / (r.hcFim || 1), 0) }), 'area:' + aMaior] : null,
+      aSaiu ? [T('ins_saidas', { a: c.I.nome(D.areas[aSaiu]), s: nSaiu }), 'saidas-area:' + aSaiu] : null,
+      [T('ins_turn', { t: c.tipoNome().toLowerCase(), v: c.pct(r.anual), st: r.stTurnover ? T('st_' + r.stTurnover).toLowerCase() : '-' }), 'saidas-tipo'],
+      [T('ins_vagas', { n: r.abertas.length, m: r.abertas.filter(v => v.dias > 60).length }), 'vagas-abertas'],
+      [T('ins_mulheres', { p: c.pct(r.mulheres / (r.hcFim || 1), 0), l: lid }), 'genero:F']
+    ].filter(Boolean);
+    h += `<div class=""cartao resumo-cartao""><h3>${esc(T('s_resumo'))}</h3><ul class=""insights"">` +
+      frases.map(([t, d]) => `<li><button class=""ins"" data-drill=""${d}"">${esc(t)}<span aria-hidden=""true"">→</span></button></li>`).join('') +
+      `</ul><p class=""resumo"">${esc(T('resumo_onde', { d: c.data(new Date(r.ultimo.fim.getFullYear(), r.ultimo.fim.getMonth(), 0)), s: r.ultimo.saidas, e: r.ultimo.entradas }))}</p></div>`;
+    let out = secao('onde', T('s_onde'), `${esc(c.periodoNome())} · ${esc(c.data(r.per.ini))} → ${esc(c.data(r.per.fim))}`, h);
+    const tipMov = s => `${G.mesCurto(s.fim, c.I.locale())}: ${s.hc} · +${s.entradas} | -${s.saidas} · ${T('clique_nomes')}`;
+    out += secao('evolucao', T('s_evolucao'), `${T('fim_de_mes')} · <span class=""pos"">+${T('leg_in')}</span> | <span class=""neg"">-${T('leg_out')}</span> · ${dica(c)}`,
+      cartao('', G.linhaQuadro(r.serie, { titulo: T('s_evolucao'), locale: c.I.locale(), tip: tipMov })) +
+      cartao(T('s_mov'), G.barrasMov(r.serie, { titulo: T('s_mov'), locale: c.I.locale(), tip: tipMov })));
+    const lideresG = { F: r.lideresF, M: r.ativosFim.filter(p => D.niveis[p.nivel].lider && p.genero === 'M').length, N: r.ativosFim.filter(p => D.niveis[p.nivel].lider && p.genero === 'N').length };
+    const linhasGen = [
+      { rotulo: T('k_hc'), partes: ['F', 'M', 'N'].map(g => ({ classe: g.toLowerCase(), nome: T('g_' + g), valor: g === 'F' ? r.mulheres : g === 'M' ? r.homens : r.hcFim - r.mulheres - r.homens, drill: 'genero:' + g })) },
+      { rotulo: T('d_lider'), partes: ['F', 'M', 'N'].map(g => ({ classe: g.toLowerCase(), nome: T('g_' + g), valor: lideresG[g], drill: 'lider:' + g })) }
+    ];
+    out += secao('composicao', T('s_composicao'), dica(c), '<div class=""grade2"">' +
+      cartao(T('s_por_area'), G.listaBarras(porX(c, r.porArea, D.areas, 'area'), { total: r.hcFim })) +
+      cartao(T('s_genero_lid'), G.segmentos(linhasGen, [{ classe: 'f', nome: T('g_F') }, { classe: 'm', nome: T('g_M') }, { classe: 'n', nome: T('g_N') }]) +
+        `<p class=""nota-cartao""><b class=""mono"">${lid}</b> ${esc(T('liderancaF'))}</p>` +
+        `<h3 class=""sub-h3"">${esc(T('por_vinculo'))}</h3>` + G.listaBarras(porX(c, r.porVinculo, D.vinculos, 'vinculo'), { total: r.hcFim })) + '</div>');
+    c.conta('contrat', T('k_contrat'), T('x_contrat'), [[T('k_contrat'), r.fechadas]]);
+    c.conta('ttf', T('k_ttf'), T('x_ttf'), [[T('k_contrat'), r.fechadas], [T('mediana'), (r.ttf == null ? '-' : c.num(r.ttf, Number.isInteger(r.ttf) ? 0 : 1)) + ' ' + T('dias')]]);
+    c.conta('aceite', T('k_aceite'), T('x_aceite'), [[T('numerador') + ': ' + T('k_contrat').toLowerCase(), r.fechadas], [T('denominador') + ': ' + T('funil_ofertas').toLowerCase(), r.ofertas]]);
+    const etapas = r.funil.map(([k, v]) => ({ rotulo: T('funil_' + k), valor: v }));
+    out += secao('rs-resumo', T('s_rs_resumo'), '', '<div class=""herois h3"">' +
+      heroi(c, { rotulo: T('k_contrat'), conta: 'contrat', numero: c.num(r.fechadas), sub: T('no_periodo') }) +
+      heroi(c, { rotulo: T('k_ttf'), conta: 'ttf', numero: r.ttf == null ? '-' : `${c.num(r.ttf)} <small>${T('dias')}</small>`, sub: T('mediana') }) +
+      heroi(c, { rotulo: T('k_aceite'), conta: 'aceite', numero: r.aceite == null ? '-' : c.pct(r.aceite, 0), sub: `${r.fechadas} ${T('de')} ${r.ofertas}` }) +
+      '</div>' + cartao(T('s_funil'), G.funil(etapas, { locale: c.I.locale(), conversao: T('conversao') })) +
+      `<button class=""botao"" data-aba=""rs"">${esc(T('abrir_rs'))} →</button>`);
+    return out;
+  }
+  function pessoas(r, c) {
+    const T = c.T, D = c.D;
+    c.conta('hc', T('k_hc'), T('x_hc'), [[T('ativos') + ' ' + c.data(r.per.fim), r.hcFim]]);
+    c.conta('idade', T('k_idade'), T('x_idade'), [[T('ativos'), r.hcFim], [T('resultado'), c.num(r.idadeMedia, 1) + ' ' + T('anos')]]);
+    c.conta('mulheres', T('k_mulheres'), T('x_mulheres'), [[T('numerador'), r.mulheres], [T('denominador'), r.hcFim], [T('resultado'), c.pct(r.mulheres / r.hcFim)]]);
+    c.conta('ppi', T('k_ppi'), T('x_ppi'), [[T('numerador'), r.ppi], [T('denominador'), r.comRaca], [T('resultado'), c.pct(r.ppi / (r.comRaca || 1))]]);
+    c.conta('lider', T('k_lider'), T('x_lider'), [[T('numerador'), r.lideresF], [T('denominador'), r.lideres], [T('resultado'), r.lideres ? c.pct(r.lideresF / r.lideres) : '-']]);
+    contaTurnover(r, c);
+    c.conta('saiu', T('k_saiu'), T('x_movs'), Object.keys(D.motivos).map(k => [c.I.nome(D.motivos[k]), r.porMotivo[k] || 0]));
+    c.conta('antes', T('k_antes'), T('x_antes'), [[T('k_saiu'), r.saidasTipo.length], [T('sairam_1ano'), r.sairam1ano], [T('resultado'), r.casaAntes == null ? '-' : c.num(r.casaAntes, 1) + ' ' + T('anos')]]);
+    c.conta('novatos', T('k_novatos'), T('x_no"
+VAR _d3 = "vatos'), [[T('numerador'), r.ficaram], [T('denominador'), r.novatos], [T('resultado'), r.retNovatos == null ? '-' : c.pct(r.retNovatos, 0)]]);
+    let h = '<div class=""herois h4"">' +
+      heroi(c, { escuro: true, rotulo: T('k_hc'), conta: 'hc', drill: 'todos', numero: c.num(r.hcFim), sub: `${T('de')} ${c.data(r.per.fim)}` }) +
+      heroi(c, { rotulo: T('k_idade'), conta: 'idade', numero: `${c.num(r.idadeMedia, 1)} <small>${T('anos')}</small>`, sub: T('faixa_comum') + ': ' + Object.entries(r.faixas).sort((a, b) => b[1] - a[1])[0][0] + ' ' + T('anos') }) +
+      heroi(c, { rotulo: T('k_mulheres'), conta: 'mulheres', drill: 'genero:F', numero: c.pct(r.mulheres / (r.hcFim || 1)), sub: `${r.mulheres} ${T('de')} ${r.hcFim}` }) +
+      heroi(c, { rotulo: T('k_ppi'), conta: 'ppi', drill: 'ppi', numero: c.pct(r.ppi / (r.comRaca || 1)), sub: `${r.ppi} ${T('de')} ${r.comRaca} ${T('informados')}` }) + '</div>';
+    h += '<div class=""grade3"">' +
+      cartao(T('por_unidade'), G.listaBarras(porX(c, r.porUnidade, D.unidades, 'unidade'), { total: r.hcFim })) +
+      cartao(T('s_por_nivel'), G.listaBarras(porX(c, r.porNivel, D.niveis, 'nivel', porOrdemNivel(c)), { total: r.hcFim })) +
+      cartao(T('por_vinculo'), G.listaBarras(porX(c, r.porVinculo, D.vinculos, 'vinculo'), { total: r.hcFim })) + '</div>';
+    let out = secao('quadro', T('s_quadro'), `${esc(c.periodoNome())} · ${dica(c)}`, h);
+    const tipos = ['pedido', 'demissao', 'outro', 'todos'];
+    const cont = { pedido: r.porMotivo.pedido || 0, demissao: r.porMotivo.demissao || 0, outro: r.porMotivo.outro || 0 };
+    cont.todos = cont.pedido + cont.demissao + cont.outro;
+    h = `<div class=""cartao faixa-tipo""><div class=""ft-linha""><span class=""ft-rot"">${esc(T('quem_conta'))}</span>` +
+      tipos.map(t => `<button class=""pilula${c.estado.tipoSaida === t ? ' ativa' : ''}"" data-tipo=""${t}"" aria-pressed=""${c.estado.tipoSaida === t}"">${esc(T('t_' + t))} <b>${cont[t]}</b></button>`).join('') +
+      `</div><div class=""ft-nota"">${r.per.n} ${T('meses')} · ${r.fimDeContrato} ${esc(T('fim_fora'))} · <button class=""link"" data-conta=""turnover"">${esc(T('como_conta'))}</button>` +
+      `<span class=""leg""><i class=""ok""></i>${esc(T('leg_15'))}</span><span class=""leg""><i class=""warn""></i>${esc(T('leg_25'))}</span><span class=""leg""><i class=""bad""></i>${esc(T('leg_acima'))}</span></div></div>`;
+    h += '<div class=""herois h4"">' +
+      heroi(c, { rotulo: T('k_turnover'), conta: 'turnover', drill: 'saidas-tipo', numero: c.pct(r.turnover), chip: chipTurn(c, r.stTurnover), sub: `${T('anualizado')} ${c.pct(r.anual)}` }) +
+      heroi(c, { rotulo: T('k_saiu'), conta: 'saiu', drill: 'saidas', numero: c.num(r.saidas.length), sub: `${r.fimDeContrato} · ${c.I.nome(D.motivos.fim).toLowerCase()}` }) +
+      heroi(c, { rotulo: T('k_antes'), conta: 'antes', numero: r.casaAntes == null ? '-' : `${c.num(r.casaAntes, 1)} <small>${T('anos')}</small>`, sub: `${r.sairam1ano} ${T('de')} ${r.saidasTipo.length} ${T('sairam_1ano')}` }) +
+      heroi(c, { rotulo: T('k_novatos'), conta: 'novatos', drill: 'novatos', numero: r.retNovatos == null ? '-' : c.pct(r.retNovatos, 0), chip: chipNov(c, r.stNovatos), sub: `${r.ficaram} ${T('de')} ${r.novatos} ${T('ficou_ano')}` }) + '</div>';
+    h += cartao(T('turnover_mensal'), G.barrasMes(r.serie, { titulo: T('turnover_mensal'), locale: c.I.locale(), tip: s => `${G.mesCurto(s.fim, c.I.locale())}: ${c.pct(s.taxa || 0)} · ${s.saidasTipo} ${T('de')} ${s.hc} · ${T('clique_nomes')}` }));
+    const bandas = ['<1', '1-2', '2-5', '5+'].map(k => ({ rotulo: k + ' ' + (k === '<1' ? T('ano') : T('anos')), valor: r.bandas[k], drill: 'banda:' + k }));
+    h += '<div class=""grade2"">' +
+      cartao(T('por_motivo'), G.listaBarras(porX(c, r.porMotivo, D.motivos, 'motivo'), { total: r.saidas.length })) +
+      cartao(T('casa_saida'), G.listaBarras(bandas, { total: r.saidasTipo.length })) + '</div>';
+    out += secao('turnover', T('s_turnover'), `${esc(c.periodoNome())} · ${dica(c)}`, h);
+    h = '<div class=""herois h4"">' +
+      heroi(c, { rotulo: T('k_mulheres'), conta: 'mulheres', drill: 'genero:F', numero: c.pct(r.mulheres / (r.hcFim || 1)), sub: `${r.mulheres} ${T('de')} ${r.hcFim}` }) +
+      heroi(c, { rotulo: T('k_lider'), conta: 'lider', drill: 'lider:F', numero: r.lideres ? c.pct(r.lideresF / r.lideres) : '-', sub: `${r.lideresF} ${T('de')} ${r.lideres} ${T('lideres')}` }) +
+      heroi(c, { rotulo: T('k_ppi'), conta: 'ppi', drill: 'ppi', numero: c.pct(r.ppi / (r.comRaca || 1)), sub: `${r.ppi} ${T('de')} ${r.comRaca}` }) +
+      heroi(c, { rotulo: T('k_idade'), conta: 'idade', numero: `${c.num(r.idadeMedia, 1)} <small>${T('anos')}</small>`, sub: T('ativos') }) + '</div>';
+    const linhasGen = Object.keys(D.niveis).filter(n => r.porNivel[n]).map(n => ({
+      rotulo: c.I.nome(D.niveis[n]),
+      partes: ['F', 'M', 'N'].map(g => ({ classe: g.toLowerCase(), nome: T('g_' + g), valor: r.generoNivel[n][g], drill: `gn:${n}:${g}` }))
+    }));
+    h += '<div class=""grade2 g-larga"">' + cartao(T('genero_nivel'), G.segmentos(linhasGen, [{ classe: 'f', nome: T('g_F') }, { classe: 'm', nome: T('g_M') }, { classe: 'n', nome: T('g_N') }])) +
+      '<div class=""pilha"">' + cartao(T('raca'), G.listaBarras(porX(c, r.porRaca, D.racas, 'raca'), { total: r.hcFim })) +
+      cartao(T('faixa_idade'), G.listaBarras(Object.entries(r.faixas).map(([k, v]) => ({ rotulo: k + ' ' + T('anos'), valor: v, drill: 'faixa:' + k })), { total: r.hcFim })) + '</div></div>';
+    out += secao('diversidade', T('s_diversidade'), `${esc(c.data(r.per.fim))} · ${dica(c)}`, h);
+    out += secao('pessoas', T('s_pessoas'), `${r.hcFim} ${T('ativos')} · ${esc(c.data(r.per.fim))}`, tabelaPessoas(r, c));
+    return out;
+  }
+  function tabelaPessoas(r, c) {
+    const T = c.T, D = c.D, tb = c.estado.tabela;
+    const busca = (tb.busca || '').trim().toLowerCase();
+    let linhas = r.ativosFim.map(p => ({
+      p, nome: p.nome, area: c.I.nome(D.areas[p.area]), nivel: c.I.nome(D.niveis[p.nivel]), ordemNivel: D.niveis[p.nivel].ordem,
+      vinculo: c.I.nome(D.vinculos[p.vinculo]), unidade: c.I.nome(D.unidades[p.unidade]), admissao: p.admissao,
+      casa: (r.per.fim - p.admissao) / (365.25 * 864e5)
+    }));
+    if (busca) linhas = linhas.filter(l => (l.nome + ' ' + l.area + ' ' + l.nivel).toLowerCase().includes(busca));
+    const cols = [['nome', 'c_nome', 'texto', l => l.nome], ['area', 'c_area', 'texto', l => l.area], ['nivel', 'c_nivel', 'num', l => l.ordemNivel],
+      ['vinculo', 'c_vinculo', 'texto', l => l.vinculo], ['unidade', 'c_unidade', 'texto', l => l.unidade], ['admissao', 'c_admissao', 'data', l => l.admissao], ['casa', 'c_casa', 'num', l => l.casa]]
+      .map(([k, t, tipo, v]) => ({ k, t, tipo, v }));
+    linhas = G.ordenar(G.ordenar(linhas, cols, { col: 'nome', passo: 1 }), cols, tb.ordem);
+    const porPag = 12, paginas = Math.max(1, Math.ceil(linhas.length / porPag));
+    tb.pagina = Math.min(tb.pagina || 1, paginas);
+    const vis = linhas.slice((tb.pagina - 1) * porPag, tb.pagina * porPag);
+    let h = `<div class=""cartao tabela-cartao""><div class=""tb-barra""><input class=""busca"" type=""search"" value=""${esc(tb.busca || '')}"" placeholder=""${esc(T('buscar'))}"" data-busca aria-label=""${esc(T('buscar'))}""><span class=""tb-conta"">${linhas.length} ${T('linhas')}</span></div>`;
+    h += '<div class=""tb-rolagem""><table class=""tabela""><thead><tr>' + cols.map(c => G.thOrdena(c, T(c.t), tb.ordem, 'data-ordem')).join('') + '</tr></thead><tbody>';
+    h += vis.length ? vis.map(l => '<tr>' + cols.map(({ k }) => {
+      if (k === 'admissao') return `<td class=""mono"">${c.data(l.admissao)}</td>`;
+      if (k === 'casa') return `<td class=""mono"">${c.num(l.casa, 1)} ${T('anos')}</td>`;
+      if (k === 'nome') return `<td><span class=""avatar-mini"">${esc(l.nome.split(' ').map(x => x[0]).slice(0, 2).join(''))}</span>${esc(l.nome)}</td>`;
+      return `<td>${esc(l[k])}</td>`;
+    }).join('') + '</tr>').join('') : `<tr><td colspan=""${cols.length}"" class=""vazio"">${esc(T('sem_linhas'))}</td></tr>`;
+    h += `</tbody></table></div><div class=""tb-pag""><button class=""botao leve"" data-pagina=""-1"" ${tb.pagina <= 1 ? 'disabled' : ''}>← ${esc(T('anterior'))}</button><span class=""mono"">${tb.pagina} / ${paginas}</span><button class=""botao leve"" data-pagina=""1"" ${tb.pagina >= paginas ? 'disabled' : ''}>${esc(T('proxima'))} →</button></div></div>`;
+    return h;
+  }
+  function rs(r, c) {
+    const T = c.T, D = c.D;
+    c.conta('vagas', T('k_vagas'), T('x_vagas'), [[T('k_vagas'), r.abertas.length], ['> 60 ' + T('dias'), r.abertas.filter(v => v.dias > 60).length]]);
+    c.conta('contrat', T('k_contrat'), T('x_contrat'), [[T('k_contrat'), r.fechadas]]);
+    c.conta('ttf', T('k_ttf'), T('x_ttf'), [[T('k_contrat'), r.fechadas], [T('mediana'), (r.ttf == null ? '-' : c.num(r.ttf, Number.isInteger(r.ttf) ? 0 : 1)) + ' ' + T('dias')]]);
+    c.conta('aceite', T('k_aceite'), T('x_aceite'), [[T('numerador'), r.fechadas], [T('denominador'), r.ofertas], [T('resultado'), r.aceite == null ? '-' : c.pct(r.aceite, 0)]]);
+    let h = '<div class=""herois h4"">' +
+      heroi(c, { escuro: true, rotulo: T('k_vagas'), conta: 'vagas', drill: 'vagas-abertas', numero: c.num(r.abertas.length), sub: `${r.abertas.filter(v => v.prioridade === 'alta').length} ${T('pr_alta').toLowerCase()}` }) +
+      heroi(c, { rotulo: T('k_contrat'), conta: 'contrat', numero: c.num(r.fechadas), sub: T('no_periodo') }) +
+      heroi(c, { rotulo: T('k_ttf'), conta: 'ttf', numero: r.ttf == null ? '-' : `${c.num(r.ttf)} <small>${T('dias')}</small>`, sub: T('mediana') }) +
+      heroi(c, { rotulo: T('k_aceite'), conta: 'aceite', numero: r.aceite == null ? '-' : c.pct(r.aceite, 0), sub: `${r.fechadas} ${T('de')} ${r.ofertas}` }) + '</div>';
+    let out = secao('rs-geral', T('s_rs_geral'), esc(c.periodoNome()), h);
+    const etapas = r.funil.map(([k, v]) => ({ rotulo: T('funil_' + k), valor: v }));
+    out += secao('funil', T('s_funil'), `${r.vagasAtivas} ${T(r.vagasAtivas === 1 ? 'vaga_1' : 'vagas_n')}`, cartao('', G.funil(etapas, { locale: c.I.locale(), conversao: T('conversao') })));
+    const maxDias = Math.max(60, ...r.abertas.map(v => v.dias));
+    const colsV = [['id', 'c_vaga', 'texto', v => v.id], ['unidade', 'c_unidade', 'texto', v => c.I.nome(D.unidades[v.unidade])], ['dias', 'c_aberta_ha', 'num', v => v.dias],
+      ['etapa', 'c_etapa', 'num', v => ({ triagem: 1, entrevistas: 2, oferta: 3 }[v.etapaNaData])], ['prioridade', 'c_prioridade', 'num', v => (v.prioridade === 'alta' ? 2 : 1)],
+      ['insc', 'c_inscritos', 'num', v => v.inscritos]].map(([k, t, tipo, v]) => ({ k, t, tipo, v }));
+    const abertas = G.ordenar(r.abertas, colsV, c.estado.vagas);
+    let tb = `<div class=""cartao tabela-cartao""><div class=""tb-rolagem""><table class=""tabela""><thead><tr>` +
+      colsV.map(x => G.thOrdena(x, T(x.t), c.estado.vagas, 'data-ordem-vaga', x.k === 'insc' ? 'dir' : '')).join('') + '</tr></thead><tbody>';
+    tb += abertas.length ? abertas.map(v => `<tr><td><b class=""mono"">${v.id}</b> ${esc(c.I.nome(D.niveis[v.nivel]))} · ${esc(c.I.nome(D.areas[v.area]))}</td>` +
+      `<td>${esc(c.I.nome(D.unidades[v.unidade]))}</td>` +
+      `<td><div class=""dias""><span class=""dias-barra${v.dias > 60 ? ' bad' : ''}"" style=""width:${(v.dias / maxDias * 100).toFixed(0)}%""></span><span class=""mono"">${v.dias} ${T('dias')}</span></div></td>` +
+      `<td><span class=""chip neutro"">${esc(T('e_' + v.etapaNaData))}</span></td>` +
+      `<td><span class=""chip ${v.prioridade === 'alta' ? 'bad' : 'neutro'}"">${esc(T('pr_' + v.prioridade))}</span></td>` +
+      `<td class=""dir mono"">${v.inscritos}</td></tr>`).join('') : `<tr><td colspan=""6"" class=""vazio"">${esc(T('sem_linhas'))}</td></tr>`;
+    tb += '</tbody></table></div></div>';
+    out += secao('abertas', T('s_abertas'), esc(c.data(r.per.fim)), tb);
+    const ttf = Object.entries(r.ttfNivel).sort((a, b) => D.niveis[a[0]].ordem - D.niveis[b[0]].ordem)
+      .map(([k, v]) => ({ rotulo: c.I.nome(D.niveis[k]), valor: v.mediana, extra: v.n + ' ' + T(v.n === 1 ? 'vaga_1' : 'vagas_n') }));
+    out += secao('ttf', T('s_ttf'), T('mediana') + ' · ' + T('dias'), cartao('', G.listaBarras(ttf, { semPct: true, fmtValor: v => c.num(v, Number.isInteger(v) ? 0 : 1) + ' ' + T('dias') })));
+    return out;
+  }
+  return { geral, pessoas, rs };
+})();
+(function () {
+  'use strict';
+  const D = window.DADOS, I = window.I18N, T = I.T, M = window.METRICAS, G = window.GRAFICOS, P = window.PAGINAS, esc = G.esc;
+  const CHAVE = 'paoli-people-demo';
+  const DIA = 864e5;
+  function lerGuardado() { try { return JSON.parse(localStorage.getItem(CHAVE)) || {}; } catch (e) { return {}; } }
+  function guardar() { try { localStorage.setItem(CHAVE, JSON.stringify({ lang: estado.lang, tema: estado.tema })); } catch (e) { /* sem armazenamento: tudo bem */ } }
+  const q = new URLSearchParams(location.search), g = lerGuardado();
+  const escuroSistema = window.matchMedia && matchMedia('(prefers-color-scheme: dark)').matches;
+  const FILTROS_VAZIOS = { periodo: 'p12', unidade: '', area: '', vinculo: '', genero: '', nivel: '' };
+  const temAmbiente = () => !!P.ambiente && D.ficticio !== false;
+  const abasValidas = () => (temAmbiente() ? ['ambiente'] : []).concat(['geral', 'pessoas', 'rs']);
+  const estado = {
+    aba: abasValidas().includes(q.get('aba')) ? q.get('aba') : abasValidas()[0],   // sem ?aba= abre sempre na primeira (sem lembrar a última)
+    lang: q.get('lang') === 'en' || q.get('lang') === 'pt' ? q.get('lang') : (g.lang || 'en'),   // 1º acesso em inglês; a escolha da pessoa fica guardada
+    tema: q.get('tema') === 'escuro' || q.get('tema') === 'claro' ? q.get('tema') : (g.tema || (escuroSistema ? 'escuro' : 'claro')),
+    tipoSaida: 'pedido',
+    filtros: Object.assign({}, FILTROS_VAZIOS),
+    tabela: { busca: '', ordem: { col: '', passo: 0 }, pagina: 1 },
+    vagas: { col: '', passo: 0 }   // ordem da tabela de vagas abertas (vazia = a ordem declarada)
+  };
+  const embed = q.get('embed') === '1';
+  if (embed) document.body.classList.add('embed');
+  const raiz = document.getElementById('app');
+  let contas = {}, ultimo = null;
+  const ctx = {
+    T, I, D, estado,
+    conta(id, titulo, formula, partes, nota) { contas[id] = { titulo, formula, partes, nota }; },
+    num: (v, dec) => v == null ? '-' : Number(v).toLocaleString(I.locale(), { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }),
+    pct: (v, dec) => v == null ? '-' : (v * 100).toLocaleString(I.locale(), { minimumFractionDigits: dec == null ? 1 : dec, maximumFractionDigits: dec == null ? 1 : dec }) + '%',
+    data: d => d.toLocaleDateString(I.locale(), { day: '2-digit', month: '2-digit', year: 'numeric' }),
+    periodoNome: () => rotuloPeriodo(estado.filtros.periodo),
+    tipoNome: () => T('t_' + estado.tipoSaida)
+  };
+  const ICONE = '<svg viewBox=""0 0 40 40"" aria-hidden=""true""><rect x=""8"" y=""20"" width=""6"" height=""12"" rx=""2"" fill=""currentColor"" opacity="".55""/><rect x=""17"" y=""12"" width=""6"" height=""20"" rx=""2"" fill=""currentColor""/><rect x=""26"" y=""16"" width=""6"" height=""16"" rx=""2"" fill=""currentColor"" opacity="".8""/></svg>';
+  function rotuloPeriodo(k) {
+    const ref = D.dataRef;
+    if (k === 'pano') return T('pano', { a: ref.getFullYear(), m: ref.toLocaleDateString(I.locale(), { month: 'long' }) });
+    if (k === 'panoant') return T('panoant', { a: ref.getFullYear() - 1 });
+    if (k === 'ptudo') return T('ptudo', { n: D.meses.length });
+    return T('p12');
+  }
+  function opcoes(nome, cadastro, valor) {
+    return `<label class=""filtro""><span>${esc(T('f_' + nome))}</span><select data-filtro=""${nome}""><option value="""">${esc(T('todos'))}</option>` +
+      Object.keys(cadastro).map(k => `<option value=""${k}""${valor === k ? ' selected' : ''}>${esc(typeof cadastro[k] === 'string' ? cadastro[k] : I.nome(cadastro[k]))}</option>`).join('') + '</select></label>';
+  }
+  function cabecalho() {
+    const f = estado.filtros;
+    const algumFiltro = Object.keys(FILTROS_VAZIOS).some(k => f[k] !== FILTROS_VAZIOS[k]);
+    let h = `<header class=""topo""><div class=""marca""><span class=""icone"">${ICONE}</span><div><div class=""eyebrow"">${esc(T('eyebrow'))}</div>` +
+      `<h1>${esc(T('titulo_exec'))} <span class=""sec"">- ${esc(T('sub_exec'))}</span></h1>` +
+      `<div class=""empresa"">${esc(D.empresa)} · ${esc(T(D.ficticio === false ? 'fonte_real' : 'ficticio'))}</div></div></div>` +
+      `<div class=""acoes""><div class=""seg-botoes"" role=""group"" aria-label=""${esc(T('idioma'))}""><button data-lang=""pt"" class=""${estado.lang === 'pt' ? 'ativo' : ''}"">PT</button><button data-lang=""en"" class=""${estado.lang === 'en' ? 'ativo' : ''}"">EN</button></div>` +
+      `<button class=""botao leve"" data-tema>${estado.tema === 'escuro' ? '☀ ' + esc(T('tema_claro')) : '☾ ' + esc(T('tema_escuro'))}</button></div></header>`;
+    const abas = (temAmbiente() ? [['ambiente', 'aba_ambiente']] : []).concat([['geral', 'aba_geral'], ['pessoas', 'aba_pessoas'], ['rs', 'aba_rs']]);
+    h += `<div class=""linha-abas""><nav class=""abas"" role=""tablist"">` +
+      abas.map(([k, t]) => `<button role=""tab"" data-aba=""${k}"" class=""${estado.aba === k ? 'ativa' : ''}"" aria-selected=""${estado.aba === k}"">${esc(T(t))}</button>`).join('') +
+      `</nav><div class=""selo-data"" data-tip=""${esc(T('dica_data'))}""><i></i>${esc(T('numeros_de'))} <b class=""mono"">${ctx.data(M.periodo(f.periodo).fim)}</b></div></div>`;
+    if (estado.aba === 'ambiente') return h;
+    h += `<div class=""filtros""><label class=""filtro""><span>${esc(T('f_periodo'))}</span><select data-filtro=""periodo"">` +
+      ['p12', 'pano', 'panoant', 'ptudo'].map(k => `<option value=""${k}""${f.periodo === k ? ' selected' : ''}>${esc(rotuloPeriodo(k))}</option>`).join('') + '</select></label>' +
+      opcoes('unidade', D.unidades, f.unidade) + opcoes('area', D.areas, f.area) + opcoes('vinculo', D.vinculos, f.vinculo) +
+      opcoes('genero', { F: T('g_F'), M: T('g_M'), N: T('g_N') }, f.genero) + opcoes('nivel', D.niveis, f.nivel) +
+      `<button class=""botao limpar${algumFiltro ? ' ativo' : ''}"" data-limpar ${algumFiltro ? '' : 'disabled'}>✕ ${esc(T('limpar'))}</button></div>`;
+    return h;
+  }
+  function alertas(r) {
+    if (estado.aba === 'ambiente') return '';
+    const n = r.alertas.length;
+    const txt = a => a.tipo === 'turnover' ? T('al_turnover', { a: I.nome(D.areas[a.area]), v: ctx.pct(a.valor) })
+      : a.tipo === 'vagas' ? (a.n === 1 ? T('al_vagas_1') : T('al_vagas', { n: a.n })) : a.tipo === 'novatos' ? T('al_novatos', { v: ctx.pct(a.valor, 0) }) : (a.n === 1 ? T('al_prazo_1') : T('al_prazo', { n: a.n }));
+    if (!n) return `<div class=""alertas zero""><span>✓</span> ${esc(T('sem_alerta'))}</div>`;
+    return `<details class=""alertas""><summary><span class=""sino"">!</span> <b>${n}</b> ${esc(T(n === 1 ? 'alerta' : 'alertas'))}<span class=""seta"">▾</span></summary><ul>` +
+      r.alertas.map(a => `<li>${esc(txt(a))} <button class=""link"" data-ir=""${a.ir}"">${esc(T('ir'))} →</button></li>`).join('') + '</ul></details>';
+  }
+  function desenhar(foco) {
+    if (window.AMBIENTE) window.AMBIENTE.desmontar();
+    I.lang = estado.lang;
+    document.documentElement.lang = estado.lang === 'en' ? 'en' : 'pt-BR';
+    document.documentElement.dataset.theme = estado.tema === 'escuro' ? 'dark' : 'light';
+    document.title = `${T('titulo_exec')} - ${T('sub_exec')} · ${D.empresa}`;
+    contas = {};
+    const r = M.calcular(estado);
+    ultimo = r;
+    const pagina = P[estado.aba](r, ctx);
+    const portfolio = location.protocol === 'file:' ? '../FernandoTRecruiter.github.io/index.html' : 'https://fernandotrecruiter.github.io/';
+    const semLink = embed || window.MODO_POWERBI; // dentro do portfólio ou do Power BI não tem para onde voltar
+    raiz.innerHTML = cabecalho() + alertas(r) + `<div class=""corpo${estado.aba === 'ambiente' ? ' cheio' : ''}""><nav class=""trilho"" aria-label=""${esc(T('secoes'))}""></nav><main class=""pagina"">${pagina}</main></div>` +
+      `<footer class=""rodape""><span>${esc(T(D.ficticio === false ? 'fonte_real' : 'rodape'))}</span>${semLink ? '' : `<a href=""${portfolio}"">${esc(T('ver_portfolio'))} →</a>`}</footer>`;
+    montarTrilho();
+    if (estado.aba === 'ambiente' && window.AMBIENTE) window.AMBIENTE.montar(document.getElementById('ambiente-raiz'), ctx);
+    if (foco === 'busca') {
+      const b = raiz.querySelector('[data-busca]');
+      if (b) { b.focus(); b.setSelectionRange(b.value.length, b.value.length); }
+    }
+    if (gaveta.chave) desenharGaveta(); // a tabela aberta acompanha filtro, idioma e tema
+    guardar();
+    window.__demo = { estado, r, gaveta }; // para os testes automáticos lerem o que a tela mostrou
+  }
+  function montarTrilho() {
+    const trilho = raiz.querySelector('.trilho');
+    const secoes = [...raiz.querySelectorAll('.secao')];
+    trilho.innerHTML = secoes.map((s, i) => `<button data-secao=""${s.id}""><span class=""n"">${i + 1}</span>${esc(s.dataset.titulo)}</button>`).join('');
+    marcarTrilho();
+  }
+  function marcarTrilho() {
+    const secoes = [...raiz.querySelectorAll('.secao')];
+    if (!secoes.length) return;
+    const linha = innerHeight * 0.35;
+    let ativa = secoes[0];
+    secoes.forEach(s => { if (s.getBoundingClientRect().top <= linha) ativa = s; });
+    if (innerHeight + scrollY >= document.documentElement.scrollHeight - 4) ativa = secoes[secoes.length - 1];
+    raiz.querySelectorAll('.trilho button').forEach(b => b.classList.toggle('ativo', b.dataset.secao === ativa.id));
+  }
+  window.addEventListener('scroll', marcarTrilho, { passive: true });
+  window.addEventListener('resize', marcarTrilho);
+  const dica = document.createElement('div'); dica.className = 'dica'; document.body.appendChild(dica);
+  document.addEventListener('mousemove', e => {
+    const alvo = e.target.closest && e.target.closest('[data-tip]');
+    if (!alvo) { dica.classList.remove('visivel'); return; }
+    dica.textContent = alvo.dataset.tip;
+    dica.classList.add('visivel');
+    const x = Math.min(e.clientX + 14, innerWidth - dica.offsetWidth - 8), y = e.clientY + 18 + dica.offsetHeight > innerHeight ? e.clientY - dica.offsetHeight - 12 : e.clientY + 18;
+    dica.style.transform = `translate(${x}px, ${y}px)`;
+  });
+  const pop = document.createElement('div'); pop.className = 'conta-pop'; pop.hidden = true; document.body.appendChild(pop);
+  function abrirConta(id, botao) {
+    const c = contas[id]; if (!c) return;
+    pop.innerHTML = `<div class=""cp-cab""><span>${esc(T('x_titulo'))} · <b>${esc(c.titulo)}</b></span><button data-fechar aria-label=""${esc(T('x_fechar'))}"">✕</button></div>` +
+      `<div class=""cp-formula mono"">${esc(c.formula)}</div><div class=""cp-sub"">${esc(T('x_partes'))}</div>` +
+      `<table>${c.partes.map(([a, b]) => `<tr><td>${esc(a)}</td><td class=""mono"">${esc(typeof b === 'number' ? ctx.num(b) : b)}</td></tr>`).join('')}</table>` +
+      (c.nota ? `<div class=""cp-nota"">${esc(c.nota)}</div>` : '');
+    pop.hidden = false;
+    const r = botao.getBoundingClientRect();
+    const larg = Math.min(360, innerWidth - 24);
+    pop.style.width = larg + 'px';
+    pop.style.left = Math.max(12, Math.min(r.left, innerWidth - larg - 12)) + 'px';
+    pop.style.top = (r.bottom + 8 + pop.offsetHeight > innerHeight ? Math.max(12, r.top - pop.offsetHeight - 8) : r.bottom + 8) + 'px';
+  }
+  const fecharConta = () => { pop.hidden = true; };
+  window.addEventListener('scroll', fecharConta, { passive: true });
+  const gaveta = { chave: null, busca: '', ordem: { col: '', passo: 0 } };
+  const fundoG = document.createElement('div'); fundoG.className = 'gaveta-fundo'; fundoG.hidden = true; document.body.appendChild(fundoG);
+  const elG = document.createElement('aside'); elG.className = 'gaveta'; elG.hidden = true;
+  elG.setAttribute('role', 'dialog'); elG.setAttribute('aria-modal', 'true'); elG.setAttribute('aria-labelledby', 'g-tit');
+  document.body.appendChild(elG);
+  const mesDe = d => d && (d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0'));
+  const anos = (a, b) => (b - a) / (365.25 * DIA);
+  const faixaDe = (p, ref) => { const i = anos(p.nascimento, ref); return i < 25 ? '<25' : i < 35 ? '25-34' : i < 45 ? '35-44' : i < 55 ? '45-54' : '55+'; };
+  const bandaDe = p => { const a = anos(p.admissao, p.desligamento); return a < 1 ? '<1' : a < 2 ? '1-2' : a < 5 ? '2-5' : '5+'; };
+  function nomeMes(iso) { const [a, m] = iso.split('-').map(Number); return new Date(a, m - 1, 1).toLocaleDateString(I.locale(), { month: 'long', year: 'numeric' }); }
+  function resolver(chave, r) {
+    const [tipo, a, b] = chave.split(':');
+    const nomeCad = (cad, k) => (cad[k] ? I.nome(cad[k]) : k);
+    const ativos = r.ativosFim;
+    const porCampo = { area: [D.areas, 'c_area'], unidade: [D.unidades, 'c_unidade'], nivel: [D.niveis, 'c_nivel'], vinculo: [D.vinculos, 'c_vinculo'], raca: [D.racas, 'raca'] };
+    if (tipo === 'todos') return { titulo: T('d_quadro', { d: ctx.data(r.per.fim) }), modelo: 'pessoas', lista: ativos };
+    if (tipo === 'entradas') return { titulo: T('d_entradas'), modelo: 'pessoas', lista: r.entradas };
+    if (tipo === 'saidas' && !a) return { titulo: T('d_saidas'), modelo: 'saidas', lista: r.saidas };
+    if (tipo === 'saidas-tipo') return { titulo: `${T('d_tipo')} (${ctx.tipoNome().toLowerCase()})`, modelo: 'saidas', lista: r.saidasTipo };
+    if (tipo === 'saidas-area') return { titulo: `${T('d_saidas')} · ${nomeCad(D.areas, a)}`, modelo: 'saidas', lista: r.saidas.filter(p => p.area === a && r.TIPOS.todos.includes(p.motivo)) };
+    if (porCampo[tipo]) return { titulo: `${T(porCampo[tipo][1])}: ${nomeCad(porCampo[tipo][0], a)}`, modelo: 'pessoas', lista: ativos.filter(p => p[tipo] === a) };
+    if (tipo === 'genero') return { titulo: `${T('f_genero')}: ${T('g_' + a)}`, modelo: 'pessoas', lista: ativos.filter(p => p.genero === a) };
+    if (tipo === 'lider') return { titulo: `${T('d_lider')} · ${T('g_' + a)}`, modelo: 'pessoas', lista: ativos.filter(p => D.niveis[p.nivel].lider && p.genero === a) };
+    if (tipo === 'gn') return { titulo: `${nomeCad(D.niveis, a)} · ${T('g_' + b)}`, modelo: 'pessoas', lista: ativos.filter(p => p.nivel === a && p.genero === b) };
+    if (tipo === 'faixa') return { titulo: `${T('faixa_idade')}: ${a} ${T('anos')}`, modelo: 'pessoas', lista: ativos.filter(p => faixaDe(p, r.per.fim) === a) };
+    if (tipo === 'ppi') return { titulo: T('k_ppi'), modelo: 'pessoas', lista: ativos.filter(p => ['preta', 'parda', 'indigena'].includes(p.raca)) };
+    if (tipo === 'motivo') return { titulo: `${T('c_motivo')}: ${nomeCad(D.motivos, a)}`, modelo: 'saidas', lista: r.saidas.filter(p => p.motivo === a) };
+    if (tipo === 'banda') return { titulo: `${T('casa_saida')}: ${a} ${a === '<1' ? T('ano') : T('anos')}`, modelo: 'saidas', lista: r.saidasTipo.filter(p => bandaDe(p) === a) };
+    if (tipo === 'mes') return { titulo: T('d_mes', { m: nomeMes(a) }), modelo: 'mov', lista: r.P.filter(p => mesDe(p.admissao) === a || mesDe(p.desligamento) === a) , mes: a };
+    if (tipo === 'saidas') return { titulo: T('d_saidas_mes', { m: nomeMes(a), t: ctx.tipoNome().toLowerCase() }), modelo: 'saidas', lista: r.P.filter(p => mesDe(p.desligamento) === a && r.TIPOS[r.tipo].includes(p.motivo)) };
+    if (tipo === 'novatos') return { titulo: T('d_novatos'), modelo: 'novatos', lista: r.novatosLista };
+    if (tipo === 'vagas-abertas') return { titulo: T('s_abertas'), modelo: 'vagas', lista: r.abertas };
+    return { titulo: chave, modelo: 'pessoas', lista: [] };
+  }
+  function colunas(modelo, ref, mes) {
+    const nome = ['nome', T('c_nome'), p => p.nome, p => `<span class=""avatar-mini"">${esc(p.nome.split(' ').map(x => x[0]).slice(0, 2).join(''))}</span>${esc(p.nome)}`, 'texto'];
+    const area = ['area', T('c_area'), p => I.nome(D.areas[p.area]), p => esc(I.nome(D.areas[p.area])), 'texto'];
+    const nivel = ['nivel', T('c_nivel'), p => D.niveis[p.nivel].ordem, p => esc(I.nome(D.niveis[p.nivel])), 'num'];
+    const vinc = ['vinculo', T('c_vinculo'), p => I.nome(D.vinculos[p.vinculo]), p => esc(I.nome(D.vinculos[p.vinculo])), 'texto'];
+    const unid = ['unidade', T('c_unidade'), p => I.nome(D.unidades[p.unidade]), p => esc(I.nome(D.unidades[p.unidade])), 'texto'];
+    const adm = ['admissao', T('c_admissao'), p => +p.admissao, p => `<span class=""mono"">${ctx.data(p.admissao)}</span>`, 'data'];
+    const casa = ['casa', T('c_casa'), p => anos(p.admissao, p.desligamento && p.desligamento <= ref ? p.desligamento : ref), p => `<span class=""mono"">${ctx.num(anos(p.admissao, p.desligamento && p.desligamento <= ref ? p.desligamento : ref), 1)} ${T('anos')}</span>`, 'num'];
+    const saida = ['saida', T('c_saida'), p => p.desligamento, p => `<span class=""mono"">${ctx.data(p.desligamento)}</span>`, 'data'];
+    const motivo = ['motivo', T('c_motivo'), p => (p.motivo ? I.nome(D.motivos[p.motivo]) : ''), p => p.motivo ? esc(I.nome(D.motivos[p.motivo])) : '', 'texto'];
+    if (modelo === 'saidas') return [nome, area, nivel, adm, saida, motivo, casa];
+    if (modelo === 'mov') {
+      const entrou = p => mesDe(p.admissao) === mes;
+      return [nome, ['mov', T('c_movimento'), p => T(entrou(p) ? 'mov_entrou' : 'mov_saiu'), p => entrou(p) ? `<span class=""chip ok"">${esc(T('mov_entrou'))}</span>` : `<span class=""chip bad"">${esc(T('mov_saiu'))}</span>`, 'texto'],
+        ['data', T('c_admissao') + ' / ' + T('c_saida'), p => (entrou(p) ? p.admissao : p.desligamento), p => `<span class=""mono"">${ctx.data(entrou(p) ? p.admissao : p.desligamento)}</span>`, 'data'], area, nivel, motivo];
+    }
+    if (modelo === 'novatos') {
+      const ficou = p => !p.desligamento || (p.desligamento - p.admissao) >= 365 * DIA;
+      return [nome, area, nivel, adm, ['sit', T('c_etapa'), p => T(ficou(p) ? 'ficou' : 'nao_ficou'), p => ficou(p) ? `<span class=""chip ok"">${esc(T('ficou'))}</s"
+VAR _d4 = "pan>` : `<span class=""chip bad"">${esc(T('nao_ficou'))}</span>`, 'texto']];
+    }
+    if (modelo === 'vagas') return [
+      ['id', T('c_vaga'), v => v.id, v => `<b class=""mono"">${v.id}</b> ${esc(I.nome(D.niveis[v.nivel]))} · ${esc(I.nome(D.areas[v.area]))}`, 'texto'],
+      ['unidade', T('c_unidade'), v => I.nome(D.unidades[v.unidade]), v => esc(I.nome(D.unidades[v.unidade])), 'texto'],
+      ['dias', T('c_aberta_ha'), v => v.dias, v => `<span class=""mono"">${v.dias} ${T('dias')}</span>`, 'num'],
+      ['etapa', T('c_etapa'), v => ({ triagem: 1, entrevistas: 2, oferta: 3 }[v.etapaNaData]), v => `<span class=""chip neutro"">${esc(T('e_' + v.etapaNaData))}</span>`, 'num'],
+      ['insc', T('c_inscritos'), v => v.inscritos, v => `<span class=""mono"">${v.inscritos}</span>`, 'num']];
+    return [nome, area, nivel, vinc, unid, adm, casa];
+  }
+  function desenharGaveta() {
+    const r = ultimo, res = resolver(gaveta.chave, r), cols = colunas(res.modelo, r.per.fim, res.mes);
+    const busca = gaveta.busca.trim().toLowerCase();
+    let lista = res.lista.filter(x => !busca || (x.nome || x.id || '').toLowerCase().includes(busca));
+    const colsO = cols.map(c => ({ k: c[0], tipo: c[4], v: c[2] }));
+    lista = G.ordenar(G.ordenar(lista, colsO, { col: colsO[0].k, passo: 1 }), colsO, gaveta.ordem);
+    gaveta.ultima = { res, cols, lista };
+    elG.innerHTML = `<header class=""g-cab""><div><div class=""eyebrow"">${esc(T('g_titulo'))}</div><h2 id=""g-tit"">${esc(res.titulo)} <span class=""chip neutro"">${res.lista.length}</span></h2></div>` +
+      `<button class=""g-x"" data-g-fechar aria-label=""${esc(T('g_fechar'))}"">✕</button></header>` +
+      `<div class=""g-barra""><input class=""busca"" type=""search"" data-g-busca value=""${esc(gaveta.busca)}"" placeholder=""${esc(T('g_buscar'))}"" aria-label=""${esc(T('g_buscar'))}""><button class=""botao leve"" data-g-csv>⭳ ${esc(T('g_baixar'))}</button></div>` +
+      `<div class=""g-rolagem""><table class=""tabela""><thead><tr>${colsO.map((c, i) => G.thOrdena(c, cols[i][1], gaveta.ordem, 'data-g-ordem')).join('')}</tr></thead><tbody>` +
+      (lista.length ? lista.map(x => `<tr>${cols.map(c => `<td>${c[3](x)}</td>`).join('')}</tr>`).join('') : `<tr><td colspan=""${cols.length}"" class=""vazio"">${esc(T('sem_linhas'))}</td></tr>`) +
+      `</tbody></table></div><footer class=""g-pe"">${esc(T(D.ficticio === false ? 'fonte_real' : 'ficticio'))}</footer>`;
+  }
+  function abrirGaveta(chave) {
+    gaveta.chave = chave; gaveta.busca = ''; gaveta.ordem = { col: '', passo: 0 };
+    desenharGaveta();
+    fundoG.hidden = false; elG.hidden = false;
+    document.body.classList.add('com-gaveta');
+    const x = elG.querySelector('[data-g-fechar]'); if (x) x.focus();
+  }
+  function fecharGaveta() {
+    if (!gaveta.chave) return;
+    gaveta.chave = null; elG.hidden = true; fundoG.hidden = true;
+    document.body.classList.remove('com-gaveta');
+  }
+  function baixarCsv() {
+    const u = gaveta.ultima; if (!u) return;
+    const limpa = h => String(h).replace(/<[^>]+>/g, '').replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '""').replace(/&#39;/g, ""'"").trim();
+    const linhas = [u.cols.map(c => c[1])].concat(u.lista.map(x => u.cols.map(c => limpa(c[3](x)))));
+    const csv = '﻿' + linhas.map(l => l.map(v => /[;""\n]/.test(v) ? '""' + v.replace(/""/g, '""""') + '""' : v).join(';')).join('\r\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = 'dashboard-' + gaveta.chave.replace(/[^a-z0-9-]+/gi, '_') + '.csv';
+    document.body.appendChild(a); a.click(); setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+  }
+  fundoG.addEventListener('click', fecharGaveta);
+  elG.addEventListener('input', e => { if (e.target.matches('[data-g-busca]')) { gaveta.busca = e.target.value; desenharGaveta(); const b = elG.querySelector('[data-g-busca]'); b.focus(); b.setSelectionRange(b.value.length, b.value.length); } });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { fecharConta(); fecharGaveta(); }
+    const linha = e.target.closest && e.target.closest('.lb-linha[data-drill]');
+    if (linha && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); abrirGaveta(linha.dataset.drill); }
+  });
+  document.addEventListener('click', e => {
+    if (e.target.closest('.gaveta')) {
+      const g = e.target.closest('[data-g-fechar], [data-g-ordem], [data-g-csv]');
+      if (!g) return;
+      if (g.hasAttribute('data-g-fechar')) return fecharGaveta();
+      if (g.hasAttribute('data-g-csv')) return baixarCsv();
+      if (g.dataset.gOrdem) { gaveta.ordem = G.proximaOrdem(gaveta.ordem, g.dataset.gOrdem); desenharGaveta(); }
+      return;
+    }
+    const b = e.target.closest('button, [data-ir], [data-drill]');
+    if (!b) { if (!e.target.closest('.conta-pop')) fecharConta(); return; }
+    if (b.hasAttribute('data-fechar')) return fecharConta();
+    if (b.dataset.conta) { e.stopPropagation(); return abrirConta(b.dataset.conta, b); }
+    fecharConta();
+    if (b.dataset.drill) return abrirGaveta(b.dataset.drill);
+    if (b.dataset.aba) { estado.aba = b.dataset.aba; desenhar(); window.scrollTo({ top: 0 }); return; }
+    if (b.dataset.lang) { estado.lang = b.dataset.lang; desenhar(); return; }
+    if (b.hasAttribute('data-tema')) { estado.tema = estado.tema === 'escuro' ? 'claro' : 'escuro'; desenhar(); return; }
+    if (b.hasAttribute('data-limpar')) { estado.filtros = Object.assign({}, FILTROS_VAZIOS); desenhar(); return; }
+    if (b.dataset.tipo) { estado.tipoSaida = b.dataset.tipo; desenhar(); return; }
+    if (b.dataset.ordem) { estado.tabela.ordem = G.proximaOrdem(estado.tabela.ordem, b.dataset.ordem); estado.tabela.pagina = 1; desenhar(); return; }
+    if (b.dataset.ordemVaga) { estado.vagas = G.proximaOrdem(estado.vagas, b.dataset.ordemVaga); desenhar(); return; }
+    if (b.dataset.pagina) { estado.tabela.pagina += Number(b.dataset.pagina); desenhar(); return; }
+    if (b.dataset.secao) { document.getElementById(b.dataset.secao).scrollIntoView({ behavior: 'smooth', block: 'start' }); return; }
+    if (b.dataset.ir) {
+      const destino = { turnover: 'pessoas', quadro: 'pessoas', abertas: 'rs' }[b.dataset.ir];
+      estado.aba = destino; desenhar();
+      const alvo = document.getElementById('s-' + b.dataset.ir);
+      if (alvo) alvo.scrollIntoView({ block: 'start' });
+    }
+  });
+  document.addEventListener('change', e => {
+    const s = e.target.closest('[data-filtro]');
+    if (s) { estado.filtros[s.dataset.filtro] = s.value; estado.tabela.pagina = 1; desenhar(); }
+  });
+  document.addEventListener('input', e => {
+    if (e.target.matches('[data-busca]')) { estado.tabela.busca = e.target.value; estado.tabela.pagina = 1; desenhar('busca'); }
+  });
+  window.addEventListener('message', e => {
+    const m = e.data;
+    if (!m || m.paoliDemo !== true) return;
+    let mudou = false;
+    if (m.lang === 'pt' || m.lang === 'en') { estado.lang = m.lang; mudou = true; }
+    if (m.tema === 'claro' || m.tema === 'escuro') { estado.tema = m.tema; mudou = true; }
+    if (abasValidas().includes(m.aba)) { estado.aba = m.aba; mudou = true; }
+    if (mudou) desenhar();
+  });
+  if (embed && window.parent !== window && 'ResizeObserver' in window) {
+    let ultima = 0;
+    new ResizeObserver(() => {
+      const h = Math.ceil(document.documentElement.scrollHeight);
+      if (Math.abs(h - ultima) > 2) { ultima = h; window.parent.postMessage({ paoliAltura: h }, '*'); }
+    }).observe(document.body);
+  }
+  desenhar();
+})();</script></body></html>"
+
+RETURN
+    _a1 &
+    "<script>window.DADOS_BRUTOS = {""empresa"":""" & _empresa & """,""dataRef"":""" & _dataRef & """,""pessoas"":" & _pessoas & ",""vagas"":" & _vagas & "};</script>" &
+    _d1 & _d2 & _d3 & _d4

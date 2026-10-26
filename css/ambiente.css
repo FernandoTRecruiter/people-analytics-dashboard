@@ -1,0 +1,367 @@
+/* =============================================================================
+   ambiente.css: a aba "Meu ambiente". Usa as variáveis do app.css (tema claro e
+   escuro vêm de graça) e cria só as suas, com o prefixo --amb-.
+   Cores: cinzas do tema no chão e nas paredes; móveis e máquinas com cor própria, calma;
+   pessoas com a camisa da cor da ÁREA (a mesma bolinha da tabela). A cor de destaque
+   (--acc) marca só o que está selecionado ou aceso; verde, âmbar e vermelho, só estoque.
+   ============================================================================= */
+.amb {
+  container-type: inline-size; container-name: amb;
+  --amb-piso: var(--sup);
+  --amb-piso2: color-mix(in srgb, var(--tx) 5%, var(--sup2));
+  --amb-piso3: color-mix(in srgb, var(--tx) 2.5%, var(--sup));
+  --amb-patio: color-mix(in srgb, var(--tx) 11%, var(--sup2)); --amb-externo: color-mix(in srgb, #7FA36B 16%, var(--sup2));
+  --amb-t: color-mix(in srgb, var(--tx) 5%, var(--sup));
+  --amb-e: color-mix(in srgb, var(--tx) 12%, var(--sup));
+  --amb-d: color-mix(in srgb, var(--tx) 20%, var(--sup));
+  --amb-aresta: color-mix(in srgb, var(--tx) 22%, var(--sup));
+  --amb-calca: #3A3D4A;
+  /* camisa por área */
+  --amb-a-ops: #4E79A7; --amb-a-man: #A0704F; --amb-a-log: #3E8E8A; --amb-a-tec: #5B9BD5; --amb-a-com: #B5838D;
+  --amb-a-fin: #6D6875; --amb-a-pes: #D4789C; --amb-a-jur: #8E9AAF; --amb-a-dir: #3D405B;
+  /* móveis, máquinas, caminhões */
+  --amb-m-mesa: #E7DCC9; --amb-m-monitor: #3A3F4C; --amb-m-prat: #C3CBD6; --amb-m-rack: #7E9CC4; --amb-m-carga: #D2B48C;
+  --amb-m-maquina: #6E9E9B; --amb-m-esteira: #454B57; --amb-m-bancada: #B39B7D; --amb-m-armario: #9DB0A8; --amb-m-palete: #C9A979;
+  --amb-m-empilhadeira: #5E6B7D; --amb-m-impressora: #D9DDE3; --amb-m-cafe: #7A5A48;
+  --amb-m-pe: #8C8578; --amb-tela: #26344A; --amb-piso-esc: color-mix(in srgb, #D9C3A0 16%, var(--sup)); --amb-m-carreta: #E4E7EC; --amb-m-cabine: #B4574B; --amb-m-escada: #CDC5B8; --amb-m-cadeira: #4A505E;
+}
+/* No escuro a luz continua vindo de cima: o topo é a face mais clara; as cores ficam mais fechadas. */
+:root[data-theme="dark"] .amb {
+  --amb-piso: color-mix(in srgb, var(--tx) 3%, var(--sup));
+  --amb-piso2: color-mix(in srgb, var(--tx) 7%, var(--sup));
+  --amb-piso3: color-mix(in srgb, var(--tx) 5%, var(--sup));
+  --amb-patio: color-mix(in srgb, var(--tx) 10%, var(--sup)); --amb-externo: color-mix(in srgb, #6E8F5C 14%, var(--sup));
+  --amb-t: color-mix(in srgb, var(--tx) 24%, var(--sup));
+  --amb-e: color-mix(in srgb, var(--tx) 14%, var(--sup));
+  --amb-d: color-mix(in srgb, var(--tx) 9%, var(--sup));
+  --amb-aresta: color-mix(in srgb, var(--tx) 34%, var(--sup));
+  --amb-calca: #555A6B;
+  --amb-a-dir: #8D93C0; --amb-a-fin: #A39FB0; --amb-a-ops: #6E98C6;
+  --amb-m-mesa: #6E6455; --amb-m-monitor: #1C1F26; --amb-m-prat: #6B7380; --amb-m-rack: #4E6A90; --amb-m-carga: #8C7354;
+  --amb-m-maquina: #4D7472; --amb-m-esteira: #2A2E37; --amb-m-bancada: #74644F; --amb-m-armario: #5B6B65; --amb-m-palete: #85704F;
+  --amb-m-empilhadeira: #66738A; --amb-m-impressora: #7C818A; --amb-m-cafe: #5A4236;
+  --amb-m-pe: #5E584F; --amb-tela: #1A2433; --amb-piso-esc: color-mix(in srgb, #C8A97E 9%, var(--sup)); --amb-m-carreta: #7E848F; --amb-m-cabine: #8E4A42; --amb-m-escada: #6F685D; --amb-m-cadeira: #2C3039;
+}
+/* "hidden" perde para qualquer display:flex/grid de autor: esta regra garante que esconde. */
+.amb [hidden] { display: none !important; }
+.amb-cab { margin-bottom: 14px; }
+
+/* ---------- topo: unidades à esquerda; agora (hora e contagem) e Histórico à direita ---------- */
+.amb-topo { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px 16px; }
+.amb-unidades { display: flex; flex-wrap: wrap; gap: 8px; }
+.amb-un { display: inline-flex; align-items: center; gap: 4px; padding: 7px 14px; font-size: 13px; }
+.amb-status { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; font-size: 13px; color: var(--tx2); }
+.amb-hora { font-size: 15px; color: var(--tx); }
+.amb-agora b { font-size: 15px; font-weight: 600; color: var(--tx); }
+.amb-de { color: var(--tx3); }
+.amb-vivo-ponto { width: 8px; height: 8px; border-radius: 50%; background: var(--borda2); }
+.amb-vivo-ponto.on { background: var(--acc); box-shadow: 0 0 0 3px var(--acc-suave); animation: amb-pisca 1.8s ease-in-out infinite; }
+@keyframes amb-pisca { 50% { opacity: .35; } }
+.amb-bt-hist.ativo { border-color: var(--acc); background: var(--acc-suave); color: var(--acc); }
+.amb-fora { margin: 8px 0 0; font-size: 12px; color: var(--tx3); }
+.amb-convite { margin: 16px 0 0; padding: 26px 20px; border: 1px dashed var(--borda2); border-radius: var(--raio); background: var(--sup); color: var(--tx2); text-align: center; font-size: 14px; }
+
+/* ---------- histórico do dia (abre embaixo do topo) ---------- */
+.amb-hist { margin-top: 12px; padding: 12px 14px; display: grid; gap: 10px; }
+.amb-hist-cab { display: flex; align-items: center; gap: 10px; }
+.amb-hist-cab b { font-size: 14px; }
+.amb-hist-hora { color: var(--tx3); font-size: 12px; }
+.amb-hist-cab .amb-x { margin-left: auto; font-size: 14px; }
+.amb-hist-nums { display: flex; flex-wrap: wrap; gap: 6px 28px; }
+.amb-hist-num { display: flex; align-items: baseline; gap: 6px; font-size: 12.5px; color: var(--tx2); }
+.amb-hist-num b { font-size: 22px; font-weight: 500; line-height: 1.1; color: var(--tx); }
+.amb-receb-tit { font-size: 12px; font-weight: 600; color: var(--tx2); }
+.amb-receb ul { list-style: none; margin: 6px 0 0; padding: 0; display: grid; gap: 4px; }
+.amb-receb li { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--tx2); }
+.amb-receb li span { flex: 1; min-width: 0; }
+.amb-receb li b { color: var(--tx); font-weight: 500; }
+.amb-receb li small { color: var(--tx3); font-size: 11.5px; white-space: nowrap; }
+.amb-receb li[data-st="atraso"] small { color: var(--warn); }
+.amb-hist-rolagem { max-height: 300px; overflow: auto; border-top: 1px solid var(--borda); }
+.amb-hist-tab { font-size: 12px; }
+.amb-hist-tab th button, .amb-hist-tab th:not(:has(button)), .amb-hist-tab td { padding: 6px 8px; }
+.amb-ev { display: inline-flex; align-items: center; gap: 6px; }
+.amb-ev::before { content: ""; width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--tx3); }
+.amb-ev-entrada::before { background: var(--ok); }
+.amb-ev-receb::before { background: var(--acc); }
+.amb-ev-det { color: var(--tx2); }
+
+/* ---------- corpo: lista (recolhível) | mapa na largura toda ---------- */
+.amb-corpo { margin-top: 14px; display: grid; grid-template-columns: minmax(0, 1fr); gap: 14px; align-items: start; }
+.amb-centro { min-width: 0; display: grid; gap: 12px; }
+
+/* ---------- barra do mapa: vista, andar, câmera, camadas e filtros ---------- */
+.amb-barra { display: grid; gap: 8px; }
+.amb-barra-l1, .amb-barra-l2 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.amb-barra-l2 { align-items: flex-end; }
+.amb-ic { display: inline-grid; place-items: center; padding: 6px 9px; }
+.amb-ic svg, .amb-cam-bt svg { width: 16px; height: 16px; display: block; }
+.amb-bt-lista.ativo { border-color: var(--acc); background: var(--acc-suave); color: var(--acc); }
+.amb-filtros { display: inline-flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.amb-sel { height: 34px; max-width: 200px; padding: 0 10px; border: 1px solid var(--borda2); border-radius: 999px; background: var(--sup); color: var(--tx); font-size: 12.5px; }
+/* Camadas num menu: o botão abre uma caixinha com as 4 opções, por cima do mapa. */
+.amb-menu { position: relative; margin-left: auto; }
+.amb-menu summary { list-style: none; cursor: pointer; }
+.amb-menu summary::-webkit-details-marker { display: none; }
+.amb-menu[open] summary { border-color: var(--acc); color: var(--acc); }
+.amb-menu-pop { position: absolute; right: 0; top: calc(100% + 6px); z-index: 6; display: grid; gap: 6px; min-width: 170px; padding: 10px; border: 1px solid var(--borda2); border-radius: 12px; background: var(--sup); box-shadow: 0 12px 30px rgba(0, 0, 0, .14); }
+.amb-camada { padding: 5px 11px; font-size: 12px; }
+.amb-q-dica { cursor: help; }   /* a dica de uso vira um "?" com balão */
+
+/* ---------- mapa ---------- */
+.amb-mapa { position: relative; min-width: 0; overflow: clip; background: var(--sup); border: 1px solid var(--borda); border-radius: var(--raio); box-shadow: var(--sombra); container-type: inline-size; container-name: ambmapa; }
+/* Arrastar o mapa não seleciona texto (o JS também barra o começo da seleção dentro dele). */
+.amb-quadro { height: clamp(560px, calc(100vh - 110px), 980px); cursor: grab; touch-action: none; -webkit-user-select: none; user-select: none; }
+.amb-quadro:active { cursor: grabbing; }
+/* Dentro do portfólio (iframe) a altura é fixa: o portfólio ajusta a janela ao conteúdo, e 100vh faria os dois crescerem sem parar. */
+body.embed .amb-quadro { height: 620px; }
+.amb-cam, .amb-minimapa { -webkit-user-select: none; user-select: none; }
+.amb-svg { display: block; width: 100%; height: 100%; }
+.amb-svg text { pointer-events: none; }
+.amb-cam { position: absolute; right: 10px; bottom: 10px; display: flex; gap: 4px; }
+.amb-cam-bt { width: 32px; height: 32px; display: grid; place-items: center; padding: 0; border: 1px solid var(--borda2); border-radius: 9px; background: var(--sup); color: var(--tx2); box-shadow: var(--sombra); }
+.amb-cam-bt:hover { border-color: var(--acc); color: var(--acc); }
+.amb-minimapa { position: absolute; left: 10px; bottom: 10px; width: 150px; height: 104px; padding: 4px; border: 1px solid var(--borda); border-radius: 10px; background: var(--sup); box-shadow: var(--sombra); cursor: pointer; }
+.amb-mini { display: block; width: 100%; height: 100%; }
+.amb-mini .amb-piso { stroke: none; }
+.amb-mini-movel { fill: var(--borda2); }
+.amb-mini-prat { fill: var(--tx3); }
+.amb-mini-parede { stroke: var(--tx3); stroke-width: 0.18; }
+.amb-mini-vista { fill: var(--acc-suave); stroke: var(--acc); stroke-width: 0.3; }
+
+/* ---------- andares (Matriz): o andar em foco inteiro, o outro transparente ---------- */
+.amb-andar { transition: opacity .4s ease; }
+.amb-quadro[data-andar-foco="1"] .amb-andar[data-andar="2"] { opacity: .13; pointer-events: none; }
+.amb-quadro[data-andar-foco="2"] .amb-andar[data-andar="1"] { opacity: .2; pointer-events: none; }
+.amb-quadro[data-andar-foco="1"] .amb-andar[data-andar="2"] .amb-rotulos,
+.amb-quadro[data-andar-foco="2"] .amb-andar[data-andar="1"] :is(.amb-rotulos, .amb-marca) { visibility: hidden; }
+/* Na planta (de cima) os andares caem um em cima do outro: o 2º só aparece com ele em foco. */
+.amb-quadro[data-andar-foco="1"] .amb-modo-planta .amb-andar[data-andar="2"] { opacity: 0; }
+
+/* ---------- desenho: chão, paredes, móveis ---------- */
+.amb-piso { fill: var(--amb-piso); stroke: var(--borda); stroke-width: .8; }
+.amb-piso-galpao, .amb-piso-storage, .amb-piso-producao, .amb-piso-manutencao, .amb-piso-almox { fill: var(--amb-piso2); }
+.amb-piso-salas, .amb-piso-wc, .amb-piso-copa, .amb-piso-vestiario, .amb-piso-lobby, .amb-piso-corredor, .amb-piso-reuniao { fill: var(--amb-piso3); }
+.amb-piso-admin, .amb-piso-escritorio, .amb-piso-escr { fill: var(--amb-piso-esc); }
+.amb-grade { fill: none; stroke: var(--borda); stroke-width: .5; opacity: .7; pointer-events: none; }
+.amb-piso-patio[data-amb-patio], .amb-caminhao { cursor: pointer; }
+.amb-cadeira, .amb-pe-mesa { pointer-events: none; }
+/* Detalhes sem função (vaso, quadro, extintor, cone, árvore, poste, pintura no chão): só enfeitam. */
+.amb-deco { pointer-events: none; }
+.amb-cx.amb-deco .amb-t { fill: var(--amb-c); stroke: none; }
+.amb-cx.amb-deco .amb-e { fill: color-mix(in srgb, var(--amb-c) 84%, #000); }
+.amb-cx.amb-deco .amb-d { fill: color-mix(in srgb, var(--amb-c) 70%, #000); }
+.amb-vaso { --amb-c: #B98B6B; } .amb-planta, .amb-copa-arvore { --amb-c: #6E9F63; } .amb-tronco { --amb-c: #7A5A44; }
+.amb-quadro { --amb-c: #8FA8C7; } .amb-bebedouro { --amb-c: #D7E3EC; } .amb-extintor { --amb-c: #C8473D; } .amb-cone { --amb-c: #E58A3A; }
+.amb-poste { --amb-c: #8A9099; } .amb-lampada { --amb-c: #F3E2A0; }
+.amb-pintura { --amb-c: #FBFBF7; } .amb-pintura .amb-e, .amb-pintura .amb-d { display: none; }
+:root[data-theme="dark"] .amb-pintura { --amb-c: #B9BCC4; }
+/* Caminhão: baú, chassi, rodas, cabine, vidros, para-choque, faróis. Clicar abre a Expedição. */
+.amb-tpeca { cursor: pointer; }
+.amb-tpeca :is(.amb-chassi, .amb-roda, .amb-vidro, .amb-parachoque, .amb-farol) .amb-t { fill: var(--amb-c); stroke: none; }
+.amb-tpeca :is(.amb-chassi, .amb-roda, .amb-vidro, .amb-parachoque, .amb-farol) .amb-e { fill: color-mix(in srgb, var(--amb-c) 84%, #000); }
+.amb-tpeca :is(.amb-chassi, .amb-roda, .amb-vidro, .amb-parachoque, .amb-farol) .amb-d { fill: color-mix(in srgb, var(--amb-c) 70%, #000); }
+.amb-chassi { --amb-c: #3E434D; } .amb-roda { --amb-c: #26282D; } .amb-vidro { --amb-c: #9EC3D9; } .amb-parachoque { --amb-c: #9AA0A8; } .amb-farol { --amb-c: #F4E3A1; }
+.amb-tpeca.hover :is(.amb-t, .amb-e, .amb-d) { stroke: var(--acc); stroke-width: .9; }          /* mouse em cima: contorno */
+.amb-tpeca.sel :is(.amb-t, .amb-e, .amb-d) { stroke: var(--acc); stroke-width: 1.6; }           /* selecionado: contorno forte */
+/* O balão do caminhão: fica em cima dele (ele para enquanto o mouse está ali, então o balão não pisca). */
+.amb-balao { position: absolute; z-index: 7; transform: translate(-50%, -100%); max-width: 260px; padding: 6px 9px; border: 1px solid var(--borda2);
+  border-radius: 9px; background: var(--sup); box-shadow: 0 8px 22px rgba(0, 0, 0, .14); font-size: 12px; line-height: 1.35; color: var(--tx); pointer-events: none; }
+.amb-subabas { display: flex; gap: 4px; padding: 6px 10px 2px; }
+   /* clicar na pessoa sentada pega a pessoa, não a cadeira */
+.amb-piso-patio, .amb-piso-estrada, .amb-piso-caminho { fill: var(--amb-patio); }
+.amb-piso-externo { fill: var(--amb-externo); stroke: none; }   /* lado de fora: chão de outra cor */
+.amb-piso-anexo { fill: var(--amb-piso2); }
+.amb-piso-plataforma { fill: var(--amb-e); }
+[data-amb-escada] { cursor: pointer; }
+[data-amb-escada]:hover .amb-t { fill: var(--acc-suave); }
+[data-amb-escada]:focus { outline: none; }
+[data-amb-escada]:focus-visible .amb-t { stroke: var(--acc); stroke-width: 1.4; }
+/* O botão de andar se destaca dos outros (cor de destaque no andar escolhido). */
+.amb-andares { border-color: var(--acc); }
+.amb-andares button.ativo { background: var(--acc); color: #fff; }
+.amb-onde.presente { color: var(--ok); }
+.amb-piso-doca { fill: var(--amb-d); stroke: none; }
+.amb-faixa-chao { fill: none; stroke: var(--borda2); stroke-width: 1; stroke-dasharray: 4 5; }
+.amb-cx .amb-t { fill: var(--amb-t); stroke: var(--amb-aresta); stroke-width: .5; stroke-linejoin: round; }
+.amb-cx .amb-e { fill: var(--amb-e); }
+.amb-cx .amb-d { fill: var(--amb-d); }
+.amb-rodape .amb-t { stroke: none; }
+.amb-mesa, .amb-mesa-sala, .amb-mesa-copa, .amb-mesa-reuniao { --amb-c: var(--amb-m-mesa); }
+.amb-monitor { --amb-c: var(--amb-m-monitor); } .amb-prat { --amb-c: var(--amb-m-prat); } .amb-rack { --amb-c: var(--amb-m-rack); }
+.amb-carga { --amb-c: var(--amb-m-carga); } .amb-maquina { --amb-c: var(--amb-m-maquina); } .amb-esteira { --amb-c: var(--amb-m-esteira); }
+.amb-bancada { --amb-c: var(--amb-m-bancada); } .amb-armario { --amb-c: var(--amb-m-armario); } .amb-palete { --amb-c: var(--amb-m-palete); }
+.amb-empilhadeira { --amb-c: var(--amb-m-empilhadeira); } .amb-impressora { --amb-c: var(--amb-m-impressora); } .amb-cafe { --amb-c: var(--amb-m-cafe); }
+.amb-cadeira { --amb-c: var(--amb-m-cadeira); } .amb-pe-mesa { --amb-c: var(--amb-m-pe); } .amb-carreta { --amb-c: var(--amb-m-carreta); } .amb-cabine { --amb-c: var(--amb-m-cabine); } .amb-escada { --amb-c: var(--amb-m-escada); }
+:is(.amb-mesa, .amb-mesa-sala, .amb-mesa-copa, .amb-mesa-reuniao, .amb-monitor, .amb-prat, .amb-carga, .amb-maquina, .amb-esteira, .amb-bancada, .amb-armario, .amb-palete, .amb-empilhadeira, .amb-impressora, .amb-cafe, .amb-carreta, .amb-cabine, .amb-escada, .amb-cadeira, .amb-pe-mesa) .amb-t { fill: var(--amb-c); }
+:is(.amb-mesa, .amb-mesa-sala, .amb-mesa-copa, .amb-mesa-reuniao, .amb-monitor, .amb-prat, .amb-carga, .amb-maquina, .amb-esteira, .amb-bancada, .amb-armario, .amb-palete, .amb-empilhadeira, .amb-impressora, .amb-cafe, .amb-carreta, .amb-cabine, .amb-escada, .amb-cadeira, .amb-pe-mesa) .amb-e { fill: color-mix(in srgb, var(--amb-c) 84%, #000); }
+:is(.amb-mesa, .amb-mesa-sala, .amb-mesa-copa, .amb-mesa-reuniao, .amb-monitor, .amb-prat, .amb-carga, .amb-maquina, .amb-esteira, .amb-bancada, .amb-armario, .amb-palete, .amb-empilhadeira, .amb-impressora, .amb-cafe, .amb-carreta, .amb-cabine, .amb-escada, .amb-cadeira, .amb-pe-mesa) .amb-d { fill: color-mix(in srgb, var(--amb-c) 70%, #000); }
+.amb-ponto .amb-t { fill: var(--acc); stroke: none; }
+.amb-monitor .amb-e { fill: var(--amb-tela); }   /* a tela do monitor, escura */
+[data-amb-patio] { cursor: pointer; }
+[data-amb-patio]:hover .amb-t { fill: color-mix(in srgb, var(--amb-c) 75%, var(--acc)); }
+[data-amb-patio]:focus { outline: none; }
+[data-amb-patio]:focus-visible .amb-t { stroke: var(--acc); stroke-width: 1.4; }
+/* Rótulo com "auréola" da cor do chão: continua legível por cima de parede, estante ou boneco. */
+.amb-rotulo, .amb-cod { paint-order: stroke; stroke: var(--sup); stroke-width: 2.4px; stroke-linejoin: round; }
+.amb-rotulo { font: 500 7.4px "DM Mono", ui-monospace, monospace; letter-spacing: .16em; text-transform: uppercase; fill: var(--tx3); }
+.amb-cod { font: 500 7px "DM Mono", ui-monospace, monospace; fill: var(--tx2); }
+
+/* Prateleiras: acesas (filtro), apagadas (fora do filtro), marcada (linha da tabela) e pulso. */
+.amb-prat { cursor: pointer; }
+.amb-prat:hover .amb-t { fill: var(--acc-suave); }
+.amb-prat:focus { outline: none; }
+.amb-prat:focus-visible .amb-t { stroke: var(--acc); stroke-width: 1.4; }
+.amb-prat.acesa .amb-t, .amb-prat.marcada .amb-t, .amb-prat.pulso .amb-t { fill: var(--acc); stroke: none; }
+.amb-prat.acesa .amb-e, .amb-prat.marcada .amb-e, .amb-prat.pulso .amb-e { fill: color-mix(in srgb, var(--acc) 78%, #000); }
+.amb-prat.acesa .amb-d, .amb-prat.marcada .amb-d, .amb-prat.pulso .amb-d { fill: color-mix(in srgb, var(--acc) 60%, #000); }
+.amb-prat.apagada, .amb-marca.apagada, .amb-carga.apagada { opacity: .28; }
+.amb-marca.acesa .amb-cod, .amb-marca.marcada .amb-cod { fill: var(--tx); font-weight: 600; }
+.amb-st { fill: transparent; pointer-events: none; }
+.amb-marca[data-st="baixo"] .amb-st { fill: var(--warn); }
+.amb-marca[data-st="zerado"] .amb-st { fill: var(--bad); }
+.amb-anel { fill: none; stroke: var(--acc); stroke-width: 1.6; opacity: 0; pointer-events: none; transform-box: fill-box; transform-origin: center; }
+.amb-marca.marcada .amb-anel { opacity: .9; }
+.amb-marca.pulso .amb-anel { animation: amb-pulso 1.1s ease-out 2; }
+@keyframes amb-pulso { from { opacity: 1; transform: scale(.75); } to { opacity: 0; transform: scale(2); } }
+
+/* ---------- pessoas: camisa da área, pele, cabelo, capacete; sentadas na mesa ---------- */
+.amb-a-ops { --amb-cor: var(--amb-a-ops); } .amb-a-man { --amb-cor: var(--amb-a-man); } .amb-a-log { --amb-cor: var(--amb-a-log); }
+.amb-a-tec { --amb-cor: var(--amb-a-tec); } .amb-a-com { --amb-cor: var(--amb-a-com); } .amb-a-fin { --amb-cor: var(--amb-a-fin); }
+.amb-a-pes { --amb-cor: var(--amb-a-pes); } .amb-a-jur { --amb-cor: var(--amb-a-jur); } .amb-a-dir { --amb-cor: var(--amb-a-dir); }
+.amb-pele-0 { --amb-pele: #F2C9A0; } .amb-pele-1 { --amb-pele: #E0AC7E; } .amb-pele-2 { --amb-pele: #C68A5C; } .amb-pele-3 { --amb-pele: #8D5A3B; } .amb-pele-4 { --amb-pele: #5E3B26; }
+.amb-cabelo-0 { --amb-cabelo: #1E1A18; } .amb-cabelo-1 { --amb-cabelo: #3B2A20; } .amb-cabelo-2 { --amb-cabelo: #6B4A2E; } .amb-cabelo-3 { --amb-cabelo: #A7835C; } .amb-cabelo-4 { --amb-cabelo: #B9B4AE; }
+.amb-camisa { fill: var(--amb-cor, var(--tx2)); }
+.amb-pele { fill: var(--amb-pele, #E0AC7E); }
+.amb-cabelo { fill: var(--amb-cabelo, #3B2A20); }
+.amb-capacete { fill: #F4F2EC; stroke: rgba(0, 0, 0, .28); stroke-width: .35; }
+.amb-calca { fill: var(--amb-calca); }
+/* Sentada: as pernas somem embaixo da mesa (a cadeira é móvel do desenho) e o tronco desce um pouco. */
+.amb-boneco.sentado .amb-calca { display: none; }
+.amb-boneco.sentado .amb-tronco { transform: translateY(0.6px); }
+.amb-boneco { cursor: pointer; }
+.amb-sombra { fill: var(--tx); opacity: .14; }
+.amb-alvo { fill: transparent; }
+.amb-anel-sel { fill: none; stroke: var(--acc); stroke-width: 1.4; opacity: 0; }
+.amb-boneco:hover .amb-anel-sel { opacity: .6; }
+.amb-boneco.aceso .amb-anel-sel { opacity: .85; }
+.amb-boneco.sel .amb-anel-sel { opacity: 1; stroke-width: 2; }
+.amb-boneco.apagado { opacity: .14; }
+.amb-modo-planta .amb-3d, .amb-modo-planta .amb-sombra { display: none; }
+.amb-modo-3d .amb-pino { display: none; }
+.amb-pino .amb-camisa { stroke: var(--sup); stroke-width: .8; }
+/* Camadas desligadas. */
+.amb-sem-pessoas .amb-boneco, .amb-sem-estoque .amb-marca, .amb-sem-nomes .amb-rotulo { display: none; }
+/* Celular ou longe: rótulos miúdos somem; fica só o número da prateleira acesa. */
+.amb-mapa.miuda .amb-rotulo, .amb-mapa.miuda .amb-cod, .amb-mapa.cod-perto .amb-cod { display: none; }
+.amb-mapa.cod-perto :is(.acesa, .marcada, .pulso) .amb-cod { display: inline; }
+.amb-mapa.miuda .acesa .amb-cod, .amb-mapa.miuda .marcada .amb-cod { display: inline; font-size: 13px; }
+/* O retrato ilustrado (mesmas cores do boneco). */
+.amb-avatar { display: block; flex: none; border-radius: 50%; }
+.amb-av-fundo { fill: color-mix(in srgb, var(--amb-cor, var(--tx3)) 24%, var(--sup)); }
+.amb-olho { fill: #2B2B2B; }
+.amb-boca { fill: none; stroke: #6B3B2E; stroke-width: 1.4; stroke-linecap: round; }
+/* bolinha + nome da área juntos: o nome quebra linha sem deixar a bolinha sozinha */
+.amb-area { display: inline-flex; align-items: baseline; gap: 6px; }
+.amb-area .amb-ponto-area { margin-right: 0; transform: translateY(-1px); }
+.amb-ponto-area { width: 8px; height: 8px; flex: none; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: 0; background: var(--amb-cor, var(--tx3)); }
+
+/* ---------- por cima do mapa: coluna da direita (avisos + estoque) e a pessoa em foco ---------- */
+/* A coluna não pega clique onde está vazia: ali o mapa continua arrastável. */
+.amb-lateral { position: absolute; top: 10px; right: 10px; width: clamp(380px, 42%, 560px); max-height: calc(100% - 62px); display: flex; flex-direction: column; align-items: stretch; gap: 8px; pointer-events: none; }
+.amb-lateral > * { pointer-events: auto; }
+.amb-lateral.recolhida { width: max-content; }   /* janela recolhida: só as abas, no canto de cima */
+.amb-est { flex: 0 1 auto; min-height: 0; display: flex; flex-direction: column; border-color: var(--borda2); box-shadow: 0 8px 24px rgba(0, 0, 0, .1); }
+/* Cabeçalho da janela, numa linha: abas (com a contagem), a busca e a seta que recolhe. */
+.amb-est-cab { flex: none; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 7px 8px; }
+.amb-abas { display: inline-flex; flex-wrap: wrap; max-width: 100%; gap: 2px; padding: 3px; border-radius: 999px; background: var(--sup2); }
+.amb-aba { border: 0; background: none; padding: 5px 10px; border-radius: 999px; font-size: 12.5px; color: var(--tx2); white-space: nowrap; }
+.amb-aba.ativa { background: var(--sup); color: var(--tx); box-shadow: 0 1px 3px rgba(0, 0, 0, .12); }
+.amb-aba b { margin-left: 2px; font-weight: 500; color: var(--tx3); }
+.amb-aba[data-amb-aba="atencao"] b { color: var(--warn); }
+.amb-busca-jan { flex: 1 1 140px; min-width: 120px; max-width: none; height: 32px; }
+.amb-est:not(.aberto) .amb-busca-jan { display: none; }
+.amb-chev { margin-left: auto; font-size: 13px; transition: transform .2s ease; }
+.amb-est:not(.aberto) .amb-chev { transform: rotate(-90deg); }
+.amb-est-corpo { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; border-top: 1px solid var(--borda); }
+.amb-est .tb-barra { flex: none; flex-wrap: wrap; gap: 8px 10px; padding: 8px 10px; }
+.amb-est .busca { flex: 1 1 200px; max-width: none; }
+.amb-est .tb-rolagem { flex: 1 1 auto; min-height: 0; overflow: auto; }
+.amb-chips:empty { display: none; }
+.amb-chips { padding: 0 10px 8px; }
+.amb-turno tr[data-amb-pessoa] { cursor: pointer; }
+.amb-saiu td { color: var(--tx3); }
+.amb-onde { white-space: nowrap; }
+.amb-chip { border: 1px solid var(--acc); border-radius: 999px; background: var(--acc-suave); color: var(--acc); padding: 4px 10px; font-size: 12px; }
+/* A pessoa em foco: no canto de cima à esquerda (a direita é do estoque). */
+.amb-ficha { position: absolute; left: 10px; top: 10px; width: 256px; padding: 12px 14px; border: 1px solid var(--borda2); border-radius: 14px; background: var(--sup); box-shadow: 0 14px 36px rgba(0, 0, 0, .16); font-size: 12.5px; }
+.amb-ficha-x { position: absolute; top: 8px; right: 8px; }
+.amb-ficha-topo { display: flex; align-items: center; gap: 10px; margin: 0 18px 10px 0; }
+.amb-ficha-topo b { display: block; font-size: 14px; line-height: 1.25; }
+.amb-ficha-topo small { display: block; margin-top: 2px; font-size: 10.5px; color: var(--tx3); }
+.amb-ficha dl { margin: 0; display: grid; gap: 4px; }
+.amb-ficha dl div { display: grid; grid-template-columns: 100px minmax(0, 1fr); gap: 6px; }
+.amb-ficha dt { padding-top: 2px; font: 500 9.5px "DM Mono", ui-monospace, monospace; letter-spacing: .1em; text-transform: uppercase; color: var(--tx3); }
+.amb-ficha dd { margin: 0; color: var(--tx); }
+
+/* ---------- janelinhas de explicação (faixa embaixo do mapa) ---------- */
+.amb-notas { display: flex; flex-wrap: wrap; align-items: flex-start; gap: 10px; }
+.amb-nota { position: relative; flex: 1 1 260px; min-width: 0; max-width: 520px; padding: 9px 11px 10px; border: 1px solid var(--borda2); border-radius: 12px; background: var(--sup); box-shadow: 0 8px 24px rgba(0, 0, 0, .06); font-size: 11.5px; line-height: 1.42; color: var(--tx2); }
+.amb-nota header { display: flex; justify-content: space-between; align-items: flex-start; gap: 6px; }
+.amb-nota header b { font-size: 12.5px; color: var(--tx); }
+.amb-nota p { margin: 5px 0 0; }
+.amb-nota p span { display: block; font: 500 9px "DM Mono", ui-monospace, monospace; letter-spacing: .12em; text-transform: uppercase; color: var(--tx3); }
+.amb-x { flex: none; border: 0; background: none; padding: 0 2px; color: var(--tx3); font-size: 12px; line-height: 1.2; }
+.amb-x:hover { color: var(--tx); }
+.amb-nota-q { display: inline-flex; align-items: center; gap: 7px; flex: 0 0 auto; padding: 4px 11px 4px 4px; border: 1px solid var(--borda2); border-radius: 999px; background: var(--sup); color: var(--tx2); font-size: 12px; }
+.amb-nota-q:hover { border-color: var(--acc); }
+.amb-q { width: 20px; height: 20px; border-radius: 50%; display: grid; place-items: center; background: var(--acc-suave); color: var(--acc); font-weight: 700; }
+
+/* ---------- tabela do estoque (o desenho é o .tabela do app, compacto) ---------- */
+.amb-est-tit { font-size: 13px; }
+.amb-inv { font-size: 12px; }
+.amb-inv th button, .amb-inv th:not(:has(button)) { padding: 8px 5px; }
+.amb-inv td { padding: 6px 5px; }
+.amb-inv th:first-child button, .amb-inv td:first-child { padding-left: 10px; }
+.amb-inv td:nth-child(-n+3) { white-space: normal; }
+.amb-inv td:first-child { min-width: 96px; }
+.amb-inv th.dir button { text-align: right; }   /* número à direita, cabeçalho em cima dele */
+.amb-inv tbody tr[data-amb-item] { cursor: pointer; }
+.amb-inv tbody tr.amb-sel td { background: var(--acc-suave); }
+.amb-inv tbody tr:focus-visible { outline: 2px solid var(--acc); outline-offset: -2px; }
+.amb-rec { display: block; margin-top: 2px; font-size: 10.5px; color: var(--ok); white-space: nowrap; }
+.amb-cod-chip { display: inline-block; padding: 2px 6px; border: 1px solid var(--borda); border-radius: 6px; background: var(--sup2); font-size: 11.5px; color: var(--tx); }
+.amb-bola { width: 8px; height: 8px; flex: none; border-radius: 50%; display: inline-block; }
+.amb-bola.ok { background: var(--ok); } .amb-bola.baixo { background: var(--warn); } .amb-bola.zerado { background: var(--bad); }
+.amb-bola.vazia { background: transparent; box-shadow: inset 0 0 0 1.5px var(--borda2); }
+.amb-rem-nota { margin: 14px 2px 10px; font-size: 13px; color: var(--tx2); }
+
+/* ---------- larguras menores ---------- */
+@container amb (max-width: 1000px) {
+}
+/* Mapa médio ou estreito: avisos, estoque e a pessoa em foco saem de cima do desenho e vão
+   para baixo dele, no mesmo cartão; os botões da câmera também (não cobrem a planta). */
+@container ambmapa (max-width: 860px) {
+  .amb-quadro { height: auto; aspect-ratio: 876 / 516; min-height: 220px; }
+  .amb-cam { position: static; display: flex; justify-content: flex-end; gap: 6px; padding: 8px 8px 0; }
+  .amb-ficha { position: static; width: auto; margin: 8px 8px 0; }
+  .amb-lateral, .amb-lateral.recolhida { position: static; width: auto; max-height: none; margin: 8px; pointer-events: auto; }
+  .amb-est .tb-rolagem { max-height: 60vh; }
+  body.embed .amb-quadro { height: auto; }
+  body.embed .amb-est .tb-rolagem { max-height: 420px; }   /* mesmo motivo: nada de vh dentro do portfólio */
+}
+@container ambmapa (max-width: 600px) {
+  .amb-abas { border-radius: 12px; }   /* no celular as abas quebram linha em vez de sair da janela */
+  .amb-minimapa { display: none; }
+}
+@container amb (max-width: 600px) {
+  .amb-menu { margin-left: 0; }
+  .amb-filtros { width: 100%; }
+  .amb-sel { flex: 1 1 30%; min-width: 0; max-width: none; }
+  .amb-hist-num b { font-size: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .amb-vivo-ponto.on, .amb-marca.pulso .amb-anel { animation: none; }
+  .amb-marca.pulso .amb-anel { opacity: .9; }
+  .amb-andar, .amb-chev { transition: none; }
+}

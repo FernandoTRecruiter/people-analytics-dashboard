@@ -1,0 +1,141 @@
+﻿Vaga;Area;Unidade;Nivel;Abertura;Fechamento;Status;Etapa;Inscritos;Triagem;Entrevistas;Ofertas;Contratados
+V001;Logística;Centro de Distribuição;Analista;2024-12-08;2025-01-07;fechada;contratado;48;11;4;1;1
+V002;Operações;Matriz;Operacional;2024-12-12;2025-01-11;fechada;contratado;244;66;25;1;1
+V003;Operações;Fábrica;Analista;2024-12-05;2025-01-06;fechada;contratado;115;28;11;1;1
+V004;Operações;Fábrica;Aprendiz;2025-01-25;2025-02-17;fechada;contratado;170;61;22;1;1
+V005;Logística;Centro de Distribuição;Analista;2024-12-29;2025-02-01;fechada;contratado;75;21;8;1;1
+V006;Financeiro;Matriz;Especialista;2024-11-28;2025-02-11;fechada;contratado;83;29;9;2;1
+V007;Comercial;Matriz;Analista;2024-11-30;2025-01-20;fechada;contratado;116;34;10;2;1
+V008;Logística;Centro de Distribuição;Operacional;2024-12-29;2025-02-02;fechada;contratado;126;30;9;1;1
+V009;Pessoas & Cultura;Matriz;Estágio;2025-01-02;2025-02-04;fechada;contratado;283;92;31;1;1
+V010;Tecnologia;Remoto;Analista;2024-12-06;2025-02-03;cancelada;entrevistas;56;17;4;0;0
+V011;Operações;Fábrica;Aprendiz;2025-02-10;2025-03-08;fechada;contratado;124;35;12;1;1
+V012;Operações;Fábrica;Analista;2025-01-14;2025-02-22;fechada;contratado;35;8;3;1;1
+V013;Operações;Fábrica;Operacional;2025-02-22;2025-03-16;fechada;contratado;216;69;19;1;1
+V014;Operações;Fábrica;Operacional;2025-02-24;2025-03-20;fechada;contratado;243;55;18;1;1
+V015;Jurídico;Matriz;Coordenação;2024-12-29;2025-03-02;fechada;contratado;55;18;5;1;1
+V016;Pessoas & Cultura;Fábrica;Analista;2025-01-14;2025-03-01;fechada;contratado;82;18;6;2;1
+V017;Logística;Centro de Distribuição;Analista;2025-02-02;2025-03-05;cancelada;entrevistas;111;39;12;0;0
+V018;Operações;Fábrica;Operacional;2025-03-14;2025-04-14;fechada;contratado;250;75;24;1;1
+V019;Logística;Centro de Distribuição;Aprendiz;2025-03-06;2025-03-27;fechada;contratado;118;35;11;2;1
+V020;Operações;Fábrica;Técnico;2025-03-07;2025-04-14;fechada;contratado;135;43;16;1;1
+V021;Manutenção;Fábrica;Técnico;2025-03-17;2025-04-12;fechada;contratado;71;20;7;1;1
+V022;Operações;Fábrica;Coordenação;2025-02-15;2025-04-11;fechada;contratado;103;24;9;1;1
+V023;Operações;Fábrica;Técnico;2025-02-15;2025-04-06;fechada;contratado;86;29;8;1;1
+V024;Financeiro;Remoto;Analista;2025-03-08;2025-04-12;fechada;contratado;57;18;6;1;1
+V025;Manutenção;Fábrica;Técnico;2025-03-19;2025-04-10;fechada;contratado;101;23;9;1;1
+V026;Operações;Fábrica;Operacional;2025-04-09;2025-04-24;fechada;contratado;163;53;16;2;1
+V027;Financeiro;Matriz;Analista;2025-02-25;2025-05-05;fechada;contratado;121;41;12;1;1
+V028;Logística;Centro de Distribuição;Técnico;2025-05-21;2025-06-20;fechada;contratado;108;29;10;1;1
+V029;Operações;Fábrica;Técnico;2025-04-20;2025-05-31;fechada;contratado;93;31;11;1;1
+V030;Operações;Fábrica;Operacional;2025-05-16;2025-06-04;fechada;contratado;124;32;13;1;1
+V031;Operações;Fábrica;Operacional;2025-05-03;2025-06-08;fechada;contratado;119;37;14;1;1
+V032;Operações;Fábrica;Analista;2025-04-25;2025-06-22;fechada;contratado;60;17;5;2;1
+V033;Operações;Fábrica;Coordenação;2025-02-28;2025-06-16;fechada;contratado;83;23;6;1;1
+V034;Operações;Fábrica;Aprendiz;2025-05-14;2025-05-28;fechada;contratado;129;38;14;1;1
+V035;Operações;Fábrica;Operacional;2025-05-17;2025-06-17;fechada;contratado;185;61;22;1;1
+V036;Operações;Fábrica;Analista;2025-04-27;2025-06-12;cancelada;entrevistas;52;18;7;0;0
+V037;Operações;Fábrica;Aprendiz;2025-06-13;2025-07-06;fechada;contratado;165;37;13;1;1
+V038;Logística;Centro de Distribuição;Aprendiz;2025-06-10;2025-07-09;fechada;contratado;205;49;18;1;1
+V039;Operações;Fábrica;Analista;2025-04-25;2025-06-24;fechada;contratado;33;10;2;1;1
+V040;Tecnologia;Matriz;Estágio;2025-07-03;2025-08-04;fechada;contratado;157;49;14;2;1
+V041;Operações;Fábrica;Aprendiz;2025-07-11;2025-08-09;fechada;contratado;127;36;8;1;1
+V042;Operações;Fábrica;Operacional;2025-07-21;2025-08-12;fechada;contratado;219;71;17;1;1
+V043;Operações;Matriz;Operacional;2025-06-18;2025-07-26;fechada;contratado;135;39;10;1;1
+V044;Tecnologia;Matriz;Estágio;2025-07-21;2025-08-12;fechada;contratado;287;103;39;1;1
+V045;Logística;Centro de Distribuição;Operacional;2025-06-25;2025-08-02;fechada;contratado;110;29;9;2;1
+V046;Manutenção;Fábrica;Operacional;2025-07-18;2025-08-12;fechada;contratado;66;21;6;1;1
+V047;Operações;Matriz;Analista;2025-07-18;2025-08-18;fechada;contratado;67;23;8;1;1
+V048;Operações;Fábrica;Operacional;2025-07-11;2025-08-04;fechada;contratado;134;31;9;1;1
+V049;Tecnologia;Matriz;Especialista;2025-06-01;2025-07-27;fechada;contratado;62;18;6;1;1
+V050;Comercial;Remoto;Estágio;2025-08-17;2025-09-09;fechada;contratado;153;46;13;1;1
+V051;Operações;Fábrica;Aprendiz;2025-08-22;2025-09-07;fechada;contratado;111;37;11;2;1
+V052;Pessoas & Cultura;Matriz;Analista;2025-07-01;2025-08-20;fechada;contratado;50;11;4;1;1
+V053;Operações;Fábrica;Coordenação;2025-06-13;2025-09-22;fechada;contratado;98;30;9;1;1
+V054;Operações;Fábrica;Operacional;2025-07-28;2025-09-07;fechada;contratado;129;42;15;1;1
+V055;Operações;Fábrica;Operacional;2025-08-13;2025-09-10;fechada;contratado;187;54;20;1;1
+V056;Tecnologia;Remoto;Estágio;2025-08-23;2025-09-25;fechada;contratado;165;53;12;1;1
+V057;Operações;Fábrica;Coordenação;2025-07-19;2025-09-21;fechada;contratado;59;20;7;1;1
+V058;Financeiro;Matriz;Analista;2025-08-20;2025-10-13;fechada;contratado;101;27;8;1;1
+V059;Comercial;Matriz;Analista;2025-08-14;2025-10-16;fechada;contratado;47;11;3;1;1
+V060;Manutenção;Fábrica;Técnico;2025-08-26;2025-10-15;fechada;contratado;52;13;3;1;1
+V061;Operações;Fábrica;Operacional;2025-09-19;2025-10-07;fechada;contratado;114;41;9;1;1
+V062;Operações;Fábrica;Analista;2025-07-31;2025-09-18;fechada;contratado;32;8;3;1;1
+V063;Operações;Matriz;Aprendiz;2025-09-05;2025-09-24;fechada;contratado;99;23;7;1;1
+V064;Operações;Fábrica;Analista;2025-09-02;2025-10-20;fechada;contratado;112;29;11;1;1
+V065;Manutenção;Fábrica;Operacional;2025-09-04;2025-10-14;fechada;contratado;119;36;12;1;1
+V066;Logística;Centro de Distribuição;Analista;2025-07-28;2025-09-21;fechada;contratado;127;29;8;1;1
+V067;Financeiro;Matriz;Analista;2025-09-05;2025-10-05;fechada;contratado;63;16;5;1;1
+V068;Logística;Centro de Distribuição;Aprendiz;2025-09-09;2025-10-24;cancelada;entrevistas;115;26;7;0;0
+V069;Operações;Fábrica;Aprendiz;2025-10-13;2025-11-12;fechada;contratado;95;25;7;1;1
+V070;Operações;Fábrica;Operacional;2025-10-09;2025-11-09;fechada;contratado;160;52;13;2;1
+V071;Logística;Centro de Distribuição;Operacional;2025-10-11;2025-10-29;fechada;contratado;69;21;8;2;1
+V072;Comercial;Matriz;Analista;2025-09-06;2025-10-21;fechada;contratado;91;27;9;1;1
+V073;Comercial;Matriz;Analista;2025-09-02;2025-11-16;cancelada;entrevistas;41;13;4;0;0
+V074;Manutenção;Fábrica;Técnico;2025-10-21;2025-12-13;fechada;contratado;69;20;7;1;1
+V075;Manutenção;Fábrica;Técnico;2025-10-13;2025-12-04;fechada;contratado;42;11;4;1;1
+V076;Logística;Fábrica;Analista;2025-10-22;2025-12-19;fechada;contratado;84;30;8;1;1
+V077;Financeiro;Matriz;Analista;2025-10-21;2025-12-13;fechada;contratado;113;40;15;1;1
+V078;Operações;Fábrica;Operacional;2025-11-07;2025-11-30;fechada;contratado;136;33;9;1;1
+V079;Operações;Fábrica;Operacional;2025-11-21;2025-12-17;fechada;contratado;231;72;21;2;1
+V080;Logística;Centro de Distribuição;Operacional;2025-11-25;2025-12-15;fechada;contratado;160;58;13;1;1
+V081;Tecnologia;Matriz;Especialista;2025-10-01;2025-11-26;fechada;contratado;106;27;6;1;1
+V082;Operações;Fábrica;Aprendiz;2025-12-15;2025-12-31;fechada;contratado;170;46;14;2;1
+V083;Tecnologia;Remoto;Estágio;2025-12-13;2026-01-10;fechada;contratado;285;68;20;1;1
+V084;Manutenção;Fábrica;Técnico;2025-11-04;2025-12-26;fechada;contratado;72;19;6;1;1
+V085;Manutenção;Fábrica;Especialista;2025-10-18;2026-01-08;fechada;contratado;32;9;2;2;1
+V086;Pessoas & Cultura;Matriz;Analista;2025-12-18;2026-01-20;fechada;contratado;99;30;9;1;1
+V087;Manutenção;Fábrica;Técnico;2026-01-17;2026-02-08;fechada;contratado;51;15;6;1;1
+V088;Operações;Fábrica;Operacional;2026-01-10;2026-02-07;fechada;contratado;140;43;16;2;1
+V089;Tecnologia;Remoto;Estágio;2026-02-05;2026-03-03;fechada;contratado;119;29;10;1;1
+V090;Manutenção;Fábrica;Operacional;2026-02-07;2026-02-23;fechada;contratado;245;76;28;1;1
+V091;Tecnologia;Matriz;Analista;2025-12-21;2026-02-28;fechada;contratado;26;7;2;2;1
+V092;Logística;Fábrica;Operacional;2026-02-25;2026-03-13;fechada;contratado;198;44;13;2;1
+V093;Manutenção;Fábrica;Coordenação;2025-11-28;2026-02-22;fechada;contratado;85;30;11;2;1
+V094;Financeiro;Matriz;Analista;2026-01-31;2026-03-15;fechada;contratado;64;21;7;1;1
+V095;Financeiro;Matriz;Analista;2026-01-21;2026-03-13;fechada;contratado;117;38;13;1;1
+V096;Operações;Fábrica;Analista;2026-02-04;2026-03-04;fechada;contratado;97;33;12;1;1
+V097;Tecnologia;Remoto;Coordenação;2026-01-03;2026-03-04;fechada;contratado;61;21;5;1;1
+V098;Tecnologia;Matriz;Especialista;2025-12-22;2026-03-11;fechada;contratado;48;11;3;1;1
+V099;Logística;Centro de Distribuição;Operacional;2026-03-20;2026-04-08;fechada;contratado;148;47;17;2;1
+V100;Manutenção;Fábrica;Operacional;2026-03-19;2026-04-06;fechada;contratado;76;20;6;1;1
+V101;Comercial;Matriz;Analista;2026-03-04;2026-04-11;fechada;contratado;110;38;10;1;1
+V102;Pessoas & Cultura;Fábrica;Estágio;2026-04-25;2026-05-10;fechada;contratado;164;44;10;1;1
+V103;Operações;Fábrica;Analista;2026-03-21;2026-04-24;fechada;contratado;123;32;9;1;1
+V104;Tecnologia;Matriz;Especialista;2026-01-28;2026-05-06;fechada;contratado;97;24;6;1;1
+V105;Comercial;Matriz;Analista;2026-03-02;2026-04-23;fechada;contratado;87;21;8;2;1
+V106;Financeiro;Matriz;Coordenação;2026-04-02;2026-06-11;fechada;contratado;36;12;3;1;1
+V107;Operações;Matriz;Analista;2026-04-05;2026-05-28;fechada;contratado;84;26;8;1;1
+V108;Comercial;Matriz;Analista;2026-04-07;2026-06-03;fechada;contratado;114;36;12;1;1
+V109;Tecnologia;Matriz;Analista;2026-04-03;2026-05-26;fechada;contratado;93;23;8;1;1
+V110;Manutenção;Fábrica;Técnico;2026-05-06;2026-06-17;fechada;contratado;63;17;5;2;1
+V111;Manutenção;Fábrica;Operacional;2026-04-27;2026-06-06;fechada;contratado;169;57;20;1;1
+V112;Operações;Matriz;Operacional;2026-06-21;2026-07-19;fechada;contratado;125;36;14;2;1
+V113;Operações;Fábrica;Operacional;2026-06-19;2026-07-15;fechada;contratado;64;17;4;1;1
+V114;Jurídico;Matriz;Analista;2026-04-22;2026-06-30;fechada;contratado;73;20;5;2;1
+V115;Pessoas & Cultura;Matriz;Especialista;2026-05-17;2026-07-21;fechada;contratado;83;26;10;2;1
+V116;Comercial;Remoto;Analista;2026-05-11;2026-06-24;fechada;contratado;73;26;10;1;1
+V117;Comercial;Remoto;Analista;2026-05-29;2026-07-01;fechada;contratado;28;9;3;1;1
+V118;Operações;Matriz;Coordenação;2026-04-19;2026-08-08;fechada;contratado;61;20;8;1;1
+V119;Logística;Centro de Distribuição;Operacional;2026-07-05;2026-07-25;fechada;contratado;226;61;20;1;1
+V120;Operações;Fábrica;Operacional;2026-07-06;2026-07-31;fechada;contratado;123;28;10;1;1
+V121;Comercial;Matriz;Analista;2026-06-23;2026-07-22;fechada;contratado;111;25;6;1;1
+V122;Logística;Fábrica;Aprendiz;2026-07-02;2026-08-11;cancelada;entrevistas;147;46;15;0;0
+V123;Operações;Fábrica;Aprendiz;2026-08-20;2026-09-11;fechada;contratado;114;27;6;1;1
+V124;Logística;Centro de Distribuição;Coordenação;2026-06-15;2026-09-07;fechada;contratado;91;30;11;1;1
+V125;Operações;Fábrica;Técnico;2026-07-29;2026-09-15;fechada;contratado;96;27;10;1;1
+V126;Manutenção;Fábrica;Técnico;2026-07-02;2026-08-22;fechada;contratado;62;20;8;1;1
+V127;Manutenção;Fábrica;Aprendiz;2026-08-06;2026-08-30;fechada;contratado;122;43;11;1;1
+V128;Manutenção;Fábrica;Operacional;2026-08-22;2026-09-11;fechada;contratado;215;67;24;2;1
+V129;Pessoas & Cultura;Fábrica;Estágio;2026-07-15;;aberta;oferta;194;54;17;1;0
+V130;Tecnologia;Matriz;Analista;2026-08-13;;aberta;triagem;79;28;0;0;0
+V131;Operações;Fábrica;Analista;2026-06-21;;aberta;entrevistas;78;20;7;0;0
+V132;Operações;Fábrica;Especialista;2026-08-24;;aberta;triagem;121;31;0;0;0
+V133;Tecnologia;Matriz;Especialista;2026-08-08;;aberta;entrevistas;110;31;8;0;0
+V134;Logística;Centro de Distribuição;Operacional;2026-08-19;;aberta;oferta;207;52;21;1;0
+V135;Manutenção;Fábrica;Operacional;2026-07-11;;aberta;oferta;185;47;12;1;0
+V136;Logística;Centro de Distribuição;Coordenação;2026-05-31;;aberta;entrevistas;74;18;6;0;0
+V137;Operações;Fábrica;Operacional;2026-08-22;;aberta;entrevistas;176;50;18;0;0
+V138;Manutenção;Fábrica;Operacional;2026-09-24;;aberta;oferta;114;36;13;1;0
+V139;Comercial;Matriz;Analista;2026-09-16;;aberta;entrevistas;37;11;4;0;0
+V140;Manutenção;Fábrica;Especialista;2026-07-18;;aberta;entrevistas;77;19;7;0;0

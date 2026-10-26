@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Meu ambiente · bancada</title>
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../css/app.css">
+<link rel="stylesheet" href="../css/ambiente.css">
+</head>
+<body>
+<!--
+  Bancada da aba "Meu ambiente": monta a aba SOZINHA, com o mesmo esqueleto do app
+  (#app > .corpo.cheio > trilho escondido + main.pagina), para as larguras serem as de verdade.
+  O botão de idioma e o de tema imitam o redesenho do app: desmontar -> casca -> montar.
+  Parâmetros: ?lang=en  ?tema=escuro  ?foto=1 (quadro congelado, para fotos de teste).
+-->
+<div id="app">
+  <header class="topo">
+    <div class="marca"><div><div class="eyebrow">BANCADA · DESENVOLVIMENTO</div><h1>Meu ambiente <span class="sec">· aba isolada</span></h1></div></div>
+    <div class="acoes">
+      <div class="seg-botoes" role="group" aria-label="idioma"><button data-b-lang="pt">PT</button><button data-b-lang="en">EN</button></div>
+      <button class="botao leve" data-b-tema></button>
+    </div>
+  </header>
+  <!-- "cheio": no app, a aba Meu ambiente ocupa a largura toda (sem o trilho numerado). -->
+  <div class="corpo cheio"><nav class="trilho" aria-label="seções"></nav><main class="pagina" id="pagina"></main></div>
+</div>
+<script src="../js/dados.js"></script>
+<script src="../js/i18n.js"></script>
+<script src="../js/graficos.js"></script>
+<script src="../js/paginas.js"></script>
+<script src="../js/ambiente-dados.js"></script>
+<script src="../js/ambiente-mapa.js"></script>
+<script src="../js/ambiente.js"></script>
+<script>
+(function () {
+  'use strict';
+  const D = window.DADOS, I = window.I18N;
+  const q = new URLSearchParams(location.search);
+  const estado = { lang: q.get('lang') === 'en' ? 'en' : 'pt', tema: q.get('tema') === 'escuro' ? 'escuro' : 'claro', aba: 'ambiente' };
+  // O mesmo ctx que o app.js entrega às páginas.
+  const ctx = {
+    T: I.T, I, D, estado,
+    num: (v, dec) => v == null ? '-' : Number(v).toLocaleString(I.locale(), { minimumFractionDigits: dec || 0, maximumFractionDigits: dec || 0 }),
+    pct: (v, dec) => v == null ? '-' : (v * 100).toLocaleString(I.locale(), { minimumFractionDigits: dec == null ? 1 : dec, maximumFractionDigits: dec == null ? 1 : dec }) + '%',
+    data: d => d.toLocaleDateString(I.locale(), { day: '2-digit', month: '2-digit', year: 'numeric' })
+  };
+  let redesenhos = 0;
+  function redesenhar() {
+    window.AMBIENTE.desmontar();                                   // 1. o app desmonta antes de redesenhar
+    I.lang = estado.lang;
+    document.documentElement.lang = estado.lang === 'en' ? 'en' : 'pt-BR';
+    document.documentElement.dataset.theme = estado.tema === 'escuro' ? 'dark' : 'light';
+    document.getElementById('pagina').innerHTML = window.PAGINAS.ambiente(null, ctx); // 2. a casca
+    const s = document.querySelector('.secao');
+    document.querySelector('.trilho').innerHTML = `<button class="ativo"><span class="n">1</span>${s.dataset.titulo}</button>`;
+    document.querySelectorAll('[data-b-lang]').forEach(b => b.classList.toggle('ativo', b.dataset.bLang === estado.lang));
+    document.querySelector('[data-b-tema]').textContent = estado.tema === 'escuro' ? '☀ Claro' : '☾ Escuro';
+    window.AMBIENTE.montar(document.getElementById('ambiente-raiz'), ctx); // 3. monta a aba
+    redesenhos++;
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest('[data-b-lang], [data-b-tema]');
+    if (!b) return;
+    if (b.dataset.bLang) estado.lang = b.dataset.bLang; else estado.tema = estado.tema === 'escuro' ? 'claro' : 'escuro';
+    redesenhar();
+  });
+  window.__bancada = { redesenhar, estado, redesenhos: () => redesenhos };
+  redesenhar();
+})();
+</script>
+</body>
+</html>

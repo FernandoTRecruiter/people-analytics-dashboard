@@ -1,0 +1,361 @@
+﻿Matricula;Nome;Genero;Raca;Nascimento;Area;Unidade;Nivel;NivelOrdem;Vinculo;Admissao;Desligamento;MotivoDesligamento
+C0001;Samuel Campos;M;Parda;1965-10-06;Operações;Fábrica;Gerência;7;CLT;2017-07-15;;
+C0002;Isabela Queiroz;F;Branca;1962-05-13;Manutenção;Fábrica;Gerência;7;CLT;2017-08-19;;
+C0003;Rodrigo Zanetti;M;Preta;1977-01-24;Logística;Centro de Distribuição;Gerência;7;CLT;2020-01-27;;
+C0004;Débora Queiroz;F;Branca;1980-01-27;Tecnologia;Remoto;Gerência;7;CLT;2016-06-07;;
+C0005;Clara Zanetti;F;Branca;1977-05-09;Comercial;Matriz;Gerência;7;CLT;2016-03-31;;
+C0006;Sofia Freitas;F;Parda;1984-10-19;Financeiro;Matriz;Gerência;7;CLT;2018-02-01;;
+C0007;Marcelo Uchoa;M;Não informado;1981-09-05;Pessoas & Cultura;Matriz;Gerência;7;CLT;2017-04-18;;
+C0008;Bruno Teixeira;M;Parda;1976-01-12;Jurídico;Matriz;Gerência;7;CLT;2017-09-12;;
+C0009;Débora Cardoso;F;Branca;1972-02-10;Diretoria;Matriz;Diretoria;8;CLT;2022-06-13;;
+C0010;Marcelo Dias;M;Branca;1971-08-16;Diretoria;Matriz;Diretoria;8;CLT;2017-06-20;;
+C0011;Fábio Rocha;M;Branca;1966-04-11;Diretoria;Matriz;Diretoria;8;CLT;2016-11-06;;
+C0012;Isabela Fontes;F;Branca;1959-09-27;Diretoria;Matriz;Diretoria;8;CLT;2015-08-18;;
+C0013;Ricardo Zanetti;M;Branca;1967-09-29;Jurídico;Matriz;Especialista;5;CLT;2022-08-15;;
+C0014;Renan Oliveira;M;Parda;1986-08-30;Comercial;Remoto;Analista;4;CLT;2020-10-10;;
+C0015;Renata Brandão;F;Parda;1977-08-14;Pessoas & Cultura;Matriz;Analista;4;CLT;2024-09-30;;
+C0016;Diego Oliveira;M;Branca;1967-03-10;Manutenção;Fábrica;Operacional;2;CLT;2021-08-09;;
+C0017;Davi Sales;M;Branca;1978-05-09;Manutenção;Fábrica;Operacional;2;CLT;2024-12-11;;
+C0018;Thiago Gomes;M;Branca;2002-02-17;Manutenção;Fábrica;Analista;4;CLT;2019-02-07;;
+C0019;Fábio Dias;M;Branca;1978-02-24;Financeiro;Matriz;Analista;4;CLT;2021-01-24;;
+C0020;Vinícius Correia;M;Preta;1984-02-19;Logística;Centro de Distribuição;Operacional;2;CLT;2023-08-17;2025-02-27;Demissão
+C0021;Caio Pires;M;Branca;1964-07-06;Operações;Fábrica;Especialista;5;CLT;2016-02-11;2026-03-22;Pedido de demissão
+C0022;Igor Almeida;M;Parda;1970-03-10;Logística;Centro de Distribuição;Técnico;3;CLT;2023-09-30;2025-06-15;Demissão
+C0023;Wagner Rocha;M;Branca;2004-03-26;Operações;Fábrica;Aprendiz;0;Aprendiz;2023-04-29;2025-03-02;Fim de contrato
+C0024;Ricardo Mendes;M;Parda;1977-12-01;Financeiro;Remoto;Coordenação;6;CLT;2023-07-22;2026-06-27;Pedido de demissão
+C0025;Camila Cardoso;F;Parda;1989-04-04;Financeiro;Matriz;Analista;4;CLT;2013-07-31;;
+C0026;Beatriz Vasconcelos;F;Branca;1981-05-12;Pessoas & Cultura;Matriz;Coordenação;6;CLT;2024-11-12;;
+C0027;Mariana Mendes;F;Parda;1997-01-15;Manutenção;Fábrica;Analista;4;CLT;2024-12-07;2025-12-19;Demissão
+C0028;César Freitas;M;Parda;1977-05-24;Operações;Fábrica;Operacional;2;CLT;2023-12-30;2026-07-01;Demissão
+C0029;Rodrigo Rocha;M;Não informado;1976-01-16;Operações;Fábrica;Especialista;5;CLT;2018-09-27;;
+C0030;Murilo Teixeira;M;Não informado;2002-02-03;Operações;Fábrica;Operacional;2;CLT;2024-01-11;;
+C0031;Eduardo Duarte;M;Parda;1979-08-28;Manutenção;Fábrica;Operacional;2;CLT;2024-02-03;;
+C0032;Enzo Vasconcelos;M;Parda;1967-11-03;Manutenção;Fábrica;Técnico;3;CLT;2020-05-16;;
+C0033;Hugo Prado;M;Preta;1992-05-16;Tecnologia;Matriz;Analista;4;PJ;2024-11-20;;
+C0034;Rafaela Vasconcelos;F;Branca;1998-01-24;Operações;Fábrica;Operacional;2;CLT;2020-07-11;;
+C0035;Paula Duarte;F;Parda;1993-05-30;Financeiro;Matriz;Analista;4;CLT;2023-10-24;;
+C0036;Gabriel Mendes;M;Parda;1999-12-12;Comercial;Matriz;Estágio;1;Estágio;2024-03-12;2025-09-11;Fim de contrato
+C0037;Alexandre Brandão;M;Preta;1986-05-19;Manutenção;Fábrica;Técnico;3;CLT;2016-06-21;;
+C0038;Yuri Farias;M;Parda;1981-12-15;Comercial;Matriz;Analista;4;CLT;2011-07-12;;
+C0039;Alexandre Pires;M;Parda;1996-06-04;Tecnologia;Remoto;Analista;4;PJ;2018-11-13;;
+C0040;Gabriela Jardim;F;Branca;1975-04-04;Jurídico;Matriz;Especialista;5;CLT;2020-02-12;;
+C0041;Isabela Vasconcelos;F;Branca;1975-06-26;Pessoas & Cultura;Matriz;Analista;4;CLT;2013-05-06;2025-09-26;Demissão
+C0042;Elisa Honorato;F;Branca;1973-10-14;Comercial;Remoto;Analista;4;CLT;2016-06-03;;
+C0043;Hugo Rocha;M;Parda;1966-05-16;Operações;Fábrica;Operacional;2;CLT;2020-08-14;;
+C0044;Fábio Teixeira;M;Parda;1974-11-03;Financeiro;Matriz;Especialista;5;CLT;2018-11-04;;
+C0045;Yuri Moreira;M;Branca;1990-07-27;Manutenção;Fábrica;Técnico;3;CLT;2019-07-30;;
+C0046;Mateus Queiroz;M;Branca;1987-01-23;Operações;Fábrica;Coordenação;6;CLT;2024-10-16;;
+C0047;Mateus Teixeira;M;Parda;1977-06-15;Logística;Fábrica;Analista;4;CLT;2022-10-07;;
+C0048;Larissa Gomes;F;Branca;1997-08-09;Pessoas & Cultura;Matriz;Analista;4;CLT;2020-11-27;;
+C0049;Otávio Campos;M;Não informado;1991-01-18;Logística;Centro de Distribuição;Operacional;2;CLT;2020-11-01;;
+C0050;César Farias;M;Parda;1967-09-02;Manutenção;Fábrica;Especialista;5;CLT;2021-07-13;;
+C0051;Gabriel Nogueira;M;Parda;2006-01-20;Operações;Fábrica;Aprendiz;0;Aprendiz;2024-07-04;2026-01-19;Fim de contrato
+C0052;André Campos;M;Parda;1991-12-16;Tecnologia;Matriz;Analista;4;PJ;2020-10-20;;
+C0053;Joana Fontes;F;Parda;1993-02-06;Pessoas & Cultura;Fábrica;Analista;4;CLT;2024-05-20;;
+C0054;Vinícius Rocha;M;Branca;1984-05-11;Operações;Fábrica;Técnico;3;CLT;2020-02-12;;
+C0055;Caio Zanetti;M;Preta;1966-11-28;Logística;Fábrica;Operacional;2;CLT;2017-01-16;;
+C0056;Alexandre Prado;M;Branca;1989-04-27;Operações;Fábrica;Operacional;2;CLT;2021-05-26;;
+C0057;Luana Correia;F;Parda;2002-03-23;Operações;Fábrica;Operacional;2;CLT;2023-11-13;;
+C0058;Vinícius Brandão;M;Parda;1999-11-29;Tecnologia;Matriz;Analista;4;PJ;2022-11-05;2025-11-08;Pedido de demissão
+C0059;Marcelo Gomes;M;Branca;1970-07-28;Manutenção;Fábrica;Coordenação;6;CLT;2017-07-12;;
+C0060;Caio Uchoa;M;Preta;1965-09-22;Logística;Fábrica;Operacional;2;CLT;2018-06-05;;
+C0061;Isabela Lima;F;Parda;1994-11-19;Operações;Fábrica;Operacional;2;CLT;2022-06-16;2025-04-18;Pedido de demissão
+C0062;Yuri Uchoa;M;Parda;1988-08-15;Operações;Fábrica;Analista;4;CLT;2024-03-31;;
+C0063;André Mendes;M;Preta;1959-02-26;Jurídico;Matriz;Coordenação;6;CLT;2011-04-20;;
+C0064;Enzo Zanetti;M;Preta;1977-07-02;Operações;Fábrica;Operacional;2;CLT;2023-06-21;2025-11-20;Demissão
+C0065;Henrique Lima;M;Preta;1991-03-25;Logística;Centro de Distribuição;Analista;4;CLT;2024-11-01;2025-04-03;Pedido de demissão
+C0066;Diego Campos;M;Parda;1971-11-12;Operações;Fábrica;Analista;4;CLT;2011-11-28;;
+C0067;Rodrigo Brandão;M;Preta;1981-08-19;Logística;Fábrica;Operacional;2;CLT;2024-02-28;;
+C0068;Marcelo Campos;M;Branca;1968-08-10;Operações;Fábrica;Operacional;2;CLT;2016-11-15;;
+C0069;Enzo Barbosa;M;Parda;1981-08-14;Jurídico;Matriz;Analista;4;CLT;2014-10-28;;
+C0070;Valéria Xavier;F;Indígena;1999-02-14;Tecnologia;Matriz;Estágio;1;Estágio;2022-12-08;2025-08-11;Fim de contrato
+C0071;Thiago Nogueira;M;Branca;1975-01-28;Comercial;Matriz;Analista;4;PJ;2023-08-21;2025-10-20;Pedido de demissão
+C0072;Bruno Barbosa;M;Parda;1998-08-13;Pessoas & Cultura;Matriz;Analista;4;CLT;2023-03-12;;
+C0073;Fábio Lima;M;Branca;2002-08-11;Tecnologia;Remoto;Analista;4;CLT;2021-08-15;;
+C0074;Rafael Cardoso;M;Parda;1990-07-26;Operações;Fábrica;Operacional;2;CLT;2022-10-07;2025-09-20;Pedido de demissão
+C0075;Marina Gomes;F;Parda;1997-10-01;Comercial;Matriz;Analista;4;CLT;2024-01-01;;
+C0076;Thiago Fontes;M;Branca;1985-11-08;Operações;Fábrica;Operacional;2;CLT;2024-12-20;2025-05-20;Demissão
+C0077;Murilo Queiroz;M;Indígena;1993-07-23;Manutenção;Fábrica;Operacional;2;CLT;2024-05-12;;
+C0078;Leonardo Jardim;M;Parda;1963-04-19;Manutenção;Fábrica;Técnico;3;CLT;2017-02-03;;
+C0079;Thiago Zanetti;M;Preta;1991-08-24;Comercial;Matriz;Coordenação;6;CLT;2022-12-17;;
+C0080;Enzo Honorato;M;Parda;1983-07-13;Manutenção;Fábrica;Técnico;3;CLT;2024-04-24;;
+C0081;Leonardo Queiroz;M;Preta;1985-01-12;Operações;Fábrica;Técnico;3;CLT;2021-09-15;;
+C0082;Wagner Pires;M;Branca;1990-03-08;Operações;Fábrica;Coordenação;6;CLT;2023-08-30;;
+C0083;Rafael Honorato;M;Branca;1974-05-24;Operações;Fábrica;Operacional;2;CLT;2022-05-27;2025-08-27;Pedido de demissão
+C0084;César Fontes;M;Branca;1983-06-21;Logística;Centro de Distribuição;Operacional;2;CLT;2022-11-05;;
+C0085;Henrique Freitas;M;Branca;2005-01-10;Operações;Fábrica;Operacional;2;CLT;2024-11-02;2026-06-08;Pedido de demissão
+C0086;Renan Lacerda;M;Branca;1971-03-25;Comercial;Matriz;Analista;4;PJ;2013-09-30;;
+C0087;Diego Teixeira;M;Branca;1991-08-07;Manutenção;Fábrica;Técnico;3;CLT;2024-05-01;2025-12-03;Outros
+C0088;Eduardo Queiroz;M;Branca;1988-03-12;Manutenção;Fábrica;Operacional;2;CLT;2019-01-20;2026-01-19;Demissão
+C0089;Alexandre Barbosa;M;Branca;1995-12-26;Operações;Fábrica;Operacional;2;CLT;2023-03-09;2025-06-02;Pedido de demissão
+C0090;Thiago Correia;M;Branca;1990-03-07;Tecnologia;Remoto;Coordenação;6;CLT;2024-10-20;;
+C0091;Bruno Uchoa;M;Parda;1988-10-04;Tecnologia;Remoto;Especialista;5;CLT;2024-10-02;2025-04-25;Demissão
+C0092;Leonardo Teixeira;M;Parda;1993-03-17;Logística;Centro de Distribuição;Analista;4;CLT;2016-06-13;2026-04-30;Pedido de demissão
+C0093;Marcelo Vasconcelos;M;Parda;1970-11-05;Operações;Matriz;Técnico;3;CLT;2022-05-07;;
+C0094;Gabriel Sales;M;Parda;1978-02-18;Manutenção;Fábrica;Operacional;2;CLT;2024-11-28;;
+C0095;Hugo Farias;M;Não informado;1972-08-05;Operações;Fábrica;Técnico;3;CLT;2018-09-12;;
+C0096;Valéria Freitas;F;Parda;1975-08-26;Financeiro;Matriz;Especialista;5;CLT;2023-06-17;;
+C0097;Renan Lima;M;Preta;1998-07-27;Manutenção;Matriz;Operacional;2;CLT;2023-12-11;;
+C0098;Ana Teixeira;F;Branca;1979-12-30;Financeiro;Matriz;Analista;4;CLT;2019-04-16;;
+C0099;Igor Zanetti;M;Parda;1989-03-10;Comercial;Matriz;Analista;4;PJ;2017-04-21;2025-11-21;Demissão
+C0100;Eduardo Rocha;M;Parda;1989-09-05;Logística;Centro de Distribuição;Operacional;2;CLT;2024-08-15;;
+C0101;Thiago Brandão;M;Parda;1974-05-02;Financeiro;Matriz;Especialista;5;CLT;2017-02-26;;
+C0102;Rafael Farias;M;Branca;1984-05-08;Financeiro;Matriz;Analista;4;CLT;2024-01-22;;
+C0103;Beatriz Rocha;F;Parda;1984-01-27;Jurídico;Matriz;Analista;4;CLT;2023-02-12;;
+C0104;Marcelo Correia;M;Preta;1992-06-26;Logística;Fábrica;Analista;4;CLT;2018-03-24;2025-05-08;Pedido de demissão
+C0105;Hugo Uchoa;M;Parda;1974-01-05;Comercial;Matriz;Especialista;5;CLT;2024-07-10;;
+C0106;Marina Nogueira;F;Branca;1988-12-25;Comercial;Remoto;Analista;4;CLT;2023-04-28;;
+C0107;Ana Almeida;F;Parda;1978-07-17;Operações;Fábrica;Operacional;2;CLT;2020-11-15;2025-05-14;Pedido de demissão
+C0108;Olívia Ribeiro;F;Branca;1999-04-27;Logística;Centro de Distribuição;Operacional;2;CLT;2024-11-24;2025-07-04;Demissão
+C0109;Wagner Esteves;M;Branca;1978-08-13;Logística;Fábrica;Técnico;3;CLT;2023-06-24;2025-02-28;Pedido de demissão
+C0110;André Rocha;M;Parda;1988-10-06;Operações;Matriz;Operacional;2;Temporário;2024-02-14;2025-01-24;Fim de contrato
+C0111;César Honorato;M;Preta;1991-11-10;Operações;Fábrica;Operacional;2;CLT;2023-06-12;2025-09-03;Outros
+C0112;Eduardo Oliveira;M;Parda;1978-07-15;Comercial;Matriz;Analista;4;CLT;2022-02-16;;
+C0113;Ricardo Xavier;M;Branca;1998-06-01;Manutenção;Fábrica;Operacional;2;CLT;2024-12-22;2026-06-07;Pedido de demissão
+C0114;Rodrigo Barbosa;M;Branca;1972-01-03;Logística;Fábrica;Analista;4;CLT;2018-04-11;;
+C0115;Clara Teixeira;F;Parda;1977-02-18;Operações;Fábrica;Técnico;3;CLT;2013-11-18;;
+C0116;Yuri Oliveira;M;Branca;1978-02-16;Tecnologia;Remoto;Analista;4;PJ;2023-02-19;;
+C0117;Rafael Zanetti;M;Branca;1978-03-20;Manutenção;Fábrica;Técnico;3;CLT;2024-10-24;;
+C0118;Rodrigo Lacerda;M;Branca;1976-10-02;Comercial;Matriz;Analista;4;CLT;2019-07-11;;
+C0119;Rafael Lacerda;M;Branca;2005-04-12;Operações;Fábrica;Aprendiz;0;Aprendiz;2023-04-21;2025-09-03;Fim de contrato
+C0120;Bruno Prado;M;Parda;1999-02-22;Manutenção;Fábrica;Operacional;2;CLT;2024-04-24;;
+C0121;César Mendes;M;Branca;1988-08-12;Financeiro;Matriz;Analista;4;CLT;2024-04-28;;
+C0122;Samuel Jardim;M;Amarela;1990-09-10;Operações;Fábrica;Analista;4;CLT;2023-02-07;2025-08-31;Pedido de demissão
+C0123;André Barbosa;M;Preta;1997-06-21;Manutenção;Fábrica;Técnico;3;CLT;2023-12-15;;
+C0124;Eduardo Barbosa;M;Branca;1995-04-01;Operações;Fábrica;Operacional;2;CLT;2023-02-13;2025-03-29;Pedido de demissão
+C0125;Lorena Farias;F;Parda;1978-07-10;Operações;Fábrica;Operacional;2;CLT;2024-03-27;;
+C0126;Vitor Correia;M;Parda;1987-08-16;Manutenção;Fábrica;Técnico;3;CLT;2024-05-07;2025-04-30;Pedido de demissão
+C0127;Olívia Fontes;F;Não informado;1973-05-05;Tecnologia;Matriz;Especialista;5;CLT;2021-08-06;;
+C0128;Otávio Dias;N;Branca;1993-01-21;Manutenção;Fábrica;Operacional;2;CLT;2016-09-05;;
+C0129;Alice Brandão;F;Branca;1983-08-05;Tecnologia;Remoto;Especialista;5;CLT;2024-07-01;;
+C0130;Yuri Lacerda;M;Branca;1980-10-20;Operações;Fábrica;Técnico;3;CLT;2018-11-18;;
+C0131;Ricardo Moreira;M;Parda;1995-12-24;Operações;Fábrica;Analista;4;CLT;2018-07-01;2025-10-01;Demissão
+C0132;Enzo Nogueira;M;Branca;1984-04-25;Logística;Centro de Distribuição;Analista;4;CLT;2021-09-09;;
+C0133;Davi Xavier;M;Parda;1982-02-25;Operações;Fábrica;Operacional;2;CLT;2022-04-20;;
+C0134;Henrique Prado;M;Branca;2004-08-30;Operações;Fábrica;Aprendiz;0;Aprendiz;2024-01-25;2025-08-02;Fim de contrato
+C0135;Renan Queiroz;M;Branca;1988-05-08;Tecnologia;Matriz;Analista;4;CLT;2019-02-19;;
+C0136;César Sales;M;Preta;1993-10-13;Comercial;Matriz;Analista;4;PJ;2019-04-06;;
+C0137;Ana Rocha;F;Branca;1977-01-25;Tecnologia;Remoto;Analista;4;CLT;2024-06-06;;
+C0138;Débora Freitas;F;Parda;1991-10-28;Operações;Fábrica;Operacional;2;CLT;2024-05-11;2025-06-12;Pedido de demissão
+C0139;Alexandre Jardim;M;Branca;1983-06-10;Tecnologia;Matriz;Analista;4;CLT;2024-02-20;2026-06-22;Pedido de demissão
+C0140;Murilo Esteves;M;Amarela;1996-01-05;Operações;Fábrica;Operacional;2;CLT;2024-12-23;;
+C0141;Ricardo Honorato;M;Parda;1976-05-01;Manutenção;Fábrica;Técnico;3;CLT;2019-09-13;;
+C0142;João Campos;M;Branca;2008-09-20;Operações;Fábrica;Aprendiz;0;Aprendiz;2024-09-27;2025-02-02;Demissão
+C0143;Samuel Moreira;M;Parda;1985-01-16;Operações;Fábrica;Técnico;3;CLT;2022-10-09;;
+C0144;Natália Farias;F;Branca;1987-01-07;Operações;Fábrica;Técnico;3;CLT;2021-11-27;2026-05-03;Demissão
+C0145;Camila Honorato;F;Parda;1972-07-05;Jurídico;Matriz;Especialista;5;CLT;2019-05-20;;
+C0146;Rafaela Barbosa;F;Parda;1984-04-26;Comercial;Matriz;Analista;4;CLT;2024-01-27;2025-02-27;Pedido de demissão
+C0147;Olívia Sales;F;Branca;1991-10-04;Operações;Fábrica;Operacional;2;CLT;2023-08-17;;
+C0148;Priscila Honorato;F;Parda;1996-12-23;Operações;Fábrica;Operacional;2;CLT;2017-11-17;;
+C0149;Yuri Honorato;M;Parda;1990-08-14;Pessoas & Cultura;Matriz;Analista;4;CLT;2021-03-30;;
+C0150;Tatiana Esteves;F;Parda;1988-02-01;Logística;Centro de Distribuição;Técnico;3;CLT;2023-10-07;2025-12-13;Pedido de demissão
+C0151;Leonardo Honorato;M;Amarela;1969-07-11;Operações;Fábrica;Operacional;2;Temporário;2024-10-12;2025-01-29;Fim de contrato
+C0152;Samuel Oliveira;M;Parda;1970-05-16;Logística;Centro de Distribuição;Operacional;2;CLT;2022-04-01;;
+C0153;Lucas Nogueira;M;Parda;1987-06-03;Operações;Fábrica;Técnico;3;CLT;2018-05-28;;
+C0154;Paula Fontes;F;Branca;1997-05-22;Tecnologia;Matriz;Estágio;1;Estágio;2018-03-16;2025-10-09;Fim de contrato
+C0155;João Oliveira;M;Branca;1977-09-15;Tecnologia;Remoto;Especialista;5;CLT;2014-10-21;;
+C0156;Beatriz Teixeira;F;Branca;1984-11-25;Financeiro;Matriz;Especialista;5;CLT;2017-04-08;;
+C0157;Caio Sales;M;Branca;1987-03-31;Operações;Fábrica;Operacional;2;CLT;2020-01-28;2025-10-14;Outros
+C0158;Olívia Prado;F;Parda;1995-05-23;Pessoas & Cultura;Matriz;Especialista;5;CLT;2023-06-30;;
+C0159;Murilo Prado;M;Branca;1993-02-28;Manutenção;Fábrica;Técnico;3;CLT;2023-08-01;;
+C0160;Joana Farias;F;Preta;1986-10-06;Operações;Fábrica;Especialista;5;CLT;2024-05-31;;
+C0161;Camila Vasconcelos;F;Parda;1983-02-10;Manutenção;Fábrica;Técnico;3;CLT;2016-07-16;;
+C0162;Henrique Pires;M;Parda;1992-09-06;Operações;Fábrica;Analista;4;CLT;2024-07-12;2025-01-10;Outros
+C0163;Diego Duarte;M;Branca;1996-04-28;Financeiro;Matriz;Analista;4;CLT;2022-12-15;;
+C0164;Nicolas Honorato;M;Parda;1979-05-09;Operações;Matriz;Operacional;2;CLT;2021-06-13;;
+C0165;Marcelo Rocha;M;Branca;1980-07-20;Operações;Fábrica;Operacional;2;CLT;2020-02-09;;
+C0166;Nicolas Almeida;M;Preta;1960-12-13;Tecnologia;Matriz;Especialista;5;CLT;2012-09-09;;
+C0167;Bianca Moreira;F;Branca;1980-03-20;Operações;Fábrica;Operacional;2;CLT;2023-05-28;;
+C0168;Júlia Cardoso;F;Branca;1980-12-20;Financeiro;Matriz;Analista;4;CLT;2011-04-20;;
+C0169;Júlia Esteves;F;Branca;1990-07-30;Logística;Centro de Distribuição;Operacional;2;CLT;2019-09-07;2025-11-19;Pedido de demissão
+C0170;Elisa Campos;F;Branca;1995-09-28;Financeiro;Matriz;Analista;4;CLT;2020-03-29;;
+C0171;Bianca Prado;F;Branca;1981-05-01;Pessoas & Cultura;Matriz;Analista;4;CLT;2023-12-17;;
+C0172;Natália Mendes;F;Preta;1999-09-06;Financeiro;Matriz;Analista;4;CLT;2024-06-21;;
+C0173;Mateus Freitas;M;Branca;1977-12-30;Logística;Centro de Distribuição;Operacional;2;CLT;2024-04-08;;
+C0174;Fábio Vasconcelos;N;Parda;1975-01-11;Manutenção;Fábrica;Operacional;2;CLT;2018-02-07;2026-02-21;Demissão
+C0175;Murilo Dias;M;Parda;1980-12-19;Jurídico;Matriz;Analista;4;CLT;2024-01-12;2026-07-12;Demissão
+C0176;Otávio Sales;M;Preta;2003-12-13;Operações;Fábrica;Operacional;2;CLT;2022-06-28;;
+C0177;Alexandre Campos;M;Branca;1977-04-12;Manutenção;Fábrica;Coordenação;6;CLT;2019-03-27;;
+C0178;Camila Gomes;F;Branca;1986-09-09;Operações;Fábrica;Operacional;2;CLT;2023-06-13;2025-09-03;Demissão
+C0179;Renan Sales;M;Branca;1983-10-20;Operações;Fábrica;Operacional;2;CLT;2011-04-20;;
+C0180;Otávio Fontes;M;Parda;1992-06-13;Pessoas & Cultura;Matriz;Especialista;5;CLT;2023-04-14;;
+C0181;Rafael Ribeiro;M;Parda;1968-12-26;Operações;Fábrica;Operacional;2;CLT;2020-02-19;;
+C0182;Mateus Rocha;M;Parda;1962-03-03;Tecnologia;Remoto;Analista;4;CLT;2011-04-20;2026-03-22;Pedido de demissão
+C0183;Luana Teixeira;F;Branca;1993-07-11;Logística;Centro de Distribuição;Operacional;2;CLT;2021-09-25;;
+C0184;Marina Barbosa;F;Branca;1993-05-16;Comercial;Remoto;Analista;4;CLT;2019-02-14;;
+C0185;Renan Mendes;M;Branca;1981-05-26;Operações;Fábrica;Operacional;2;CLT;2021-04-30;;
+C0186;Yuri Lima;M;Branca;1977-05-20;Operações;Fábrica;Operacional;2;CLT;2022-12-29;;
+C0187;Clara Lacerda;F;Branca;1983-07-08;Pessoas & Cultura;Fábrica;Analista;4;CLT;2024-05-21;;
+C0188;Lucas Moreira;M;Branca;1986-01-05;Operações;Fábrica;Analista;4;CLT;2024-09-11;2026-09-15;Pedido de demissão
+C0189;Mateus Campos;M;Parda;1967-11-22;Operações;Fábrica;Coordenação;6;CLT;2020-12-26;2025-10-03;Pedido de demissão
+C0190;Marina Almeida;F;Branca;1994-03-28;Financeiro;Remoto;Analista;4;CLT;2023-05-25;;
+C0191;Alice Rocha;F;Preta;2000-01-23;Comercial;Matriz;Analista;4;CLT;2022-07-05;;
+C0192;Igor Lima;M;Preta;1984-11-25;Manutenção;Fábrica;Técnico;3;CLT;2022-03-29;;
+C0193;Marina Duarte;F;Parda;1983-03-01;Manutenção;Fábrica;Coordenação;6;CLT;2020-04-15;2025-10-06;Pedido de demissão
+C0194;Lucas Sales;M;Branca;1983-10-23;Tecnologia;Matriz;Especialista;5;CLT;2015-12-19;;
+C0195;Sofia Pires;F;Branca;1970-03-10;Operações;Fábrica;Operacional;2;CLT;2017-04-11;2026-01-10;Pedido de demissão
+C0196;Enzo Campos;M;Parda;1995-04-28;Manutenção;Fábrica;Operacional;2;CLT;2022-10-04;2025-04-15;Demissão
+C0197;Rafael Xavier;M;Parda;1974-02-03;Manutenção;Fábrica;Coordenação;6;CLT;2023-10-06;;
+C0198;Leonardo Rocha;M;Preta;1985-06-12;Operações;Matriz;Coordenação;6;CLT;2016-06-16;;
+C0199;Lucas Teixeira;M;Parda;1993-12-05;Manutenção;Fábrica;Técnico;3;CLT;2015-08-06;;
+C0200;Wagner Lacerda;M;Parda;2001-06-11;Financeiro;Remoto;Analista;4;CLT;2023-12-29;;
+C0201;Valéria Jardim;F;Parda;1968-07-22;Manutenção;Fábrica;Operacional;2;CLT;2018-10-04;;
+C0202;Vinícius Almeida;M;Branca;1974-05-08;Logística;Centro de Distribuição;Analista;4;CLT;2023-10-21;;
+C0203;Rodrigo Cardoso;M;Parda;2002-09-05;Operações;Fábrica;Aprendiz;0;Aprendiz;2019-01-22;2025-07-28;Fim de contrato
+C0204;Igor Sales;M;Parda;1998-02-05;Operações;Matriz;Operacional;2;CLT;2023-08-08;;
+C0205;Lívia Lacerda;F;Parda;1993-09-21;Pessoas & Cultura;Matriz;Analista;4;CLT;2020-03-05;;
+C0206;Otávio Nogueira;M;Branca;1962-10-22;Manutenção;Fábrica;Técnico;3;CLT;2016-04-30;2026-06-18;Pedido de demissão
+C0207;Tatiana Ribeiro;F;Parda;1983-01-29;Comercial;Matriz;Analista;4;CLT;2021-08-25;;
+C0208;Bruna Barbosa;F;Parda;1985-05-21;Financeiro;Matriz;Analista;4;CLT;2019-12-16;;
+C0209;Gabriel Queiroz;M;Branca;2004-08-10;Operações;Matriz;Operacional;2;CLT;2024-07-12;;
+C0210;César Campos;M;Branca;1963-06-23;Operações;Fábrica;Operacional;2;CLT;2019-02-22;;
+C0211;Vitória Freitas;F;Branca;1990-10-23;Comercial;Matriz;Analista;4;CLT;2023-03-18;;
+C0212;Júlia Prado;F;Parda;2002-11-22;Tecnologia;Matriz;Estágio;1;Estágio;2024-08-30;2026-01-09;Fim de contrato
+C0213;Alice Queiroz;F;Branca;1991-05-21;Comercial;Remoto;Analista;4;CLT;2024-12-08;;
+C0214;Samuel Pires;M;Branca;1995-09-15;Operações;Fábrica;Operacional;2;Temporário;2023-07-14;2025-06-13;Fim de contrato
+C0215;Bruno Rocha;M;Parda;2003-02-21;Manutenção;Fábrica;Analista;4;CLT;2021-09-23;;
+C0216;Igor Prado;M;Parda;2004-10-08;Manutenção;Fábrica;Analista;4;CLT;2024-08-20;;
+C0217;João Almeida;M;Branca;1970-05-16;Operações;Fábrica;Técnico;3;CLT;2024-11-15;2025-06-20;Demissão
+C0218;Yasmin Xavier;F;Parda;1995-08-28;Financeiro;Matriz;Analista;4;CLT;2019-04-06;;
+C0219;Vinícius Barbosa;M;Branca;1982-07-20;Operações;Fábrica;Coordenação;6;CLT;2024-10-19;;
+C0220;Alice Nogueira;F;Parda;1992-03-30;Logística;Centro de Distribuição;Operacional;2;CLT;2013-02-19;2026-03-29;Demissão
+C0221;André Esteves;M;Parda;1981-02-03;Manutenção;Fábrica;Técnico;3;CLT;2024-10-22;2026-03-05;Pedido de demissão
+C0222;Ricardo Jardim;M;Parda;1978-09-24;Operações;Fábrica;Operacional;2;CLT;2024-05-12;;
+C0223;Lívia Pires;F;Preta;1959-05-09;Operações;Fábrica;Operacional;2;Temporário;2013-09-27;2025-10-14;Fim de contrato
+C0224;Renan Dias;M;Branca;1973-01-08;Comercial;Matriz;Analista;4;CLT;2018-02-05;;
+C0225;Gabriel Vasconcelos;M;Parda;1967-01-26;Operações;Fábrica;Especialista;5;CLT;2022-01-02;2025-03-04;Pedido de demissão
+C0226;Débora Brandão;F;Parda;1999-03-02;Manutenção;Fábrica;Técnico;3;CLT;2022-09-02;;
+C0227;Fábio Brandão;M;Preta;1984-06-15;Manutenção;Fábrica;Operacional;2;CLT;2022-08-30;;
+C0228;Eduardo Jardim;M;Parda;1972-12-11;Tecnologia;Matriz;Analista;4;CLT;2014-05-23;2026-05-08;Pedido de demissão
+C0229;Vinícius Moreira;M;Branca;1982-04-17;Financeiro;Matriz;Analista;4;CLT;2016-08-14;;
+C0230;Vinícius Queiroz;M;Parda;1981-03-29;Manutenção;Fábrica;Analista;4;CLT;2020-07-19;;
+C0231;Nicolas Moreira;M;Branca;1967-04-15;Operações;Matriz;Operacional;2;CLT;2014-09-02;;
+C0232;João Dias;M;Parda;1987-11-03;Operações;Matriz;Técnico;3;CLT;2021-11-14;2025-02-02;Demissão
+C0233;Marcelo Ribeiro;M;Branca;1969-08-17;Operações;Fábrica;Especialista;5;CLT;2024-05-10;;
+C0234;Davi Moreira;M;Branca;1980-05-22;Manutenção;Fábrica;Operacional;2;CLT;2024-09-01;;
+C0235;Davi Cardoso;M;Branca;1981-08-24;Tecnologia;Matriz;Especialista;5;CLT;2017-04-23;2025-08-21;Demissão
+C0236;Mateus Cardoso;M;Parda;1994-05-30;Operações;Fábrica;Operacional;2;CLT;2020-03-07;2025-03-12;Pedido de demissão
+C0237;Mariana Vasconcelos;F;Branca;1978-03-18;Jurídico;Matriz;Analista;4;CLT;2020-11-23;;
+C0238;Nicolas Fontes;M;Preta;1977-12-27;Operações;Fábrica;Coordenação;6;CLT;2022-06-18;;
+C0239;Vitor Pires;M;Branca;1985-06-05;Logística;Centro de Distribuição;Analista;4;CLT;2025-01-21;;
+C0240;Eduardo Dias;M;Parda;1995-12-23;Operações;Matriz;Operacional;2;CLT;2025-01-22;;
+C0241;João Barbosa;M;Parda;2001-05-30;Operações;Fábrica;Analista;4;CLT;2025-01-19;2026-09-10;Pedido de demissão
+C0242;Olívia Rocha;F;Parda;2005-09-07;Operações;Fábrica;Aprendiz;0;Aprendiz;2025-02-25;2026-09-05;Fim de contrato
+C0243;Thiago Farias;M;Não informado;1999-08-03;Logística;Centro de Distribuição;Analista;4;CLT;2025-02-11;;
+C0244;Larissa Fontes;F;Parda;1992-01-06;Financeiro;Matriz;Especialista;5;CLT;2025-02-24;2026-03-18;Outros
+C0245;Rodrigo Pires;M;Parda;1999-05-15;Comercial;Matriz;Analista;4;CLT;2025-02-03;2025-03-14;Pedido de demissão
+C0246;Diego Cardoso;M;Branca;2005-10-28;Logística;Centro de Distribuição;Operacional;2;Temporário;2025-02-14;2025-08-13;Fim de contrato
+C0247;Mariana Gomes;F;Preta;2005-09-29;Pessoas & Cultura;Matriz;Estágio;1;Estágio;2025-02-12;2026-05-29;Fim de contrato
+C0248;Lucas Rocha;M;Parda;2008-04-24;Operações;Fábrica;Aprendiz;0;Aprendiz;2025-03-18;;
+C0249;Sofia Oliveira;F;Parda;1983-01-24;Operações;Fábrica;Analista;4;CLT;2025-03-06;2025-06-04;Demissão
+C0250;Samuel Dias;M;Preta;1974-08-11;Operações;Fábrica;Operacional;2;CLT;2025-03-26;2025-11-24;Demissão
+C0251;Ricardo Gomes;M;Branca;1987-10-03;Operações;Fábrica;Operacional;2;CLT;2025-03-31;;
+C0252;Davi Teixeira;M;Parda;1981-06-20;Jurídico;Matriz;Coordenação;6;CLT;2025-03-11;;
+C0253;Mariana Prado;F;Parda;1994-10-20;Pessoas & Cultura;Fábrica;Analista;4;CLT;2025-03-15;;
+C0254;Murilo Duarte;M;Amarela;1992-01-18;Operações;Fábrica;Operacional;2;CLT;2025-04-28;2026-04-05;Pedido de demissão
+C0255;Marina Dias;F;Parda;2007-07-20;Logística;Centro de Distribuição;Aprendiz;0;Aprendiz;2025-04-09;;
+C0256;André Pires;M;Preta;1977-03-04;Operações;Fábrica;Técnico;3;CLT;2025-04-22;;
+C0257;Nicolas Lacerda;M;Parda;1993-07-08;Manutenção;Fábrica;Técnico;3;CLT;2025-04-23;;
+C0258;Henrique Oliveira;M;Branca;1983-02-26;Operações;Fábrica;Coordenação;6;CLT;2025-04-22;;
+C0259;Caio Oliveira;M;Branca;2000-11-15;Operações;Fábrica;Técnico;3;CLT;2025-04-13;;
+C0260;César Moreira;M;Parda;1991-09-20;Financeiro;Remoto;Analista;4;CLT;2025-04-21;;
+C0261;Nicolas Uchoa;M;Parda;1978-08-13;Manutenção;Fábrica;Técnico;3;CLT;2025-04-20;;
+C0262;Bruno Pires;M;Parda;1972-01-16;Operações;Fábrica;Operacional;2;CLT;2025-05-05;2025-06-13;Pedido de demissão
+C0263;João Mendes;M;Branca;1993-02-03;Financeiro;Matriz;Analista;4;CLT;2025-05-13;;
+C0264;Otávio Prado;M;Parda;1991-08-16;Logística;Centro de Distribuição;Técnico;3;CLT;2025-06-28;;
+C0265;Gabriel Farias;M;Parda;1991-04-13;Operações;Fábrica;Técnico;3;CLT;2025-06-13;;
+C0266;Vinícius Lima;M;Parda;2003-12-23;Operações;Fábrica;Operacional;2;CLT;2025-06-11;;
+C0267;Yuri Esteves;M;Preta;1976-01-27;Operações;Fábrica;Operacional;2;CLT;2025-06-20;;
+C0268;Yasmin Nogueira;F;Branca;1977-09-06;Operações;Fábrica;Analista;4;CLT;2025-06-29;2025-08-20;Pedido de demissão
+C0269;Nicolas Barbosa;M;Preta;1989-07-22;Operações;Fábrica;Coordenação;6;CLT;2025-06-27;;
+C0270;André Oliveira;M;Branca;2006-06-09;Operações;Fábrica;Aprendiz;0;Aprendiz;2025-06-10;;
+C0271;Yuri Campos;M;Parda;1985-07-28;Operações;Fábrica;Operacional;2;CLT;2025-06-27;;
+C0272;Leonardo Ribeiro;M;Branca;2008-09-04;Operações;Fábrica;Aprendiz;0;Aprendiz;2025-07-14;;
+C0273;Leonardo Almeida;M;Parda;2008-10-12;Logística;Centro de Distribuição;Aprendiz;0;Aprendiz;2025-07-17;;
+C0274;Yasmin Farias;F;Branca;1978-06-21;Operações;Fábrica;Analista;4;CLT;2025-07-04;;
+C0275;Eduardo Brandão;M;Branca;2002-05-20;Tecnologia;Matriz;Estágio;1;Estágio;2025-08-15;;
+C0276;Diego Mendes;M;Parda;2006-05-19;Operações;Fábrica;Aprendiz;0;Aprendiz;2025-08-23;;
+C0277;Enzo Xavier;M;Branca;1987-07-04;Operações;Fábrica;Operacional;2;CLT;2025-08-26;2025-10-08;Demissão
+C0278;Enzo Esteves;M;Branca;1985-12-14;Operações;Matriz;Operacional;2;CLT;2025-08-04;2026-02-26;Demissão
+C0279;César Correia;M;Parda;2002-04-28;Tecnologia;Matriz;Estágio;1;Estágio;2025-08-26;;
+C0280;Henrique Campos;M;Preta;1990-10-14;Logística;Centro de Distribuição;Operacional;2;CLT;2025-08-10;;
+C0281;Thiago Xavier;M;Parda;1984-06-10;Manutenção;Fábrica;Operacional;2;CLT;2025-08-20;;
+C0282;César Rocha;M;Parda;1978-06-29;Operações;Matriz;Analista;4;CLT;2025-08-30;2026-08-24;Demissão
+C0283;Davi Rocha;M;Parda;1992-09-22;Operações;Fábrica;Operacional;2;CLT;2025-08-14;;
+C0284;Enzo Lacerda;M;Parda;1972-03-26;Tecnologia;Matriz;Especialista;5;CLT;2025-08-05;;
+C0285;César Almeida;M;Preta;2003-11-10;Comercial;Remoto;Estágio;1;Estágio;2025-09-18;;
+C0286;Alice Uchoa;F;Branca;2006-03-26;Operações;Fábrica;Aprendiz;0;Aprendiz;2025-09-20;2025-11-26;Demissão
+C0287;Fábio Farias;M;Branca;1990-12-14;Pessoas & Cultura;Matriz;Analista;4;CLT;2025-09-02;;
+C0288;Ana Jardim;F;Branca;1972-10-12;Operações;Fábrica;Coordenação;6;CLT;2025-09-30;;
+C0289;Lucas Mendes;M;Branca;2005-01-25;Operações;Fábrica;Operacional;2;CLT;2025-09-16;2026-03-11;Pedido de demissão
+C0290;Wagner Barbosa;M;Branca;1990-07-13;Operações;Fábrica;Operacional;2;CLT;2025-09-18;2025-10-04;Outros
+C0291;Gabriel Brandão;M;Parda;2004-06-02;Tecnologia;Remoto;Estágio;1;Estágio;2025-10-07;2026-03-05;Pedido de demissão
+C0292;Rodrigo Ribeiro;M;Parda;1995-02-10;Operações;Fábrica;Coordenação;6;CLT;2025-10-03;;
+C0293;Helena Vasconcelos;F;Branca;1995-12-18;Financeiro;Matriz;Analista;4;CLT;2025-10-22;;
+C0294;Hugo Honorato;M;Branca;1977-01-15;Comercial;Matriz;Analista;4;CLT;2025-10-23;;
+C0295;Lucas Zanetti;M;Parda;1981-12-12;Manutenção;Fábrica;Técnico;3;CLT;2025-10-22;;
+C0296;Caio Esteves;M;Parda;2000-08-19;Operações;Fábrica;Operacional;2;CLT;2025-10-21;;
+C0297;Nicolas Prado;M;Parda;2001-09-22;Operações;Fábrica;Analista;4;CLT;2025-10-02;;
+C0298;Vitor Almeida;M;Parda;2009-05-20;Operações;Matriz;Aprendiz;0;Aprendiz;2025-10-03;;
+C0299;Thiago Esteves;M;Parda;1991-07-10;Operações;Fábrica;Analista;4;CLT;2025-10-27;;
+C0300;Helena Pires;F;Preta;1973-03-02;Manutenção;Fábrica;Operacional;2;CLT;2025-10-22;2026-09-13;Demissão
+C0301;Davi Farias;M;Parda;1994-02-08;Logística;Centro de Distribuição;Analista;4;CLT;2025-10-02;;
+C0302;Elisa Dias;F;Branca;2002-08-18;Financeiro;Matriz;Analista;4;CLT;2025-10-14;;
+C0303;Marcelo Duarte;M;Parda;2007-06-19;Operações;Fábrica;Aprendiz;0;Aprendiz;2025-11-25;;
+C0304;Igor Pires;M;Parda;1971-08-09;Operações;Fábrica;Operacional;2;CLT;2025-11-19;;
+C0305;Bruno Freitas;M;Parda;1988-07-10;Logística;Centro de Distribuição;Operacional;2;CLT;2025-11-10;;
+C0306;Thiago Ribeiro;M;Branca;1991-11-06;Comercial;Matriz;Analista;4;PJ;2025-11-01;2026-04-08;Pedido de demissão
+C0307;Samuel Brandão;M;Parda;1985-10-04;Manutenção;Fábrica;Técnico;3;CLT;2025-12-20;;
+C0308;João Zanetti;M;Parda;1978-03-15;Manutenção;Fábrica;Técnico;3;CLT;2025-12-16;;
+C0309;Igor Uchoa;M;Parda;1983-02-25;Logística;Fábrica;Analista;4;CLT;2025-12-28;2026-08-31;Demissão
+C0310;Bruna Dias;F;Branca;1993-08-26;Financeiro;Matriz;Analista;4;CLT;2025-12-22;;
+C0311;Thiago Duarte;M;Parda;1985-11-26;Operações;Fábrica;Operacional;2;CLT;2025-12-07;;
+C0312;Nicolas Lima;M;Parda;1985-10-29;Operações;Fábrica;Operacional;2;CLT;2025-12-30;;
+C0313;Eduardo Farias;M;Branca;2003-03-14;Logística;Centro de Distribuição;Operacional;2;CLT;2025-12-28;;
+C0314;Tatiana Zanetti;F;Parda;1991-11-26;Tecnologia;Matriz;Especialista;5;CLT;2025-12-06;;
+C0315;Rafael Correia;M;Parda;2006-02-16;Operações;Fábrica;Aprendiz;0;Aprendiz;2026-01-14;;
+C0316;André Fontes;M;Parda;2002-11-09;Tecnologia;Remoto;Estágio;1;Estágio;2026-01-20;;
+C0317;Enzo Queiroz;M;Branca;2003-11-25;Manutenção;Fábrica;Técnico;3;CLT;2026-01-04;;
+C0318;Eduardo Campos;M;Branca;1971-03-04;Manutenção;Fábrica;Especialista;5;CLT;2026-01-19;;
+C0319;Lívia Mendes;F;Branca;1992-08-14;Pessoas & Cultura;Matriz;Analista;4;CLT;2026-01-30;;
+C0320;Júlia Dias;F;Parda;1992-12-14;Manutenção;Fábrica;Técnico;3;CLT;2026-02-22;;
+C0321;Marcelo Almeida;M;Parda;1998-07-20;Operações;Fábrica;Operacional;2;CLT;2026-02-14;2026-03-24;Demissão
+C0322;Renata Honorato;F;Parda;2001-11-09;Tecnologia;Remoto;Estágio;1;Estágio;2026-03-13;;
+C0323;Eduardo Prado;M;Branca;1970-07-22;Manutenção;Fábrica;Operacional;2;CLT;2026-03-05;2026-06-03;Outros
+C0324;Marina Mendes;F;Branca;1981-04-19;Tecnologia;Matriz;Analista;4;CLT;2026-03-10;;
+C0325;Igor Queiroz;M;Branca;2004-04-15;Logística;Fábrica;Operacional;2;CLT;2026-03-27;;
+C0326;Mateus Uchoa;M;Parda;1975-10-06;Manutenção;Fábrica;Coordenação;6;CLT;2026-03-08;;
+C0327;Rafaela Oliveira;F;Parda;1990-07-08;Financeiro;Matriz;Analista;4;CLT;2026-03-26;;
+C0328;Otávio Oliveira;M;Parda;1996-02-22;Financeiro;Matriz;Analista;4;CLT;2026-03-22;;
+C0329;Leonardo Zanetti;M;Branca;1988-09-23;Operações;Fábrica;Analista;4;CLT;2026-03-18;;
+C0330;Rafaela Rocha;F;Parda;1971-07-23;Tecnologia;Remoto;Coordenação;6;CLT;2026-03-16;;
+C0331;Marcelo Lacerda;M;Parda;1992-09-25;Tecnologia;Matriz;Especialista;5;CLT;2026-03-25;;
+C0332;Alexandre Lacerda;M;Parda;1998-08-07;Logística;Centro de Distribuição;Operacional;2;CLT;2026-04-18;;
+C0333;Murilo Correia;M;Parda;1981-07-21;Manutenção;Fábrica;Operacional;2;CLT;2026-04-17;;
+C0334;Thiago Sales;M;Preta;1982-07-24;Comercial;Matriz;Analista;4;CLT;2026-04-19;2026-05-26;Demissão
+C0335;Paula Campos;F;Branca;2005-10-12;Pessoas & Cultura;Fábrica;Estágio;1;Estágio;2026-05-24;;
+C0336;Yuri Queiroz;M;Parda;1981-03-04;Operações;Fábrica;Analista;4;CLT;2026-05-08;2026-08-09;Pedido de demissão
+C0337;Joana Pires;F;Preta;1991-07-15;Tecnologia;Matriz;Especialista;5;CLT;2026-05-17;;
+C0338;Wagner Moreira;M;Parda;2000-12-22;Comercial;Matriz;Analista;4;PJ;2026-05-06;2026-08-09;Pedido de demissão
+C0339;Fábio Fontes;M;Branca;1987-11-30;Financeiro;Matriz;Coordenação;6;CLT;2026-06-21;;
+C0340;Rodrigo Correia;M;Branca;2000-04-03;Operações;Matriz;Analista;4;CLT;2026-06-06;;
+C0341;Cecília Almeida;F;Parda;1979-03-31;Comercial;Matriz;Analista;4;CLT;2026-06-12;;
+C0342;Igor Oliveira;M;Parda;1977-12-08;Tecnologia;Matriz;Analista;4;PJ;2026-06-05;;
+C0343;Alexandre Nogueira;M;Parda;1974-08-15;Manutenção;Fábrica;Técnico;3;CLT;2026-06-25;;
+C0344;Gabriel Rocha;M;Branca;1973-09-22;Manutenção;Fábrica;Operacional;2;CLT;2026-06-15;;
+C0345;André Prado;M;Parda;1986-06-13;Operações;Matriz;Operacional;2;CLT;2026-07-26;;
+C0346;Camila Dias;F;Parda;2002-12-16;Operações;Fábrica;Operacional;2;CLT;2026-07-27;;
+C0347;Clara Jardim;F;Parda;1977-12-11;Jurídico;Matriz;Analista;4;PJ;2026-07-11;;
+C0348;Paula Freitas;F;Branca;1975-02-07;Pessoas & Cultura;Matriz;Especialista;5;CLT;2026-07-30;;
+C0349;Rodrigo Queiroz;M;Branca;1986-06-27;Comercial;Remoto;Analista;4;CLT;2026-07-03;;
+C0350;Yuri Fontes;M;Branca;1988-10-11;Comercial;Remoto;Analista;4;CLT;2026-07-15;;
+C0351;Davi Prado;M;Parda;1976-01-16;Operações;Matriz;Coordenação;6;CLT;2026-08-19;2026-09-16;Pedido de demissão
+C0352;Igor Mendes;M;Branca;1989-05-07;Logística;Centro de Distribuição;Operacional;2;CLT;2026-08-02;;
+C0353;Ana Vasconcelos;F;Branca;2006-05-06;Operações;Fábrica;Operacional;2;CLT;2026-08-10;;
+C0354;Bruno Fontes;M;Branca;2000-09-28;Comercial;Matriz;Analista;4;CLT;2026-08-02;;
+C0355;Lucas Prado;M;Parda;2008-05-17;Operações;Fábrica;Aprendiz;0;Aprendiz;2026-09-18;;
+C0356;Wagner Jardim;M;Parda;1996-04-29;Logística;Centro de Distribuição;Coordenação;6;CLT;2026-09-18;;
+C0357;Rafaela Queiroz;F;Branca;1998-10-14;Operações;Fábrica;Técnico;3;CLT;2026-09-27;;
+C0358;Yasmin Honorato;F;Branca;1975-07-07;Manutenção;Fábrica;Técnico;3;CLT;2026-09-02;;
+C0359;Samuel Teixeira;M;Preta;2009-01-10;Manutenção;Fábrica;Aprendiz;0;Aprendiz;2026-09-12;;
+C0360;Thiago Pires;M;Parda;1990-05-31;Manutenção;Fábrica;Operacional;2;CLT;2026-09-25;;
